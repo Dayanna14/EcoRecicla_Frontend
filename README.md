@@ -13,7 +13,7 @@ ng serve -o
 Usar la terminal **Command Prompt** en VS Code (no PowerShell).
 
 ## Reglas para no chocar en GitHub
-1. Trabaja **solo en tu rama** y **solo en tus carpetas**.
+1. Trabaja **solo en tu rama** y **solo en tus carpetas y archivos**.
 2. **No instales librerías** sin avisar: ya están Material, Leaflet, ngx-charts y TensorFlow.
 3. En `app.routes.ts` y `menucomponent.html` escribe **solo dentro de tu bloque comentado**.
 4. No modifiques: `app.config.ts`, `environments/`, `material-theme.scss`, `styles.css`, `index.html`, `angular.json`.
@@ -24,7 +24,9 @@ Usar la terminal **Command Prompt** en VS Code (no PowerShell).
 | Padre | `ng g c components/xxxcomponent --skip-tests` | `rolcomponent` |
 | Hijos | `ng g c components/xxxcomponent/xxxlistcomponent --skip-tests` | `rollistcomponent`, `rolinsertcomponent` |
 | Servicio | `ng g s services/xxxservice --skip-tests` | `rolservice` |
-| Modelo | archivo en `src/app/models/` | `Rol.ts` |
+| Modelo | archivo en `src/app/models/` con el nombre del DTO | `RolDTOInsert.ts`, `RolDTOList.ts` |
+
+Ejemplo completo: carpetas `rolcomponent`, `models/RolDTO*.ts` y `services/rolservice.ts`.
 
 ## Quién hace qué
 | Integrante | Entidades |

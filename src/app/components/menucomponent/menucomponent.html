@@ -1,0 +1,27 @@
+<mat-toolbar class="barra">
+    <button mat-button routerLink="/home" class="logo">
+        <mat-icon>eco</mat-icon> EcoRecicla
+    </button>
+
+  <!-- Dayana: Roles -->
+  <button mat-button [matMenuTriggerFor]="menuRoles">Roles</button>
+  <mat-menu #menuRoles="matMenu">
+    <button mat-menu-item routerLink="/roles/listar">Listar</button>
+    <button mat-menu-item routerLink="/roles/insertar">Registrar</button>
+  </mat-menu>
+
+  <!-- Dayana: Centros de acopio -->
+  <button mat-button [matMenuTriggerFor]="menuCentros">Centros</button>
+  <mat-menu #menuCentros="matMenu">
+    <button mat-menu-item routerLink="/centrosacopio/listar">Listar</button>
+    <button mat-menu-item routerLink="/centrosacopio/insertar">Registrar</button>
+    <button mat-menu-item routerLink="/centrosacopio/mapa">Mapa</button>
+  </mat-menu>
+    <!-- Nayara: Usuarios y Recompensas -->
+
+    <!-- Axel: Tipos de recompensa y Materiales -->
+
+    <!-- Jhon: Entregas -->
+
+     <!-- Franco: Canjes -->
+</mat-toolbar>

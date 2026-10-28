@@ -1,0 +1,15 @@
+.barra {
+  background-color: var(--eco-verde-bosque);
+  --mat-toolbar-container-text-color: #ffffff;
+  gap: 8px;
+}
+
+.logo {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  margin-right: 24px;
+}
+
+.barra button {
+  --mat-button-text-label-text-color: #ffffff;
+}
