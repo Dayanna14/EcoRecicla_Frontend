@@ -1,1 +1,37 @@
-/* You can add global styles to this file, and also import other style files */
+/* Paleta de EcoRecicla (tomada del logo) */
+:root {
+  --eco-verde-bosque: #2d5d3e;
+  --eco-verde-hoja: #709645;
+  --eco-verde-te: #dde5b6;
+  --eco-crema: #fdf3d7;
+  --eco-vanilla: #f0ead2;
+  --eco-onyx: #0d0a0b;
+  --eco-charcoal: #454955;
+  --eco-ambar: #c9893e;
+  --eco-corcho: #95652e;
+  --eco-linen: #fff1e6;
+  --eco-salvia: #88a987;
+  --eco-salvia-claro: #b8c7a4;
+  --eco-oliva: #5c6b2c;
+  --eco-error: #a3412f;
+}
+
+/* Fondo de página crema (las tarjetas usan el surface del tema) */
+body {
+  background-color: var(--eco-crema);
+  font-family: 'Lato', sans-serif;
+}
+
+/* Títulos en Playfair Display */
+h1,
+h2,
+h3 {
+  font-family: 'Playfair Display', serif;
+  color: var(--eco-verde-bosque);
+  margin: 0;
+}
+
+/* Números, puntos, kg y códigos de canje en Roboto Mono */
+.mono {
+  font-family: 'Roboto Mono', monospace;
+}
