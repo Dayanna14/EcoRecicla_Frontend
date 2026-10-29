@@ -1,1 +1,106 @@
-<p>rolinsertcomponent works!</p>
+<div class="contenedor">
+  <nav class="migas">
+    <a routerLink="/roles/listar">Roles</a>
+    <span>/</span>
+    <span>Registrar</span>
+  </nav>
+
+  <h1>Registrar rol</h1>
+  <p class="subtitulo">Crea un nuevo perfil de acceso para los usuarios de EcoRecicla.</p>
+
+  <div class="grid">
+    <!-- Columna izquierda: formulario -->
+    <form class="tarjeta formulario" [formGroup]="form" (ngSubmit)="registrar()">
+      <h2>Datos del rol</h2>
+
+      <label class="etiqueta" for="nombre">Nombre</label>
+      <mat-form-field appearance="outline">
+        <mat-icon matPrefix>badge</mat-icon>
+        <span matTextPrefix class="mono prefijo">ROLE_</span>
+        <input
+          matInput
+          id="nombre"
+          formControlName="nombre"
+          placeholder="SUPERVISOR"
+          maxlength="45"
+          (input)="normalizarNombre()"
+        />
+        <mat-hint>Escribe la función, por ejemplo: supervisor.</mat-hint>
+        @if (form.get('nombre')?.hasError('required')) {
+          <mat-error>El nombre del rol es obligatorio.</mat-error>
+        } @else if (form.get('nombre')?.hasError('pattern')) {
+          <mat-error>Usa solo letras, sin tildes ni números.</mat-error>
+        }
+      </mat-form-field>
+
+      <label class="etiqueta" for="descripcion">Descripción</label>
+      <mat-form-field appearance="outline">
+        <mat-icon matPrefix>notes</mat-icon>
+        <textarea
+          matInput
+          id="descripcion"
+          formControlName="descripcion"
+          rows="4"
+          maxlength="200"
+          placeholder="¿Qué podrá hacer este rol en la plataforma?"
+        ></textarea>
+        <mat-hint align="end" class="mono">{{ form.get('descripcion')?.value?.length || 0 }}/200</mat-hint>
+        @if (form.get('descripcion')?.hasError('required')) {
+          <mat-error>La descripción es obligatoria.</mat-error>
+        }
+      </mat-form-field>
+
+      <div class="acciones">
+        <a mat-stroked-button routerLink="/roles/listar">Cancelar</a>
+        <button mat-flat-button type="submit" [disabled]="form.invalid || guardando">
+          Registrar rol
+        </button>
+      </div>
+    </form>
+
+    <!-- Columna derecha: ayuda para el usuario -->
+    <aside class="lateral">
+      <div class="tarjeta">
+        <h2>¿Qué es un rol?</h2>
+        <p class="texto">
+          Un rol define qué puede hacer una persona dentro de EcoRecicla. Cada usuario tiene un
+          rol y, según él, ve unas opciones u otras en el menú.
+        </p>
+        <ul class="ejemplos">
+          <li>
+            <mat-icon>admin_panel_settings</mat-icon>
+            <div>
+              <strong>Administrador</strong>
+              <span>Gestiona usuarios, centros, materiales y recompensas.</span>
+            </div>
+          </li>
+          <li>
+            <mat-icon>storefront</mat-icon>
+            <div>
+              <strong>Operador de centro</strong>
+              <span>Registra las entregas que llegan a su centro de acopio.</span>
+            </div>
+          </li>
+          <li>
+            <mat-icon>recycling</mat-icon>
+            <div>
+              <strong>Reciclador</strong>
+              <span>Entrega materiales, suma puntos y los canjea por recompensas.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="consejo">
+        <mat-icon>lightbulb</mat-icon>
+        <div>
+          <strong>Consejo</strong>
+          <p>
+            Usa un nombre corto que diga la función, como <span class="mono">SUPERVISOR</span>,
+            y explica en la descripción qué podrá hacer. Así será fácil asignarlo a cada persona.
+          </p>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
