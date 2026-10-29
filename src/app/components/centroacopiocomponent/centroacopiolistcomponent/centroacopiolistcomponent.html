@@ -1,1 +1,101 @@
-<p>centroacopiolistcomponent works!</p>
+<div class="contenedor">
+  <div class="encabezado">
+    <div>
+      <h1>Centros de acopio</h1>
+      <p class="subtitulo">Gestiona los puntos donde los recicladores entregan sus materiales.</p>
+    </div>
+    <a mat-flat-button routerLink="/centrosacopio/insertar">Registrar centro</a>
+  </div>
+
+  <div class="tarjeta">
+    <!-- Filtro por estado (CA04) -->
+    <div class="filtros">
+      <mat-form-field appearance="outline" class="filtro-estado">
+        <mat-label>Estado</mat-label>
+        <mat-select [(value)]="estadoFiltro" (selectionChange)="listar()">
+          @for (e of estados; track e.value) {
+            <mat-option [value]="e.value">{{ e.viewValue }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <table mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="c1">
+        <th mat-header-cell *matHeaderCellDef>ID</th>
+        <td mat-cell *matCellDef="let element" class="mono">{{ element.idCentro }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="c2">
+        <th mat-header-cell *matHeaderCellDef>Nombre</th>
+        <td mat-cell *matCellDef="let element" class="nombre">{{ element.nombre }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="c3">
+        <th mat-header-cell *matHeaderCellDef>Horario</th>
+        <td mat-cell *matCellDef="let element">
+          <span class="horario">
+            <mat-icon>schedule</mat-icon>
+            {{ element.horario }}
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="c4">
+        <th mat-header-cell *matHeaderCellDef>Estado</th>
+        <td mat-cell *matCellDef="let element">
+          @if (element.estado) {
+            <span class="chip chip-activo">● Activo</span>
+          } @else {
+            <span class="chip chip-inactivo">● Inactivo</span>
+          }
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="c5">
+        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+        <td mat-cell *matCellDef="let element">
+          <!-- Editar: se conecta en HUF24 -->
+          <button mat-icon-button class="btn-editar" aria-label="Editar centro">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <!-- Eliminar (HUF25) -->
+          <button mat-icon-button class="btn-eliminar" aria-label="Eliminar centro" (click)="eliminar(element)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+      <tr class="mat-row" *matNoDataRow>
+        <td class="sin-datos" [attr.colspan]="displayedColumns.length">
+          No hay centros de acopio para mostrar.
+        </td>
+      </tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10]" showFirstLastButtons></mat-paginator>
+  </div>
+</div>
+
+<!-- Confirmación de eliminar (HUF25): se abre con MatDialog -->
+<ng-template #dialogEliminar let-centro>
+  <div class="icono-eliminar">
+    <mat-icon>delete</mat-icon>
+  </div>
+
+  <h2 mat-dialog-title>¿Eliminar {{ centro.nombre }}?</h2>
+
+  <mat-dialog-content>
+    <p class="texto-dialogo">
+      Los recicladores ya no verán este centro en el mapa. Esta acción no se puede deshacer.
+    </p>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end" class="acciones-dialogo">
+    <button mat-stroked-button [mat-dialog-close]="false" cdkFocusInitial>Cancelar</button>
+    <button mat-flat-button class="btn-confirmar" [mat-dialog-close]="true">Eliminar</button>
+  </mat-dialog-actions>
+</ng-template>

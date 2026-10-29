@@ -1,0 +1,148 @@
+.contenedor {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 16px;
+}
+
+.encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.subtitulo {
+  margin: 10px 0 0;
+  color: var(--eco-charcoal);
+}
+
+.tarjeta {
+  background-color: var(--mat-sys-surface);
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  padding: 16px;
+  overflow-x: auto;
+}
+
+/* Filtro */
+.filtros {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.filtro-estado {
+  width: 220px;
+  --mat-form-field-outlined-outline-color: var(--eco-salvia);
+  --mat-form-field-outlined-focus-outline-color: var(--eco-verde-bosque);
+  --mat-form-field-outlined-container-shape: 8px;
+}
+
+/* Tabla */
+table,
+mat-paginator {
+  width: 100%;
+  background: transparent;
+}
+
+th.mat-mdc-header-cell {
+  background-color: var(--eco-verde-te);
+  color: var(--eco-verde-bosque);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+tr.mat-mdc-row:nth-child(even) {
+  background-color: var(--eco-vanilla);
+}
+
+.nombre {
+  font-weight: 700;
+}
+
+.horario {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.horario mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+  color: var(--eco-salvia);
+}
+
+/* Chips de estado, como en el Figma */
+.chip {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.chip-activo {
+  background-color: var(--eco-verde-te);
+  color: var(--eco-verde-bosque);
+}
+
+.chip-inactivo {
+  background-color: #e6e6ea;
+  color: var(--eco-charcoal);
+}
+
+.btn-editar {
+  color: var(--eco-verde-bosque);
+}
+
+.btn-eliminar {
+  color: var(--eco-error);
+}
+
+.sin-datos {
+  padding: 24px;
+  text-align: center;
+  color: var(--eco-charcoal);
+}
+
+
+/* ---------- Diálogo de eliminar (HUF25) ---------- */
+.icono-eliminar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  margin: 24px 24px 0;
+  border-radius: 50%;
+  background-color: #f6e3de;
+  color: var(--eco-error);
+}
+
+h2[mat-dialog-title] {
+  font-family: 'Playfair Display', serif;
+  color: var(--eco-verde-bosque);
+}
+
+.texto-dialogo {
+  margin: 0;
+  color: var(--eco-charcoal);
+  line-height: 1.5;
+}
+
+.acciones-dialogo {
+  gap: 8px;
+  padding: 8px 24px 24px;
+  --mat-button-filled-container-shape: 8px;
+  --mat-button-outlined-container-shape: 8px;
+  --mat-button-outlined-outline-color: var(--eco-verde-bosque);
+}
+
+.btn-confirmar {
+  --mat-button-filled-container-color: var(--eco-error);
+  --mat-button-filled-label-text-color: #ffffff;
+}
