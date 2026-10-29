@@ -20,6 +20,7 @@ export const routes: Routes = [
         children: [
             { path: 'listar', component: Rollistcomponent },
             { path: 'insertar', component: Rolinsertcomponent },
+            { path: 'ediciones/:id', component: Rolinsertcomponent },
             { path: '', redirectTo: 'listar', pathMatch: 'full' }
         ]
     },

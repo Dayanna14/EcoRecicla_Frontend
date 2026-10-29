@@ -12,7 +12,13 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-rollistcomponent',
-  imports: [MatTableModule, MatPaginatorModule, MatIconModule, MatButtonModule, RouterLink,MatDialogModule],
+  imports: [
+    MatTableModule, 
+    MatPaginatorModule, 
+    MatIconModule, 
+    MatButtonModule, 
+    RouterLink,
+    MatDialogModule],
   templateUrl: './rollistcomponent.html',
   styleUrl: './rollistcomponent.css',
 })

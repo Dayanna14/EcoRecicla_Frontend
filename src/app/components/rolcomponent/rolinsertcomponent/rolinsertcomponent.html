@@ -2,11 +2,17 @@
   <nav class="migas">
     <a routerLink="/roles/listar">Roles</a>
     <span>/</span>
-    <span>Registrar</span>
+    <span>{{ edicion ? 'Editar' : 'Registrar' }}</span>
   </nav>
 
-  <h1>Registrar rol</h1>
-  <p class="subtitulo">Crea un nuevo perfil de acceso para los usuarios de EcoRecicla.</p>
+  <h1>{{ edicion ? 'Editar rol' : 'Registrar rol' }}</h1>
+  <p class="subtitulo">
+    @if (edicion) {
+      Actualiza los datos del perfil de acceso.
+    } @else {
+      Crea un nuevo perfil de acceso para los usuarios de EcoRecicla.
+    }
+  </p>
 
   <div class="grid">
     <!-- Columna izquierda: formulario -->
@@ -25,7 +31,11 @@
           maxlength="45"
           (input)="normalizarNombre()"
         />
-        <mat-hint>Escribe la función, por ejemplo: supervisor.</mat-hint>
+        @if (esRolSistema) {
+          <mat-hint>Es un rol del sistema: su nombre no se puede cambiar.</mat-hint>
+        } @else {
+          <mat-hint>Escribe la función, por ejemplo: supervisor.</mat-hint>
+        }
         @if (form.get('nombre')?.hasError('required')) {
           <mat-error>El nombre del rol es obligatorio.</mat-error>
         } @else if (form.get('nombre')?.hasError('pattern')) {
@@ -53,7 +63,7 @@
       <div class="acciones">
         <a mat-stroked-button routerLink="/roles/listar">Cancelar</a>
         <button mat-flat-button type="submit" [disabled]="form.invalid || guardando">
-          Registrar rol
+          {{ edicion ? 'Guardar cambios' : 'Registrar rol' }}
         </button>
       </div>
     </form>

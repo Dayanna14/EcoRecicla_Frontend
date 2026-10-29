@@ -27,10 +27,10 @@
       <ng-container matColumnDef="c4">
         <th mat-header-cell *matHeaderCellDef>Acciones</th>
         <td mat-cell *matCellDef="let element">
-          <!-- Editar: se conecta en HUF06 -->
-          <button mat-icon-button class="btn-editar" aria-label="Editar rol">
+          <!-- Editar (HUF06) -->
+          <a mat-icon-button class="btn-editar" aria-label="Editar rol" [routerLink]="['/roles/ediciones', element.idRol]">
             <mat-icon>edit</mat-icon>
-          </button>
+          </a>
           <!-- Eliminar (HUF07) -->
           <button mat-icon-button class="btn-eliminar" aria-label="Eliminar rol" (click)="eliminar(element)">
             <mat-icon>delete</mat-icon>
