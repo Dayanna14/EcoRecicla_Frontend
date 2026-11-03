@@ -6,19 +6,31 @@ import { CentroAcopioDTOInsert } from '../../../models/CentroAcopioDTOInsert';
 import { forkJoin, of, switchMap } from 'rxjs';
 import * as L from 'leaflet';
 import { Nominatimservice } from '../../../services/nominatimservice';
+import { DecimalPipe } from '@angular/common';
+
+// Cada fila de la lista: el centro, su marcador y la distancia al usuario
+interface ItemCentro {
+  centro: CentroAcopioDTOInsert;
+  marcador: L.Marker;
+  distanciaKm: number | null;
+}
 
 @Component({
   selector: 'app-mapacentroscomponent',
-  imports: [MatIconModule, MatSnackBarModule],
+  imports: [MatIconModule, MatSnackBarModule, DecimalPipe],
   templateUrl: './mapacentroscomponent.html',
   styleUrl: './mapacentroscomponent.css',
 })
 export class Mapacentroscomponent implements AfterViewInit, OnDestroy {
-   private mapa!: L.Map;
+  private mapa!: L.Map;
   totalActivos: number = 0;
   totalInactivos: number = 0;
 
-  // Centro de Lima (si no hay centros, el mapa se queda aquí)
+  centrosLista: ItemCentro[] = [];
+  tengoUbicacion: boolean = false;
+  private miUbicacion: L.LatLng | null = null;
+
+  // Centro de Lima (si no hay permiso de ubicación, el mapa se queda aquí)
   private readonly LIMA: L.LatLngTuple = [-12.0464, -77.0428];
 
   // Tus SVG como marcadores (public/img/mapa)
@@ -46,6 +58,7 @@ export class Mapacentroscomponent implements AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.crearMapa();
     this.cargarCentros();
+    this.ubicarUsuario();
   }
 
   // Al salir de la página se libera el mapa
@@ -97,22 +110,84 @@ export class Mapacentroscomponent implements AfterViewInit, OnDestroy {
           // Al abrir el popup se consulta la API externa
           marcador.on('popupopen', () => this.obtenerDireccion(centro, marcador));
 
+          this.centrosLista.push({ centro, marcador, distanciaKm: null });
           centro.estado ? this.totalActivos++ : this.totalInactivos++;
         });
 
-        if (puntos.length > 0) {
-          // Acerca el mapa para que se vean todos los marcadores
-          this.mapa.fitBounds(L.latLngBounds(puntos), { padding: [40, 40], maxZoom: 15 });
-        } else {
+        if (puntos.length === 0) {
           this.notificar('No hay centros de acopio para mostrar en el mapa', 'advertencia');
+        } else if (!this.miUbicacion) {
+          // Sin ubicación del usuario: se acerca para ver todos los centros
+          this.mapa.fitBounds(L.latLngBounds(puntos), { padding: [40, 40], maxZoom: 15 });
         }
-        this.cdr.detectChanges();
+
+        this.calcularDistancias();
       },
       error: err => {
         console.error('Error al cargar los centros', err);
         this.notificar('Error al cargar los centros de acopio', 'error');
       },
     });
+  }
+
+  // HUF26 CA03 y CA04: ubicación del reciclador (Geolocation API del navegador)
+  ubicarUsuario(): void {
+    if (!navigator.geolocation) {
+      this.notificar('Tu navegador no permite obtener la ubicación. Se muestra Lima.', 'advertencia');
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        this.miUbicacion = L.latLng(pos.coords.latitude, pos.coords.longitude);
+        this.tengoUbicacion = true;
+
+        // Círculo con el margen de error que informa el navegador (en metros)
+        L.circle(this.miUbicacion, {
+          radius: pos.coords.accuracy,
+          color: '#c9893e',
+          weight: 1,
+          fillColor: '#c9893e',
+          fillOpacity: 0.1,
+        }).addTo(this.mapa)
+          .bindPopup('<div class="popup-centro"><strong>Tú estás aquí</strong></div>');
+
+        this.mapa.setView(this.miUbicacion, 14);
+        this.calcularDistancias();
+        this.notificar('Ubicación encontrada. Centros ordenados por distancia.', 'exito');
+      },
+      err => {
+        console.log('Error de ubicación', err.code, err.message);
+        // 1 = permiso denegado, 2 = ubicación no disponible, 3 = tiempo agotado
+        const mensajes: Record<number, string> = {
+          1: 'No diste permiso de ubicación. Se muestra el mapa de Lima.',
+          2: 'No se pudo obtener tu ubicación (revisa la ubicación de Windows). Se muestra Lima.',
+          3: 'La ubicación tardó demasiado. Se muestra el mapa de Lima.',
+        };
+        this.notificar(mensajes[err.code] ?? 'No se pudo obtener tu ubicación. Se muestra Lima.', 'advertencia');
+      },
+      { enableHighAccuracy: false, timeout: 15000, maximumAge: 60000 },
+    );
+  }
+  // HUF26 CA05: distancia de cada centro y orden del más cercano al más lejano
+  calcularDistancias(): void {
+    this.centrosLista.forEach(item => {
+      item.distanciaKm = this.miUbicacion
+        ? this.miUbicacion.distanceTo([item.centro.latitud, item.centro.longitud]) / 1000
+        : null;
+    });
+
+    this.centrosLista.sort((a, b) =>
+      (a.distanciaKm ?? Infinity) - (b.distanciaKm ?? Infinity) ||
+      a.centro.nombre.localeCompare(b.centro.nombre)
+    );
+    this.cdr.detectChanges();
+  }
+
+  // Al hacer clic en la lista: el mapa va al centro y abre su popup
+  verEnMapa(item: ItemCentro): void {
+    this.mapa.setView(item.marcador.getLatLng(), 16);
+    item.marcador.openPopup();
   }
 
   // API externa 2: Nominatim (mismo patrón que obtenerPersonaje de la profesora)
