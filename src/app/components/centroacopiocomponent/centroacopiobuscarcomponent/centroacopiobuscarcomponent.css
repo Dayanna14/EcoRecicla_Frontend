@@ -1,0 +1,139 @@
+.contenedor {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 16px;
+}
+
+.encabezado {
+  margin-bottom: 24px;
+}
+
+.subtitulo {
+  margin: 10px 0 0;
+  color: var(--eco-charcoal);
+}
+
+.tarjeta {
+  background-color: var(--mat-sys-surface);
+  border: 1px solid var(--eco-vanilla);
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  overflow-x: auto;
+}
+
+/* ---------- Buscador ---------- */
+.etiqueta {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--eco-charcoal);
+}
+
+.buscador {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--eco-vanilla);
+}
+
+.buscador .campo {
+  flex: 1;
+  min-width: 220px;
+  max-width: 460px;
+  --mat-form-field-outlined-outline-color: var(--eco-salvia);
+  --mat-form-field-outlined-hover-outline-color: var(--eco-verde-hoja);
+  --mat-form-field-outlined-focus-outline-color: var(--eco-verde-bosque);
+  --mat-form-field-outlined-container-shape: 8px;
+}
+
+.buscador mat-icon[matPrefix] {
+  color: var(--eco-salvia);
+}
+
+/* Botón a la misma altura que el campo */
+.btn-buscar {
+  height: 56px;
+  padding: 0 28px;
+  --mat-button-filled-container-shape: 8px;
+}
+
+.btn-buscar mat-icon {
+  margin-right: 4px;
+}
+
+/* ---------- Resultados ---------- */
+.resultados {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: var(--eco-charcoal);
+}
+
+.resultados strong {
+  color: var(--eco-verde-bosque);
+}
+
+table {
+  width: 100%;
+  background: transparent;
+}
+
+th.mat-mdc-header-cell {
+  background-color: var(--eco-verde-te);
+  color: var(--eco-verde-bosque);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+tr.mat-mdc-row:nth-child(even) {
+  background-color: var(--eco-vanilla);
+}
+
+.nombre {
+  font-weight: 700;
+}
+
+/* Chips de estado (igual que el listado) */
+.chip {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.chip-activo {
+  background-color: var(--eco-verde-te);
+  color: var(--eco-verde-bosque);
+}
+
+.chip-inactivo {
+  background-color: #e6e6ea;
+  color: var(--eco-charcoal);
+}
+
+/* ---------- Estado vacío con ilustración ---------- */
+.vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 32px 16px;
+  text-align: center;
+  color: var(--eco-charcoal);
+}
+
+.vacio img {
+  width: 180px;
+  height: auto;
+}
+
+.vacio p {
+  margin: 0;
+}

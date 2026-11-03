@@ -1,0 +1,62 @@
+<div class="contenedor">
+  <div class="encabezado">
+    <h1>Buscar centros de acopio</h1>
+    <p class="subtitulo">Filtra los centros por su estado.</p>
+  </div>
+
+  <div class="tarjeta">
+    <label class="etiqueta">Estado</label>
+    <div class="buscador">
+      <mat-form-field appearance="outline" class="campo" subscriptSizing="dynamic">
+        <mat-icon matPrefix>toggle_on</mat-icon>
+        <mat-select [(value)]="estadoSeleccionado" placeholder="Seleccione un estado" (selectionChange)="buscarPorEstado()">
+          @for (e of estados; track e.value) {
+            <mat-option [value]="e.value">{{ e.viewValue }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-flat-button class="btn-buscar" (click)="buscarPorEstado()">
+        <mat-icon>search</mat-icon>
+        Buscar
+      </button>
+    </div>
+
+    @if (dataSource.length > 0) {
+      <p class="resultados">
+        <strong>{{ dataSource.length }}</strong> resultado(s) encontrados
+      </p>
+
+      <table mat-table [dataSource]="dataSource">
+        <ng-container matColumnDef="c1">
+          <th mat-header-cell *matHeaderCellDef>ID</th>
+          <td mat-cell *matCellDef="let element" class="mono">{{ element.idCentro }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="c2">
+          <th mat-header-cell *matHeaderCellDef>Nombre</th>
+          <td mat-cell *matCellDef="let element" class="nombre">{{ element.nombre }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="c3">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let element">
+            @if (element.estado) {
+              <span class="chip chip-activo">● Activo</span>
+            } @else {
+              <span class="chip chip-inactivo">● Inactivo</span>
+            }
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    } @else {
+      <div class="vacio">
+        <img src="img/estados/buscar.svg" alt="" />
+        <p>Selecciona un estado y pulsa <strong>Buscar</strong>.</p>
+      </div>
+    }
+  </div>
+</div>

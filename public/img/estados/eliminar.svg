@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Eliminar">
+  <circle cx="60" cy="60" r="56" fill="#f8e6e2"/>
+  <ellipse cx="60" cy="98" rx="28" ry="5" fill="#a3412f" opacity="0.15"/>
+  <!-- tapa levantada -->
+  <g transform="rotate(-14 40 36)">
+    <rect x="34" y="30" width="52" height="9" rx="3" fill="#a3412f"/>
+    <rect x="52" y="24" width="16" height="8" rx="3" fill="#7d2f22"/>
+  </g>
+  <!-- hoja saliendo -->
+  <path d="M58 52 C52 38 58 26 72 22 C76 36 70 48 58 52 Z" fill="#709645"/>
+  <path d="M59 50 C63 42 67 34 71 26" stroke="#2d5d3e" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  <!-- cuerpo -->
+  <path d="M38 46 L82 46 L77 96 L43 96 Z" fill="#c4543f"/>
+  <rect x="36" y="44" width="48" height="6" rx="2" fill="#a3412f"/>
+  <path d="M50 56 L51 88 M60 56 L60 88 M70 56 L69 88" stroke="#f8e6e2" stroke-width="3.5" stroke-linecap="round" opacity="0.85"/>
+</svg>

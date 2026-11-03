@@ -1,1 +1,47 @@
-<p>mapacentroscomponent works!</p>
+<div class="contenedor">
+  <div class="encabezado">
+    <div>
+      <h1>Mapa de centros de acopio</h1>
+      <p class="subtitulo">Encuentra el centro más cercano para llevar tus materiales.</p>
+    </div>
+
+    <div class="leyenda">
+      <span><img src="img/mapa/pin-activo.svg" alt="" /> Activos ({{ totalActivos }})</span>
+      <span><img src="img/mapa/pin-inactivo.svg" alt="" /> Inactivos ({{ totalInactivos }})</span>
+      <span><i class="punto-usuario"></i> Tú</span>
+    </div>
+  </div>
+
+  <div class="layout">
+    <div class="tarjeta">
+      <div id="mapa"></div>
+    </div>
+
+    <!-- Lista de centros ordenada por distancia (HUF26 CA05) -->
+    <aside class="tarjeta lista">
+      <h2>{{ tengoUbicacion ? 'Más cerca de ti' : 'Centros de acopio' }}</h2>
+      @if (!tengoUbicacion) {
+        <p class="aviso">Activa tu ubicación para ordenarlos por distancia.</p>
+      }
+
+      <ul>
+        @for (item of centrosLista; track item.centro.idCentro) {
+          <li>
+            <button type="button" class="item" (click)="verEnMapa(item)">
+              <img [src]="item.centro.estado ? 'img/mapa/pin-activo.svg' : 'img/mapa/pin-inactivo.svg'" alt="" />
+              <span class="info">
+                <strong>{{ item.centro.nombre }}</strong>
+                <span>🕒 {{ item.centro.horario }}</span>
+              </span>
+              @if (item.distanciaKm !== null) {
+                <span class="distancia mono">{{ item.distanciaKm | number: '1.1-1' }} km</span>
+              }
+            </button>
+          </li>
+        } @empty {
+          <li class="vacio">No hay centros para mostrar.</li>
+        }
+      </ul>
+    </aside>
+  </div>
+</div>

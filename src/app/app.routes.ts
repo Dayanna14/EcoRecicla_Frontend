@@ -7,6 +7,10 @@ import { Centroacopiolistcomponent } from './components/centroacopiocomponent/ce
 import { Centroacopioinsertcomponent } from './components/centroacopiocomponent/centroacopioinsertcomponent/centroacopioinsertcomponent';
 import { Mapacentroscomponent } from './components/centroacopiocomponent/mapacentroscomponent/mapacentroscomponent';
 import { Homecomponent } from './components/homecomponent/homecomponent';
+import { Rolupdatecomponent } from './components/rolcomponent/rolupdatecomponent/rolupdatecomponent';
+import { Rolbuscarcomponent } from './components/rolcomponent/rolbuscarcomponent/rolbuscarcomponent';
+import { Centroacopiobuscarcomponent } from './components/centroacopiocomponent/centroacopiobuscarcomponent/centroacopiobuscarcomponent';
+import { Centroacopioupdatecomponent } from './components/centroacopiocomponent/centroacopioupdatecomponent/centroacopioupdatecomponent';
 
 export const routes: Routes = [
         // ---------- General ----------
@@ -20,6 +24,8 @@ export const routes: Routes = [
         children: [
             { path: 'listar', component: Rollistcomponent },
             { path: 'insertar', component: Rolinsertcomponent },
+            { path: 'editar/:id', component: Rolupdatecomponent },
+            { path: 'buscar', component: Rolbuscarcomponent },
             { path: '', redirectTo: 'listar', pathMatch: 'full' }
         ]
     },
@@ -31,6 +37,8 @@ export const routes: Routes = [
         children: [
             { path: 'listar', component: Centroacopiolistcomponent },
             { path: 'insertar', component: Centroacopioinsertcomponent },
+            { path: 'buscar', component: Centroacopiobuscarcomponent },
+            { path: 'editar/:id', component: Centroacopioupdatecomponent },
             { path: 'mapa', component: Mapacentroscomponent },
             { path: '', redirectTo: 'listar', pathMatch: 'full' }
         ]

@@ -1,13 +1,14 @@
 <mat-toolbar class="barra">
-    <button mat-button routerLink="/home" class="logo">
-        <mat-icon>eco</mat-icon> EcoRecicla
-    </button>
+      <a routerLink="/home" class="logo">
+      <img src="ecorecicla-texto-crema.svg" alt="EcoRecicla" />
+    </a>
 
   <!-- Dayana: Roles -->
   <button mat-button [matMenuTriggerFor]="menuRoles">Roles</button>
   <mat-menu #menuRoles="matMenu">
     <button mat-menu-item routerLink="/roles/listar">Listar</button>
     <button mat-menu-item routerLink="/roles/insertar">Registrar</button>
+    <button mat-menu-item routerLink="/roles/buscar">Buscar</button>
   </mat-menu>
 
   <!-- Dayana: Centros de acopio -->
@@ -15,6 +16,7 @@
   <mat-menu #menuCentros="matMenu">
     <button mat-menu-item routerLink="/centrosacopio/listar">Listar</button>
     <button mat-menu-item routerLink="/centrosacopio/insertar">Registrar</button>
+    <button mat-menu-item routerLink="/centrosacopio/buscar">Buscar</button>
     <button mat-menu-item routerLink="/centrosacopio/mapa">Mapa</button>
   </mat-menu>
     <!-- Nayara: Usuarios y Recompensas -->

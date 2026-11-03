@@ -1,0 +1,63 @@
+<div class="contenedor">
+  <nav class="migas">
+    <a routerLink="/roles/listar">Roles</a>
+    <span>/</span>
+    <span>Editar</span>
+  </nav>
+
+  <h1>Editar rol</h1>
+  <p class="subtitulo">Actualiza los datos del perfil de acceso.</p>
+
+  <div class="grid">
+    <div>
+      <form class="tarjeta formulario" [formGroup]="formRol" (ngSubmit)="actualizarRol()">
+        <h2>Datos del rol</h2>
+
+        <label class="etiqueta" for="codigo">ID</label>
+        <mat-form-field appearance="outline">
+          <mat-icon matPrefix>tag</mat-icon>
+          <input matInput id="codigo" type="number" formControlName="codigo" readonly />
+        </mat-form-field>
+
+        <label class="etiqueta" for="nombre">Nombre</label>
+        <mat-form-field appearance="outline">
+          <mat-icon matPrefix>badge</mat-icon>
+          <span matTextPrefix class="mono prefijo">ROLE_</span>
+          <input
+            matInput
+            id="nombre"
+            formControlName="nombre"
+            maxlength="45"
+            (input)="normalizarNombre()"
+          />
+          @if (formRol.get('nombre')?.hasError('required')) {
+            <mat-error>Campo obligatorio, ingrese el nombre</mat-error>
+          } @else if (formRol.get('nombre')?.hasError('pattern')) {
+            <mat-error>Usa solo letras, sin tildes ni números</mat-error>
+          }
+        </mat-form-field>
+
+        <label class="etiqueta" for="descripcion">Descripción</label>
+        <mat-form-field appearance="outline">
+          <mat-icon matPrefix>notes</mat-icon>
+          <textarea
+            matInput
+            id="descripcion"
+            formControlName="descripcion"
+            rows="4"
+            maxlength="200"
+          ></textarea>
+          <mat-hint align="end" class="mono">{{ formRol.get('descripcion')?.value?.length || 0 }}/200</mat-hint>
+          @if (formRol.get('descripcion')?.hasError('required')) {
+            <mat-error>Campo obligatorio, ingrese la descripción</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="acciones">
+          <a mat-stroked-button routerLink="/roles/listar">Cancelar</a>
+          <button mat-flat-button type="submit">Guardar cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
