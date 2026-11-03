@@ -1,5 +1,5 @@
 .contenedor {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 24px 16px 48px;
 }
@@ -28,15 +28,15 @@
   color: var(--eco-charcoal);
 }
 
-/* Una columna de ancho cómodo */
+/* Formulario a la izquierda, mapa a la derecha; en celular, uno debajo del otro */
 .grid {
   display: grid;
-  grid-template-columns: minmax(0, 720px);
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
   gap: 24px;
   align-items: start;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .grid {
     grid-template-columns: 1fr;
   }
@@ -60,7 +60,6 @@ h2 {
   margin-bottom: 16px;
 }
 
-/* Etiqueta encima del campo */
 .etiqueta {
   display: block;
   margin-bottom: 6px;
@@ -82,7 +81,7 @@ mat-icon[matPrefix] {
   color: var(--eco-salvia);
 }
 
-/* Latitud y longitud lado a lado; en celular, una debajo de otra */
+/* Latitud y longitud lado a lado */
 .fila {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -95,7 +94,17 @@ mat-icon[matPrefix] {
   }
 }
 
-/* Botones con esquinas suaves */
+/* Dirección que trae Nominatim */
+.direccion {
+  margin: 0 0 8px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background-color: var(--eco-verde-te);
+  color: var(--eco-verde-bosque);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
 .acciones {
   display: flex;
   justify-content: flex-end;
@@ -104,4 +113,35 @@ mat-icon[matPrefix] {
   --mat-button-filled-container-shape: 8px;
   --mat-button-outlined-container-shape: 8px;
   --mat-button-outlined-outline-color: var(--eco-verde-bosque);
+}
+
+/* ---------- Mapa ---------- */
+.mapa-tarjeta {
+  padding: 12px;
+}
+
+.mapa-ayuda {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 13px;
+  color: var(--eco-charcoal);
+}
+
+.mapa-ayuda mat-icon {
+  color: var(--eco-ambar);
+}
+
+#mapaEditar {
+  height: 560px;
+  width: 100%;
+  border-radius: 8px;
+  cursor: crosshair;
+}
+
+@media (max-width: 768px) {
+    #mapaEditar{
+    height: 380px;
+  }
 }
