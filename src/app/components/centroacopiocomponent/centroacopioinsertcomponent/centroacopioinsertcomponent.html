@@ -1,1 +1,93 @@
-<p>centroacopioinsertcomponent works!</p>
+<div class="contenedor">
+  <nav class="migas">
+    <a routerLink="/centrosacopio/listar">Centros de acopio</a>
+    <span>/</span>
+    <span>Registrar</span>
+  </nav>
+
+  <h1>Registrar centro de acopio</h1>
+  <p class="subtitulo">Completa los datos y haz clic en el mapa para marcar dónde está el centro.</p>
+
+  <div class="grid">
+    <!-- Columna izquierda: formulario -->
+    <form class="tarjeta formulario" [formGroup]="form" #formDir="ngForm" (ngSubmit)="registrar(formDir)">
+      <h2>Datos del centro</h2>
+
+      <label class="etiqueta" for="nombre">Nombre</label>
+      <mat-form-field appearance="outline">
+        <mat-icon matPrefix>store</mat-icon>
+        <input matInput id="nombre" formControlName="nombre" placeholder="Centro Miraflores" maxlength="100" />
+        @if (form.get('nombre')?.hasError('required')) {
+          <mat-error>Campo obligatorio, ingrese el nombre</mat-error>
+        }
+      </mat-form-field>
+
+      <label class="etiqueta" for="horario">Horario</label>
+      <mat-form-field appearance="outline">
+        <mat-icon matPrefix>schedule</mat-icon>
+        <input matInput id="horario" formControlName="horario" placeholder="08:00-18:00" maxlength="100" />
+        @if (form.get('horario')?.hasError('required')) {
+          <mat-error>Campo obligatorio, ingrese el horario</mat-error>
+        }
+      </mat-form-field>
+
+      <label class="etiqueta">Operador responsable</label>
+      <mat-form-field appearance="outline">
+        <mat-icon matPrefix>person</mat-icon>
+        <mat-select formControlName="idUsuario" placeholder="Seleccione un usuario">
+          @for (u of usuarios; track u.id_usuario) {
+            <mat-option [value]="u.id_usuario">{{ u.nombre }} · {{ u.email }}</mat-option>
+          }
+        </mat-select>
+        @if (form.get('idUsuario')?.hasError('required')) {
+          <mat-error>Campo obligatorio, seleccione el operador</mat-error>
+        }
+      </mat-form-field>
+
+      <label class="etiqueta">Estado</label>
+      <mat-form-field appearance="outline">
+        <mat-icon matPrefix>toggle_on</mat-icon>
+        <mat-select formControlName="estado">
+          @for (e of estados; track e.value) {
+            <mat-option [value]="e.value">{{ e.viewValue }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <div class="fila">
+        <div>
+          <label class="etiqueta" for="latitud">Latitud</label>
+          <mat-form-field appearance="outline">
+            <mat-icon matPrefix>place</mat-icon>
+            <input matInput id="latitud" type="number" formControlName="latitud" readonly placeholder="Clic en el mapa" />
+          </mat-form-field>
+        </div>
+        <div>
+          <label class="etiqueta" for="longitud">Longitud</label>
+          <mat-form-field appearance="outline">
+            <mat-icon matPrefix>explore</mat-icon>
+            <input matInput id="longitud" type="number" formControlName="longitud" readonly placeholder="Clic en el mapa" />
+          </mat-form-field>
+        </div>
+      </div>
+
+      @if (direccion) {
+        <p class="direccion">📍 {{ direccion }}</p>
+      }
+
+      <div class="acciones">
+        <a mat-stroked-button routerLink="/centrosacopio/listar">Cancelar</a>
+        <button mat-flat-button type="submit">Registrar centro</button>
+      </div>
+    </form>
+
+    <!-- Columna derecha: mapa para marcar la ubicación -->
+    <div class="tarjeta mapa-tarjeta">
+      <div class="mapa-ayuda">
+        <mat-icon>touch_app</mat-icon>
+        <span>Haz clic en el mapa para marcar el centro. Puedes arrastrar el pin para corregirlo.</span>
+      </div>
+      <div id="mapaRegistro"></div>
+    </div>
+  </div>
+</div>
