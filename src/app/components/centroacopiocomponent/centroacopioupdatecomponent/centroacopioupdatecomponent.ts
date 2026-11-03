@@ -9,6 +9,8 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Centroacopioservice } from '../../../services/centroacopioservice';
 import { CentroAcopioDTOInsert } from '../../../models/CentroAcopioDTOInsert';
+import * as L from 'leaflet';
+import { Nominatimservice } from '../../../services/nominatimservice';
 
 @Component({
   selector: 'app-centroacopioupdatecomponent',
@@ -26,17 +28,28 @@ import { CentroAcopioDTOInsert } from '../../../models/CentroAcopioDTOInsert';
   styleUrl: './centroacopioupdatecomponent.css',
 })
 export class Centroacopioupdatecomponent {
-    idCentro: number = 0;
+   idCentro: number = 0;
   idUsuario: number = 0; // se conserva el usuario que ya tiene el centro
   formCentro!: FormGroup;
+  direccion: string = '';
 
   estados = [
     { value: true, viewValue: 'Activo' },
     { value: false, viewValue: 'Inactivo' },
   ];
 
+  private mapa!: L.Map;
+  private marcador: L.Marker | null = null;
+  private readonly LIMA: L.LatLngTuple = [-12.0464, -77.0428];
+  private icono = L.icon({
+    iconUrl: 'img/mapa/pin-activo.svg',
+    iconSize: [36, 48],
+    iconAnchor: [18, 45],
+  });
+
   constructor(
     private cS: Centroacopioservice,
+    private nS: Nominatimservice,
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
@@ -67,6 +80,25 @@ export class Centroacopioupdatecomponent {
     this.buscarPorId();
   }
 
+  // El mapa se crea cuando el <div id="mapaEditar"> ya existe
+  ngAfterViewInit(): void {
+    this.mapa = L.map('mapaEditar').setView(this.LIMA, 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    }).addTo(this.mapa);
+
+    // Clic en el mapa = nueva ubicación
+    this.mapa.on('click', (e: L.LeafletMouseEvent) => this.moverUbicacion(e.latlng));
+
+    // Si los datos llegaron antes que el mapa, se pone el pin ahora
+    this.ponerMarcadorActual();
+  }
+
+  ngOnDestroy(): void {
+    this.mapa?.remove();
+  }
+
   notificar(texto: string, tipo: 'exito' | 'advertencia' | 'error'): void {
     this.snackBar.open(texto, 'Cerrar', {
       duration: 4000,
@@ -88,10 +120,55 @@ export class Centroacopioupdatecomponent {
           longitud: data.longitud,
           estado: data.estado,
         });
+        this.ponerMarcadorActual();
         this.cdr.detectChanges();
       },
       error: () => {
         this.notificar('No se encontró el centro de acopio', 'error');
+      },
+    });
+  }
+
+  // HUF24 CA06: el marcador aparece en la ubicación actual del centro
+  ponerMarcadorActual(): void {
+    const lat = this.formCentro?.value.latitud;
+    const lng = this.formCentro?.value.longitud;
+    if (!this.mapa || lat == null || lng == null) return;
+
+    const punto = L.latLng(lat, lng);
+    if (!this.marcador) {
+      this.marcador = L.marker(punto, { icon: this.icono, draggable: true }).addTo(this.mapa);
+      // HUF24 CA06: el marcador se puede mover arrastrándolo
+      this.marcador.on('dragend', () => this.moverUbicacion(this.marcador!.getLatLng()));
+    } else {
+      this.marcador.setLatLng(punto);
+    }
+    this.mapa.setView(punto, 16);
+    this.buscarDireccion(lat, lng);
+  }
+
+  // Mueve el pin y actualiza latitud y longitud
+  moverUbicacion(punto: L.LatLng): void {
+    this.marcador?.setLatLng(punto);
+    this.formCentro.patchValue({
+      latitud: Number(punto.lat.toFixed(6)),
+      longitud: Number(punto.lng.toFixed(6)),
+    });
+    this.buscarDireccion(punto.lat, punto.lng);
+    this.cdr.detectChanges();
+  }
+
+  // Dirección con Nominatim (API externa)
+  buscarDireccion(lat: number, lon: number): void {
+    this.direccion = 'Buscando dirección......';
+    this.nS.buscarDireccion(lat, lon).subscribe({
+      next: data => {
+        this.direccion = data.display_name ?? 'Dirección no disponible';
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.direccion = 'No se encontró la dirección';
+        this.cdr.detectChanges();
       },
     });
   }
