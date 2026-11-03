@@ -7,6 +7,8 @@ import { Centroacopiolistcomponent } from './components/centroacopiocomponent/ce
 import { Centroacopioinsertcomponent } from './components/centroacopiocomponent/centroacopioinsertcomponent/centroacopioinsertcomponent';
 import { Mapacentroscomponent } from './components/centroacopiocomponent/mapacentroscomponent/mapacentroscomponent';
 import { Homecomponent } from './components/homecomponent/homecomponent';
+import { Rolupdatecomponent } from './components/rolcomponent/rolupdatecomponent/rolupdatecomponent';
+import { Rolbuscarcomponent } from './components/rolcomponent/rolbuscarcomponent/rolbuscarcomponent';
 
 export const routes: Routes = [
         // ---------- General ----------
@@ -20,7 +22,8 @@ export const routes: Routes = [
         children: [
             { path: 'listar', component: Rollistcomponent },
             { path: 'insertar', component: Rolinsertcomponent },
-            { path: 'ediciones/:id', component: Rolinsertcomponent },
+            { path: 'editar/:id', component: Rolupdatecomponent },
+            { path: 'buscar', component: Rolbuscarcomponent },
             { path: '', redirectTo: 'listar', pathMatch: 'full' }
         ]
     },

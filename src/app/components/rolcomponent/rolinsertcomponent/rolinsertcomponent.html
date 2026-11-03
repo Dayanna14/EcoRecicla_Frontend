@@ -2,73 +2,63 @@
   <nav class="migas">
     <a routerLink="/roles/listar">Roles</a>
     <span>/</span>
-    <span>{{ edicion ? 'Editar' : 'Registrar' }}</span>
+    <span>Registrar</span>
   </nav>
 
-  <h1>{{ edicion ? 'Editar rol' : 'Registrar rol' }}</h1>
-  <p class="subtitulo">
-    @if (edicion) {
-      Actualiza los datos del perfil de acceso.
-    } @else {
-      Crea un nuevo perfil de acceso para los usuarios de EcoRecicla.
-    }
-  </p>
+  <h1>Registrar rol</h1>
+  <p class="subtitulo">Crea un nuevo perfil de acceso para los usuarios de EcoRecicla.</p>
 
   <div class="grid">
     <!-- Columna izquierda: formulario -->
-    <form class="tarjeta formulario" [formGroup]="form" (ngSubmit)="registrar()">
-      <h2>Datos del rol</h2>
+    <div>
+      <form class="tarjeta formulario" [formGroup]="form" #formDir="ngForm" (ngSubmit)="registrar(formDir)">
+        <h2>Datos del rol</h2>
 
-      <label class="etiqueta" for="nombre">Nombre</label>
-      <mat-form-field appearance="outline">
-        <mat-icon matPrefix>badge</mat-icon>
-        <span matTextPrefix class="mono prefijo">ROLE_</span>
-        <input
-          matInput
-          id="nombre"
-          formControlName="nombre"
-          placeholder="SUPERVISOR"
-          maxlength="45"
-          (input)="normalizarNombre()"
-        />
-        @if (esRolSistema) {
-          <mat-hint>Es un rol del sistema: su nombre no se puede cambiar.</mat-hint>
-        } @else {
+        <label class="etiqueta" for="nombre">Nombre</label>
+        <mat-form-field appearance="outline">
+          <mat-icon matPrefix>badge</mat-icon>
+          <span matTextPrefix class="mono prefijo">ROLE_</span>
+          <input
+            matInput
+            id="nombre"
+            formControlName="nombre"
+            placeholder="SUPERVISOR"
+            maxlength="45"
+            (input)="normalizarNombre()"
+          />
           <mat-hint>Escribe la función, por ejemplo: supervisor.</mat-hint>
-        }
-        @if (form.get('nombre')?.hasError('required')) {
-          <mat-error>El nombre del rol es obligatorio.</mat-error>
-        } @else if (form.get('nombre')?.hasError('pattern')) {
-          <mat-error>Usa solo letras, sin tildes ni números.</mat-error>
-        }
-      </mat-form-field>
+          @if (form.get('nombre')?.hasError('required')) {
+            <mat-error>Campo obligatorio, ingrese el nombre</mat-error>
+          } @else if (form.get('nombre')?.hasError('pattern')) {
+            <mat-error>Usa solo letras, sin tildes ni números</mat-error>
+          }
+        </mat-form-field>
 
-      <label class="etiqueta" for="descripcion">Descripción</label>
-      <mat-form-field appearance="outline">
-        <mat-icon matPrefix>notes</mat-icon>
-        <textarea
-          matInput
-          id="descripcion"
-          formControlName="descripcion"
-          rows="4"
-          maxlength="200"
-          placeholder="¿Qué podrá hacer este rol en la plataforma?"
-        ></textarea>
-        <mat-hint align="end" class="mono">{{ form.get('descripcion')?.value?.length || 0 }}/200</mat-hint>
-        @if (form.get('descripcion')?.hasError('required')) {
-          <mat-error>La descripción es obligatoria.</mat-error>
-        }
-      </mat-form-field>
+        <label class="etiqueta" for="descripcion">Descripción</label>
+        <mat-form-field appearance="outline">
+          <mat-icon matPrefix>notes</mat-icon>
+          <textarea
+            matInput
+            id="descripcion"
+            formControlName="descripcion"
+            rows="4"
+            maxlength="200"
+            placeholder="¿Qué podrá hacer este rol en la plataforma?"
+          ></textarea>
+          <mat-hint align="end" class="mono">{{ form.get('descripcion')?.value?.length || 0 }}/200</mat-hint>
+          @if (form.get('descripcion')?.hasError('required')) {
+            <mat-error>Campo obligatorio, ingrese la descripción</mat-error>
+          }
+        </mat-form-field>
 
-      <div class="acciones">
-        <a mat-stroked-button routerLink="/roles/listar">Cancelar</a>
-        <button mat-flat-button type="submit" [disabled]="form.invalid || guardando">
-          {{ edicion ? 'Guardar cambios' : 'Registrar rol' }}
-        </button>
-      </div>
-    </form>
+        <div class="acciones">
+          <a mat-stroked-button routerLink="/roles/listar">Cancelar</a>
+          <button mat-flat-button type="submit">Registrar rol</button>
+        </div>
+      </form>
+    </div>
 
-    <!-- Columna derecha: ayuda para el usuario -->
+    <!-- Columna derecha: ayuda para el usuario (sin cambios) -->
     <aside class="lateral">
       <div class="tarjeta">
         <h2>¿Qué es un rol?</h2>

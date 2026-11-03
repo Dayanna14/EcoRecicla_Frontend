@@ -22,7 +22,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
   templateUrl: './rollistcomponent.html',
   styleUrl: './rollistcomponent.css',
 })
-export class Rollistcomponent  implements OnInit {
+export class Rollistcomponent {
   displayedColumns: string[] = ['c1', 'c2', 'c3', 'c4'];
   dataSource = new MatTableDataSource<RolDTOInsert>();
 
@@ -72,17 +72,28 @@ export class Rollistcomponent  implements OnInit {
   }
 
   // Igual que deleteMovie() de la profesora (CA03, CA04, CA05)
+    // Igual que deleteMovie() de la profesora (CA03, CA04, CA05)
   deleteRol(id: number): void {
     this.rS.delete(id).subscribe({
       next: () => {
-        this.snackBar.open('Rol eliminado correctamente', 'OK', { duration: 3000 });
+        this.snackBar.open('Rol eliminado correctamente', 'Cerrar', {
+          duration: 4000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+          panelClass: ['noti-exito'],
+        });
         this.listar();
       },
       error: err => {
         const mensaje = err.error?.message ?? 'No se pudo eliminar el rol';
-        this.snackBar.open(mensaje, 'Cerrar', { duration: 6000 });
+        this.snackBar.open(mensaje, 'Cerrar', {
+          duration: 6000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+          panelClass: ['noti-error'],
+        });
         this.cdr.detectChanges();
-      }
+      },
     });
   }
 }
