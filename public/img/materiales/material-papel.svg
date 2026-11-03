@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Papel y cartón">
+<clipPath id="c-material-papel"><circle cx="60" cy="60" r="56"/></clipPath>
+<circle cx="60" cy="60" r="56" fill="#f3e6cf"/>
+
+<ellipse cx="60" cy="98" rx="30" ry="3.5" fill="#e2cfa8"/>
+<path d="M30 52 L60 60 L90 52 L60 44 Z" fill="#95652e"/><path d="M30 52 L60 60 L60 96 L30 88 Z" fill="#c9893e"/><path d="M90 52 L60 60 L60 96 L90 88 Z" fill="#b57a35"/>
+<path d="M30 52 L22 62 L52 70 L60 60 Z" fill="#dba25a"/><path d="M90 52 L98 62 L68 70 L60 60 Z" fill="#c9893e"/>
+<g transform="rotate(-12 58 34)"><rect x="40" y="22" width="36" height="26" rx="1" fill="#fffaee"/><rect x="44" y="26" width="14" height="10" fill="#b8c7a4"/><path d="M61 27 H72 M61 31 H72 M61 35 H70 M44 40 H72 M44 44 H66" stroke="#454955" stroke-width="1.6" stroke-linecap="round"/></g>
+</svg>

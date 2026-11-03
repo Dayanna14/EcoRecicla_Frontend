@@ -1,1 +1,17 @@
-<p>mapacentroscomponent works!</p>
+<div class="contenedor">
+  <div class="encabezado">
+    <div>
+      <h1>Mapa de centros de acopio</h1>
+      <p class="subtitulo">Encuentra el centro más cercano para llevar tus materiales.</p>
+    </div>
+
+    <div class="leyenda">
+      <span><img src="img/mapa/pin-activo.svg" alt="" /> Activos ({{ totalActivos }})</span>
+      <span><img src="img/mapa/pin-inactivo.svg" alt="" /> Inactivos ({{ totalInactivos }})</span>
+    </div>
+  </div>
+
+  <div class="tarjeta">
+    <div id="mapa"></div>
+  </div>
+</div>

@@ -1,9 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { RouterLink } from '@angular/router';
 import { CentroAcopioDTOInsert } from '../../../models/CentroAcopioDTOInsert';
@@ -17,8 +15,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   imports: [
     MatTableModule,
     MatPaginatorModule,
-    MatFormFieldModule,
-    MatSelectModule,
     MatIconModule,
     MatButtonModule,
     RouterLink,
@@ -31,37 +27,31 @@ export class Centroacopiolistcomponent implements OnInit {
   displayedColumns: string[] = ['c1', 'c2', 'c3', 'c4', 'c5'];
   dataSource = new MatTableDataSource<CentroAcopioDTOInsert>();
 
-  // Opciones del filtro (como el ejemplo de mat-select)
-  estados: any[] = [
-    { value: 'todos', viewValue: 'Todos los estados' },
-    { value: 'activos', viewValue: 'Activos' },
-    { value: 'inactivos', viewValue: 'Inactivos' },
-  ];
-  estadoFiltro: string = 'todos';
-
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild('dialogEliminar') dialogEliminar!: TemplateRef<any>;
-
 
   constructor(
     private cS: Centroacopioservice,
     private cdr: ChangeDetectorRef,
-    private dialog: MatDialog,     
-    private snackBar: MatSnackBar, 
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar,
   ) {}
 
   ngOnInit(): void {
     this.listar();
   }
 
-  listar(): void {
-    // Todos → GET /api/centrosacopio ; Activos/Inactivos → GET /buscar?estado=
-    const peticion =
-      this.estadoFiltro === 'todos'
-        ? this.cS.list()
-        : this.cS.searchByEstado(this.estadoFiltro === 'activos');
+  notificar(texto: string, tipo: 'exito' | 'advertencia' | 'error'): void {
+    this.snackBar.open(texto, 'Cerrar', {
+      duration: 4000,
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+      panelClass: ['noti-' + tipo],
+    });
+  }
 
-    peticion.pipe(
+  listar(): void {
+    this.cS.list().pipe(
       // Por cada centro, pide su detalle (trae el horario)
       switchMap(centros =>
         centros.length > 0
@@ -76,11 +66,11 @@ export class Centroacopiolistcomponent implements OnInit {
       },
       error: err => {
         console.log('Error al listar los centros de acopio', err);
-      }
+      },
     });
   }
 
-    // NUEVO: abre la confirmación (CA02)
+  // Abre la confirmación (HUF25 CA02)
   eliminar(centro: CentroAcopioDTOInsert): void {
     this.dialog.open(this.dialogEliminar, {
       data: centro,
@@ -92,18 +82,17 @@ export class Centroacopiolistcomponent implements OnInit {
     });
   }
 
-  // NUEVO: igual que deleteMovie() de la profesora (CA03, CA04, CA05)
+  // Igual que deleteMovie() de la profesora
   deleteCentro(id: number): void {
     this.cS.delete(id).subscribe({
       next: () => {
-        this.snackBar.open('Centro de acopio eliminado correctamente', 'OK', { duration: 3000 });
+        this.notificar('Centro de acopio eliminado correctamente', 'exito');
         this.listar();
       },
       error: err => {
-        const mensaje = err.error?.message ?? 'No se pudo eliminar el centro de acopio';
-        this.snackBar.open(mensaje, 'Cerrar', { duration: 6000 });
+        this.notificar(err.error?.message ?? 'No se pudo eliminar el centro de acopio', 'error');
         this.cdr.detectChanges();
-      }
+      },
     });
   }
 }

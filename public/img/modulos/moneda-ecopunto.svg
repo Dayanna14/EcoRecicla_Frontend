@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="EcoPunto">
+<clipPath id="c-moneda-ecopunto"><circle cx="60" cy="60" r="56"/></clipPath>
+<circle cx="60" cy="60" r="56" fill="#dde5b6"/>
+
+<ellipse cx="66" cy="70" rx="26" ry="26" fill="#95652e"/>
+<circle cx="56" cy="58" r="28" fill="#c9893e"/><circle cx="56" cy="58" r="22" fill="#dba25a"/><circle cx="56" cy="58" r="22" fill="none" stroke="#b57a35" stroke-width="2" stroke-dasharray="2 3"/>
+<g transform="translate(56 58) rotate(0) scale(1.8)"><path d="M-7 7 C-8 -2 -2 -8 8 -8 C9 2 3 8 -7 7 Z" fill="#fdf3d7"/><path d="M-5.5 5.5 C-2 1.5 2 -2 6.5 -6.5" fill="none" stroke="#c9893e" stroke-width="1.3" stroke-linecap="round"/></g>
+</svg>

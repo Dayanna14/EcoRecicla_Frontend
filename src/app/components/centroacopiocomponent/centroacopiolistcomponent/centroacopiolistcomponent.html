@@ -8,18 +8,6 @@
   </div>
 
   <div class="tarjeta">
-    <!-- Filtro por estado (CA04) -->
-    <div class="filtros">
-      <mat-form-field appearance="outline" class="filtro-estado">
-        <mat-label>Estado</mat-label>
-        <mat-select [(value)]="estadoFiltro" (selectionChange)="listar()">
-          @for (e of estados; track e.value) {
-            <mat-option [value]="e.value">{{ e.viewValue }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-    </div>
-
     <table mat-table [dataSource]="dataSource">
       <ng-container matColumnDef="c1">
         <th mat-header-cell *matHeaderCellDef>ID</th>
@@ -56,9 +44,9 @@
         <th mat-header-cell *matHeaderCellDef>Acciones</th>
         <td mat-cell *matCellDef="let element">
           <!-- Editar: se conecta en HUF24 -->
-          <button mat-icon-button class="btn-editar" aria-label="Editar centro">
+          <a mat-icon-button class="btn-editar" aria-label="Editar centro" [routerLink]="['/centrosacopio/editar', element.idCentro]">
             <mat-icon>edit</mat-icon>
-          </button>
+          </a>
           <!-- Eliminar (HUF25) -->
           <button mat-icon-button class="btn-eliminar" aria-label="Eliminar centro" (click)="eliminar(element)">
             <mat-icon>delete</mat-icon>

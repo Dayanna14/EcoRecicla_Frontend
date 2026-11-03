@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Materiales">
+<clipPath id="c-modulo-materiales"><circle cx="60" cy="60" r="56"/></clipPath>
+<circle cx="60" cy="60" r="56" fill="#dde5b6"/>
+
+<ellipse cx="60" cy="96" rx="24" ry="4" fill="#b8c7a4"/>
+<path d="M38 44 L82 44 L77 95 L43 95 Z" fill="#709645"/><path d="M60 44 L82 44 L77 95 L60 95 Z" fill="#628a3c"/>
+<rect x="33" y="36" width="54" height="10" rx="3" fill="#2d5d3e"/><rect x="52" y="30" width="16" height="7" rx="2" fill="#1f4a2f"/>
+<g transform="translate(60 70) scale(1.9)" fill="none" stroke="#fdf3d7" stroke-width="1.37" stroke-linecap="round" stroke-linejoin="round"><path d="M-6 3 L-1 -6 L2 -1"/><path d="M6 3 L-4 3"/><path d="M1 -6 L6 2 L2 5"/></g>
+</svg>

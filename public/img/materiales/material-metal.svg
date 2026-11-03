@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Metal">
+<clipPath id="c-material-metal"><circle cx="60" cy="60" r="56"/></clipPath>
+<circle cx="60" cy="60" r="56" fill="#e8e8e4"/>
+
+<ellipse cx="60" cy="98" rx="20" ry="3.5" fill="#cfd0ca"/>
+<path d="M42 30 H78 V90 C78 94 70 97 60 97 C50 97 42 94 42 90 Z" fill="#a9aea7"/>
+<path d="M60 30 H78 V90 C78 94 70 97 60 97 Z" fill="#8f948d"/>
+<ellipse cx="60" cy="30" rx="18" ry="5" fill="#c9cdc6"/><ellipse cx="60" cy="30" rx="12" ry="3" fill="#a9aea7"/>
+<rect x="42" y="50" width="36" height="26" fill="#2d5d3e"/><g transform="translate(60 63) rotate(0) scale(1.3)"><path d="M-7 7 C-8 -2 -2 -8 8 -8 C9 2 3 8 -7 7 Z" fill="#709645"/><path d="M-5.5 5.5 C-2 1.5 2 -2 6.5 -6.5" fill="none" stroke="#fdf3d7" stroke-width="1.3" stroke-linecap="round"/></g>
+<path d="M47 36 V88" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+</svg>

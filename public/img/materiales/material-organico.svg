@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Orgánico">
+<clipPath id="c-material-organico"><circle cx="60" cy="60" r="56"/></clipPath>
+<circle cx="60" cy="60" r="56" fill="#efe6c9"/>
+
+<ellipse cx="60" cy="98" rx="24" ry="3.5" fill="#dccf9f"/>
+<path d="M60 40 C50 32 30 34 30 58 C30 80 46 96 60 92 C74 96 90 80 90 58 C90 34 70 32 60 40 Z" fill="#709645"/>
+<path d="M60 40 C70 32 90 34 90 58 C90 80 74 96 60 92 Z" fill="#628a3c"/>
+<path d="M60 40 C60 32 62 26 66 22" fill="none" stroke="#95652e" stroke-width="3" stroke-linecap="round"/>
+<g transform="translate(72 26) rotate(-20) scale(1.1)"><path d="M-7 7 C-8 -2 -2 -8 8 -8 C9 2 3 8 -7 7 Z" fill="#2d5d3e"/><path d="M-5.5 5.5 C-2 1.5 2 -2 6.5 -6.5" fill="none" stroke="#dde5b6" stroke-width="1.3" stroke-linecap="round"/></g>
+<path d="M40 56 C40 48 44 44 50 44" fill="none" stroke="#dde5b6" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+</svg>

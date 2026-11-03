@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Administrador">
+  <circle cx="60" cy="60" r="58" fill="#dde5b6"/>
+  <clipPath id="c"><circle cx="60" cy="60" r="58"/></clipPath>
+  <g clip-path="url(#c)">
+    <path d="M18 120 C18 92 36 80 60 80 C84 80 102 92 102 120 Z" fill="#2d5d3e"/>
+    <path d="M50 80 L60 96 L70 80 Z" fill="#fdf3d7"/>
+    <path d="M57 84 L63 84 L62 104 L60 108 L58 104 Z" fill="#c9893e"/>
+  </g>
+  <rect x="53" y="64" width="14" height="14" rx="4" fill="#e0a877"/>
+  <circle cx="60" cy="50" r="20" fill="#eab887"/>
+  <path d="M40 48 C40 32 50 26 60 26 C72 26 81 33 80 48 C76 40 68 37 60 37 C52 37 45 40 40 48 Z" fill="#454955"/>
+  <circle cx="53" cy="52" r="2" fill="#0d0a0b"/><circle cx="67" cy="52" r="2" fill="#0d0a0b"/>
+  <path d="M54 59 C57 62 63 62 66 59" stroke="#95652e" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <!-- escudo -->
+  <path d="M90 74 L104 79 L104 90 C104 99 97 104 90 107 C83 104 76 99 76 90 L76 79 Z" fill="#c9893e" stroke="#fdf3d7" stroke-width="3"/>
+  <path d="M84 96 C83 89 87 84 96 84 C96 92 92 96 84 96 Z" fill="#fdf3d7"/>
+</svg>

@@ -1,0 +1,60 @@
+.contenedor {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 16px;
+}
+
+.encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.subtitulo {
+  margin: 10px 0 0;
+  color: var(--eco-charcoal);
+}
+
+/* Leyenda de los pines */
+.leyenda {
+  display: flex;
+  gap: 16px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--eco-charcoal);
+}
+
+.leyenda span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.leyenda img {
+  width: 18px;
+  height: 24px;
+}
+
+.tarjeta {
+  background-color: var(--mat-sys-surface);
+  border: 1px solid var(--eco-vanilla);
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  padding: 8px;
+}
+
+/* Leaflet necesita una altura fija para dibujarse */
+#mapa {
+  height: 560px;
+  width: 100%;
+  border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  #mapa {
+    height: 420px;
+  }
+}

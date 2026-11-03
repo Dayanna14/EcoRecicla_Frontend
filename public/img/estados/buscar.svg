@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 180" role="img" aria-label="Buscar">
+  <ellipse cx="120" cy="160" rx="80" ry="11" fill="#dde5b6"/>
+  <!-- mango -->
+  <path d="M146 112 L182 148" stroke="#95652e" stroke-width="18" stroke-linecap="round"/>
+  <path d="M146 112 L160 126" stroke="#2d5d3e" stroke-width="20" stroke-linecap="round"/>
+  <!-- lente -->
+  <circle cx="110" cy="80" r="50" fill="#2d5d3e"/>
+  <circle cx="110" cy="80" r="40" fill="#fdf3d7"/>
+  <circle cx="110" cy="80" r="40" fill="#dde5b6" opacity="0.55"/>
+  <!-- hoja dentro del lente -->
+  <path d="M90 104 C84 78 98 54 132 52 C136 82 118 104 90 104 Z" fill="#709645"/>
+  <path d="M93 101 C104 88 116 72 128 57" fill="none" stroke="#2d5d3e" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M106 85 L103 74 M114 76 L121 82 M100 94 L95 86 M119 67 L125 71" stroke="#2d5d3e" stroke-width="1.8" stroke-linecap="round"/>
+  <!-- brillo -->
+  <path d="M82 62 C86 52 94 46 104 44" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" opacity="0.8"/>
+  <circle cx="40" cy="60" r="3" fill="#b8c7a4"/><circle cx="196" cy="56" r="4" fill="#c9893e" opacity="0.7"/><circle cx="186" cy="34" r="2.5" fill="#88a987"/>
+</svg>
