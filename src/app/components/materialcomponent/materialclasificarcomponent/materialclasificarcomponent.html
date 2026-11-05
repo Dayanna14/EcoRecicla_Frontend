@@ -1,0 +1,103 @@
+<div class="contenedor">
+  <div class="encabezado">
+    <h1>Clasificar material con IA</h1>
+    <p class="subtitulo">Sube una foto del residuo y te diremos qué tipo de material es.</p>
+  </div>
+
+  @if (cargandoModelo) {
+    <div class="tarjeta cargando">
+      <p>Cargando el modelo de IA...</p>
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </div>
+  } @else if (!modeloDisponible) {
+    <div class="tarjeta vacio">
+      <mat-icon>error_outline</mat-icon>
+      <p>
+        No se encontró el modelo. Copia los archivos exportados de Teachable Machine en
+        <span class="mono">public/modelo/</span>.
+      </p>
+    </div>
+  } @else {
+    <div class="grid">
+      <!-- Columna izquierda: foto -->
+      <div class="tarjeta">
+        <h2>Tu foto</h2>
+
+        <input #inputFoto type="file" accept="image/*" hidden (change)="seleccionarFoto($event)" />
+
+        @if (urlFoto) {
+          <div class="vista-previa">
+            <img #foto [src]="urlFoto" alt="Foto del material" (load)="clasificar()" />
+          </div>
+          <div class="acciones">
+            <button mat-stroked-button (click)="limpiar(inputFoto)">Quitar</button>
+            <button mat-flat-button (click)="inputFoto.click()">
+              <mat-icon>photo_camera</mat-icon>
+              Otra foto
+            </button>
+          </div>
+        } @else {
+          <button class="zona-subida" (click)="inputFoto.click()">
+            <mat-icon>add_a_photo</mat-icon>
+            <strong>Selecciona una foto</strong>
+            <span>JPG o PNG, con el material bien iluminado y centrado.</span>
+          </button>
+        }
+      </div>
+
+      <!-- Columna derecha: resultado -->
+      <div class="tarjeta">
+        <h2>Resultado</h2>
+
+        @if (clasificando) {
+          <p class="texto">Analizando la imagen...</p>
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        } @else if (mejor) {
+          <div class="sugerencia">
+            <mat-icon>recycling</mat-icon>
+            <div>
+              <span class="etiqueta">Material sugerido</span>
+              <strong class="material">{{ mejor.clase }}</strong>
+              <span class="mono">{{ mejor.confianza }}% de confianza</span>
+            </div>
+          </div>
+
+          @if (mejor.confianza < CONFIANZA_MINIMA) {
+            <div class="aviso">
+              <mat-icon>help_outline</mat-icon>
+              <p>
+                La IA no está muy segura. Prueba con otra foto o confirma el material con el operador
+                del centro.
+              </p>
+            </div>
+          }
+
+          @if (materialSugerido) {
+            <p class="puntos">
+              Este material otorga <strong class="mono">{{ materialSugerido.puntosPorKg }}</strong>
+              puntos por kg.
+            </p>
+          }
+
+          <h3>Todas las clases</h3>
+          <ul class="clases">
+            @for (p of predicciones; track p.clase) {
+              <li>
+                <div class="fila-clase">
+                  <span>{{ p.clase }}</span>
+                  <span class="mono">{{ p.confianza }}%</span>
+                </div>
+                <mat-progress-bar mode="determinate" [value]="p.confianza"></mat-progress-bar>
+              </li>
+            }
+          </ul>
+        } @else {
+          <div class="vacio">
+            <mat-icon>image_search</mat-icon>
+            <p>Sube una foto para ver el resultado.</p>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>
