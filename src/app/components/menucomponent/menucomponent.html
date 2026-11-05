@@ -22,6 +22,20 @@
     <!-- Nayara: Usuarios y Recompensas -->
 
     <!-- Axel: Tipos de recompensa y Materiales -->
+  <button mat-button [matMenuTriggerFor]="menuTipos">Tipos de recompensa</button>
+  <mat-menu #menuTipos="matMenu">
+    <button mat-menu-item routerLink="/tiporecompensas/listar">Listar</button>
+    <button mat-menu-item routerLink="/tiporecompensas/insertar">Registrar</button>
+    <button mat-menu-item routerLink="/tiporecompensas/buscar">Buscar</button>
+  </mat-menu>
+
+  <button mat-button [matMenuTriggerFor]="menuMateriales">Materiales</button>
+  <mat-menu #menuMateriales="matMenu">
+    <button mat-menu-item routerLink="/materiales/listar">Listar</button>
+    <button mat-menu-item routerLink="/materiales/insertar">Registrar</button>
+    <button mat-menu-item routerLink="/materiales/buscar">Buscar</button>
+  </mat-menu>
+
 
     <!-- Jhon: Entregas -->
 
