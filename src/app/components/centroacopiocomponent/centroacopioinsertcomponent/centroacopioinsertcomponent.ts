@@ -13,6 +13,8 @@ import { Centroacopioservice } from '../../../services/centroacopioservice';
 import { UsuariosService } from '../../../services/usuariosservice';
 import { Nominatimservice } from '../../../services/nominatimservice';
 import { CentroAcopioDTOInsert } from '../../../models/CentroAcopioDTOInsert';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import { MatTimepickerModule } from '@angular/material/timepicker';
 
 @Component({
   selector: 'app-centroacopioinsertcomponent',
@@ -25,9 +27,11 @@ import { CentroAcopioDTOInsert } from '../../../models/CentroAcopioDTOInsert';
     MatIconModule,
     MatSnackBarModule,
     RouterLink,
+    MatTimepickerModule,
   ],
   templateUrl: './centroacopioinsertcomponent.html',
   styleUrl: './centroacopioinsertcomponent.css',
+  providers: [provideNativeDateAdapter()],
 })
 export class Centroacopioinsertcomponent implements OnInit, AfterViewInit, OnDestroy {
   form: FormGroup;
@@ -59,7 +63,8 @@ export class Centroacopioinsertcomponent implements OnInit, AfterViewInit, OnDes
   ) {
     this.form = this.fb.group({
       nombre: ['', Validators.required],
-      horario: ['', Validators.required],
+      apertura: [this.aFecha('08:00'), Validators.required],
+      cierre: [this.aFecha('18:00'), Validators.required],
       estado: [true, Validators.required],
       idUsuario: [null, Validators.required],
       latitud: [null, Validators.required],
@@ -101,6 +106,19 @@ export class Centroacopioinsertcomponent implements OnInit, AfterViewInit, OnDes
       verticalPosition: 'top',
       panelClass: ['noti-' + tipo],
     });
+  }
+    // "08:00" → objeto Date (el timepicker trabaja con Date)
+  aFecha(hora: string): Date | null {
+    const m = /^(\d{1,2}):(\d{2})$/.exec((hora ?? '').trim());
+    if (!m) return null;
+    const d = new Date();
+    d.setHours(Number(m[1]), Number(m[2]), 0, 0);
+    return d;
+  }
+
+  // Date → "08:00" (lo que guarda el backend)
+  aTexto(fecha: Date): string {
+    return String(fecha.getHours()).padStart(2, '0') + ':' + String(fecha.getMinutes()).padStart(2, '0');
   }
 
   // Coloca (o mueve) el pin y completa latitud y longitud
@@ -158,12 +176,16 @@ export class Centroacopioinsertcomponent implements OnInit, AfterViewInit, OnDes
       this.notificar('Los campos son obligatorios!!', 'advertencia');
       return;
     }
+        if (this.form.value.cierre <= this.form.value.apertura) {
+      this.notificar('La hora de cierre debe ser mayor que la de apertura', 'advertencia');
+      return;
+    }
 
     // Sin idCentro: con IDENTITY, enviar id 0 hace fallar a Hibernate
     const centro = {
       idUsuario: this.form.value.idUsuario,
       nombre: this.form.value.nombre,
-      horario: this.form.value.horario,
+      horario: this.aTexto(this.form.value.apertura) + '-' + this.aTexto(this.form.value.cierre),
       latitud: this.form.value.latitud,
       longitud: this.form.value.longitud,
       estado: this.form.value.estado,
@@ -173,7 +195,7 @@ export class Centroacopioinsertcomponent implements OnInit, AfterViewInit, OnDes
     this.cS.insert(centro).subscribe({
       next: () => {
         this.notificar('Se registró correctamente!!!', 'exito');
-        formDir.resetForm({ estado: true, horario: '08:00-18:00' });
+        formDir.resetForm({ estado: true, apertura: this.aFecha('08:00'), cierre: this.aFecha('18:00') });
         this.nombreAutomatico = '';
         this.marcador?.remove();
         this.marcador = null;

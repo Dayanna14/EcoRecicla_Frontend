@@ -11,6 +11,8 @@ import { Centroacopioservice } from '../../../services/centroacopioservice';
 import { CentroAcopioDTOInsert } from '../../../models/CentroAcopioDTOInsert';
 import * as L from 'leaflet';
 import { Nominatimservice } from '../../../services/nominatimservice';
+import { MatTimepickerModule } from '@angular/material/timepicker';
+import { provideNativeDateAdapter } from '@angular/material/core';
 
 @Component({
   selector: 'app-centroacopioupdatecomponent',
@@ -23,9 +25,11 @@ import { Nominatimservice } from '../../../services/nominatimservice';
     MatIconModule,
     MatSnackBarModule,
     RouterLink,
+    MatTimepickerModule,
   ],
   templateUrl: './centroacopioupdatecomponent.html',
   styleUrl: './centroacopioupdatecomponent.css',
+  providers: [provideNativeDateAdapter()],
 })
 export class Centroacopioupdatecomponent {
    idCentro: number = 0;
@@ -65,7 +69,8 @@ export class Centroacopioupdatecomponent {
     this.formCentro = this.fb.group({
       codigo: [this.idCentro],
       nombre: ['', Validators.required],
-      horario: ['', Validators.required],
+      apertura: [null, Validators.required],
+      cierre: [null, Validators.required],
       latitud: [null, [Validators.required, Validators.min(-90), Validators.max(90)]],
       longitud: [null, [Validators.required, Validators.min(-180), Validators.max(180)]],
       estado: [true, Validators.required],
@@ -107,6 +112,20 @@ export class Centroacopioupdatecomponent {
       panelClass: ['noti-' + tipo],
     });
   }
+  
+  // "08:00" → objeto Date (el timepicker trabaja con Date)
+  aFecha(hora: string): Date | null {
+    const m = /^(\d{1,2}):(\d{2})$/.exec((hora ?? '').trim());
+    if (!m) return null;
+    const d = new Date();
+    d.setHours(Number(m[1]), Number(m[2]), 0, 0);
+    return d;
+  }
+
+  // Date → "08:00" (lo que guarda el backend)
+  aTexto(fecha: Date): string {
+    return String(fecha.getHours()).padStart(2, '0') + ':' + String(fecha.getMinutes()).padStart(2, '0');
+  }
 
   buscarPorId(): void {
     this.cS.listId(this.idCentro).subscribe({
@@ -115,7 +134,8 @@ export class Centroacopioupdatecomponent {
         this.formCentro.patchValue({
           codigo: data.idCentro,
           nombre: data.nombre,
-          horario: data.horario,
+          apertura: this.aFecha((data.horario ?? '').split('-')[0]),
+          cierre: this.aFecha((data.horario ?? '').split('-')[1]),
           latitud: data.latitud,
           longitud: data.longitud,
           estado: data.estado,
@@ -179,12 +199,17 @@ export class Centroacopioupdatecomponent {
       this.notificar('Los campos son obligatorios!!', 'advertencia');
       return;
     }
+    
+    if (this.formCentro.value.cierre <= this.formCentro.value.apertura) {
+      this.notificar('La hora de cierre debe ser mayor que la de apertura', 'advertencia');
+      return;
+    }
 
     const dto: CentroAcopioDTOInsert = {
       idCentro: this.formCentro.value.codigo,
       idUsuario: this.idUsuario,
       nombre: this.formCentro.value.nombre,
-      horario: this.formCentro.value.horario,
+      horario: this.aTexto(this.formCentro.value.apertura) + '-' + this.aTexto(this.formCentro.value.cierre),
       latitud: this.formCentro.value.latitud,
       longitud: this.formCentro.value.longitud,
       estado: this.formCentro.value.estado,
