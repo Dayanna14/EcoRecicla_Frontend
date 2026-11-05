@@ -9,6 +9,8 @@ import { Centroacopioservice } from '../../../services/centroacopioservice';
 import { forkJoin, of, switchMap } from 'rxjs';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { UsuariosDTOList } from '../../../models/UsuariosDTOList';
+import { UsuariosService } from '../../../services/usuariosservice';
 
 @Component({
   selector: 'app-centroacopiolistcomponent',
@@ -24,14 +26,16 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrl: './centroacopiolistcomponent.css',
 })
 export class Centroacopiolistcomponent implements OnInit {
-  displayedColumns: string[] = ['c1', 'c2', 'c3', 'c4', 'c5'];
+  displayedColumns: string[] = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6'];
   dataSource = new MatTableDataSource<CentroAcopioDTOInsert>();
+    usuarios: UsuariosDTOList[] = [];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild('dialogEliminar') dialogEliminar!: TemplateRef<any>;
 
   constructor(
     private cS: Centroacopioservice,
+    private uS: UsuariosService,
     private cdr: ChangeDetectorRef,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
@@ -39,6 +43,7 @@ export class Centroacopiolistcomponent implements OnInit {
 
   ngOnInit(): void {
     this.listar();
+    this.listarUsuarios();
   }
 
   notificar(texto: string, tipo: 'exito' | 'advertencia' | 'error'): void {
@@ -66,6 +71,15 @@ export class Centroacopiolistcomponent implements OnInit {
       },
       error: err => {
         console.log('Error al listar los centros de acopio', err);
+      },
+    });
+  }
+    // Trae la lista de la tabla relacionada (FK), igual que listarPeliculas() de la profesora
+  listarUsuarios(): void {
+    this.uS.list().subscribe({
+      next: data => {
+        this.usuarios = data;
+        this.cdr.detectChanges();
       },
     });
   }
