@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { TipoRecompensaDTOInsert } from '../models/TipoRecompensaDTOInsert';
 import { TipoRecompensaDTOList } from '../models/TipoRecompensaDTOList';
+import { TipoRecompensaRankingDTO } from '../models/TipoRecompensaRankingDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -38,5 +39,10 @@ export class Tiporecompensaservice {
   searchByName(nombre: string): Observable<TipoRecompensaDTOList[]> {
     const params = new HttpParams().set('nombre', nombre);
     return this.http.get<TipoRecompensaDTOList[]>(`${this.apiURL}/buscar`, { params });
+  }
+
+  // Reporte: tipos de recompensa más canjeados (HUF17)
+  ranking(): Observable<TipoRecompensaRankingDTO[]> {
+    return this.http.get<TipoRecompensaRankingDTO[]>(`${this.apiURL}/ranking`);
   }
 }

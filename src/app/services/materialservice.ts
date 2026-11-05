@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { MaterialDTOInsert } from '../models/MaterialDTOInsert';
 import { MaterialDTOList } from '../models/MaterialDTOList';
+import { MaterialRankingDTO } from '../models/MaterialRankingDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -37,5 +38,10 @@ export class Materialservice {
   searchByName(nombre: string): Observable<MaterialDTOList[]> {
     const params = new HttpParams().set('nombre', nombre);
     return this.http.get<MaterialDTOList[]>(`${this.apiURL}/buscar`, { params });
+  }
+
+  // Reporte: materiales más entregados (HUF17)
+  ranking(): Observable<MaterialRankingDTO[]> {
+    return this.http.get<MaterialRankingDTO[]>(`${this.apiURL}/ranking`);
   }
 }
