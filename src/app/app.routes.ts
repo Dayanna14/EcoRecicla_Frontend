@@ -28,7 +28,7 @@ import { Tiporecompensarankingcomponent } from './components/tiporecompensacompo
 export const routes: Routes = [
         // ---------- General ----------
     { path: '', redirectTo: 'home', pathMatch: 'full' },
-    { path: 'home', component: Homecomponent },
+    { path: 'home', component: Homecomponent, title: 'EcoRecicla | Inicio' },
     
         // ---------- Dayana: Roles ----------
     {
