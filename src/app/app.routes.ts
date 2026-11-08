@@ -11,6 +11,11 @@ import { Rolupdatecomponent } from './components/rolcomponent/rolupdatecomponent
 import { Rolbuscarcomponent } from './components/rolcomponent/rolbuscarcomponent/rolbuscarcomponent';
 import { Centroacopiobuscarcomponent } from './components/centroacopiocomponent/centroacopiobuscarcomponent/centroacopiobuscarcomponent';
 import { Centroacopioupdatecomponent } from './components/centroacopiocomponent/centroacopioupdatecomponent/centroacopioupdatecomponent';
+import { Entregacomponent } from './components/entregacomponent/entregacomponent';
+import { Entregalistcomponent } from './components/entregacomponent/entregalistcomponent/entregalistcomponent';
+import { Entregainsertcomponent } from './components/entregacomponent/entregainsertcomponent/entregainsertcomponent';
+import { Entregaupdatecomponent } from './components/entregacomponent/entregaupdatecomponent/entregaupdatecomponent';
+import { Entregabuscarcomponent } from './components/entregacomponent/entregabuscarcomponent/entregabuscarcomponent';
 
 export const routes: Routes = [
         // ---------- General ----------
@@ -49,6 +54,17 @@ export const routes: Routes = [
     // ---------- Axel: tiporecompensas, materiales ----------
 
     // ---------- Jhon: entregas ----------
+    {
+        path: 'entregas',
+        component: Entregacomponent,
+        children: [
+            { path: 'listar', component: Entregalistcomponent },
+            { path: 'insertar', component: Entregainsertcomponent },
+            { path: 'editar/:id', component: Entregaupdatecomponent },
+            { path: 'buscar', component: Entregabuscarcomponent },
+            { path: '', redirectTo: 'listar', pathMatch: 'full' }
+        ]
+    }
 
     // ---------- Franco: canjes ----------
 ];

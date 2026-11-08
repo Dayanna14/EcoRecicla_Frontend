@@ -1,0 +1,89 @@
+<div class="container">
+    <div class="header-path">
+        <span>Entregas</span> / <span>Actualizar</span>
+    </div>
+    
+    <h1 class="titulo-principal">Actualizar entrega de material</h1>
+    <p class="subtitulo-principal">Modifica los campos necesarios y guarda los cambios de la entrega.</p>
+
+    <div class="grid-layout">
+        <!-- Columna Izquierda: Formulario -->
+        <div class="card-formulario">
+            <h2 class="seccion-titulo">Datos de la entrega</h2>
+
+            <form [formGroup]="formEntrega" (ngSubmit)="actualizarEntrega()">
+                
+                <!-- ID de la entrega (Solo lectura) -->
+                <label class="input-label">ID Entrega</label>
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>ID</mat-label>
+                    <input matInput type="number" formControlName="idEntrega" readonly>
+                </mat-form-field>
+
+                <!-- Select de Usuario -->
+                <label class="input-label">Usuario (Reciclador)</label>
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Seleccione un usuario</mat-label>
+                    <mat-select formControlName="idUsuario">
+                        @for (u of listaUsuarios; track u) {
+                        <mat-option [value]="u.id_usuario">{{u.nombre}}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+
+                <!-- Select de Material -->
+                <label class="input-label">Material</label>
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Seleccione el material</mat-label>
+                    <mat-select formControlName="idMaterial">
+                        @for (m of listaMateriales; track m) {
+                        <mat-option [value]="m.idMaterial">{{m.nombreMaterial}}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+
+                <!-- Select de Centro de Acopio -->
+                <label class="input-label">Centro de acopio</label>
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Seleccione el centro</mat-label>
+                    <mat-select formControlName="idCentroAcopio">
+                        @for (c of listaCentros; track c) {
+                        <mat-option [value]="c.idCentro">{{c.nombreCentro}}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+
+                <!-- Cantidad en Kilogramos -->
+                <label class="input-label">Cantidad en kg</label>
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Ej. 5.5</mat-label>
+                    <input matInput type="number" formControlName="cantidadKg" placeholder="0.0">
+                </mat-form-field>
+
+                <!-- Botones de Acción -->
+                <div class="contenedor-botones">
+                    <button mat-stroked-button class="btn-cancelar" routerLink="/entregas/listar" type="button">Cancelar</button>
+                    <button mat-flat-button class="btn-registrar" type="submit">Guardar cambios</button>
+                </div>
+
+            </form>
+
+            @if(mensaje){
+                <p class="mensaje-alerta">{{mensaje}}</p>
+            }
+        </div>
+
+        <!-- Columna Derecha: Tarjetas informativas -->
+        <div class="columna-lateral">
+            <div class="card-info">
+                <h3>💡 Edición de registros</h3>
+                <p>Al actualizar los kilogramos o el tipo de material, el sistema recalculará los puntos asociados a esta entrega en el perfil del usuario.</p>
+            </div>
+
+            <div class="card-consejo">
+                <h3>📌 Nota importante</h3>
+                <p>El identificador de la entrega no se puede modificar ya que es generado automáticamente por el sistema.</p>
+            </div>
+        </div>
+    </div>
+</div>

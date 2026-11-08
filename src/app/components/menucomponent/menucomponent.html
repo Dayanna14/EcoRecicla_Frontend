@@ -25,5 +25,13 @@
 
     <!-- Jhon: Entregas -->
 
+    <!-- Jhon: Entregas -->
+    <button mat-button [matMenuTriggerFor]="menuEntregas">Entregas</button>
+    <mat-menu #menuEntregas="matMenu">
+      <button mat-menu-item routerLink="/entregas/listar">Listar</button>
+      <button mat-menu-item routerLink="/entregas/insertar">Registrar</button>
+      <button mat-menu-item routerLink="/entregas/buscar">Buscar</button>
+    </mat-menu>
+
      <!-- Franco: Canjes -->
 </mat-toolbar>

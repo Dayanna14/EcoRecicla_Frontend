@@ -1,0 +1,83 @@
+<div class="container">
+    <div class="header-path">
+        <span>Entregas</span> / <span>Listar</span>
+    </div>
+
+    <div class="header-section">
+        <div>
+            <h1 class="titulo-principal">Lista de entregas</h1>
+            <p class="subtitulo-principal">Gestiona las entregas de materiales registradas en los centros de acopio.</p>
+        </div>
+        <button mat-flat-button class="btn-registrar" routerLink="/entregas/insertar">
+            Registrar entrega
+        </button>
+    </div>
+
+    <div class="card-table">
+        <!-- La tabla se dibuja siempre para mostrar los nombres de las columnas -->
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z0">
+            
+            <!-- c1: ID Entrega -->
+            <ng-container matColumnDef="c1">
+                <th mat-header-cell *matHeaderCellDef> ID </th>
+                <td mat-cell *matCellDef="let element"> {{ element.idEntrega }} </td>
+            </ng-container>
+
+            <!-- c2: Cantidad (Kg) -->
+            <ng-container matColumnDef="c2">
+                <th mat-header-cell *matHeaderCellDef> Cantidad (Kg) </th>
+                <td mat-cell *matCellDef="let element"> {{ element.cantidadKg }} kg </td>
+            </ng-container>
+
+            <!-- c3: Puntos Generados -->
+            <ng-container matColumnDef="c3">
+                <th mat-header-cell *matHeaderCellDef> Puntos </th>
+                <td mat-cell *matCellDef="let element">
+                    <span class="badge-puntos">+{{ element.puntosGenerados }} pts</span>
+                </td>
+            </ng-container>
+
+            <!-- c4: Material ID -->
+            <ng-container matColumnDef="c4">
+                <th mat-header-cell *matHeaderCellDef> Material ID </th>
+                <td mat-cell *matCellDef="let element"> {{ element.materialIdMaterial }} </td>
+            </ng-container>
+
+            <!-- c5: Centro de Acopio ID -->
+            <ng-container matColumnDef="c5">
+                <th mat-header-cell *matHeaderCellDef> Centro ID </th>
+                <td mat-cell *matCellDef="let element"> {{ element.centroAcopioIdCentroAcopio }} </td>
+            </ng-container>
+
+            <!-- c6: Eliminar (Tachito) -->
+            <ng-container matColumnDef="c6">
+                <th mat-header-cell *matHeaderCellDef class="text-center"> Eliminar </th>
+                <td mat-cell *matCellDef="let element" class="text-center">
+                    <button mat-icon-button class="btn-eliminar" (click)="eliminarEntrega(element.idEntrega)" title="Eliminar entrega">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <!-- c7: Editar (Lapicito) -->
+            <ng-container matColumnDef="c7">
+                <th mat-header-cell *matHeaderCellDef class="text-center"> Editar </th>
+                <td mat-cell *matCellDef="let element" class="text-center">
+                    <button mat-icon-button class="btn-editar" [routerLink]="['/entregas/editar', element.idEntrega]" title="Editar entrega">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+
+        <!-- El mensaje de aviso solo aparece debajo de la tabla si no existen registros -->
+        @if (dataSource.length === 0) {
+        <div class="no-data">
+            <p>No hay entregas registradas para mostrar.</p>
+        </div>
+        }
+    </div>
+</div>
