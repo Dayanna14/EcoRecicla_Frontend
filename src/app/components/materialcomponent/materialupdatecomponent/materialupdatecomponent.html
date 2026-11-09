@@ -1,0 +1,75 @@
+<div class="contenedor">
+  <nav class="migas">
+    <a routerLink="/materiales/listar">Materiales</a>
+    <span>/</span>
+    <span>Editar</span>
+  </nav>
+
+  <h1>Editar material</h1>
+  <p class="subtitulo">Actualiza los datos del material reciclable.</p>
+
+  <div class="grid">
+    <div>
+      <form class="tarjeta formulario" [formGroup]="formMaterial" (ngSubmit)="actualizarMaterial()">
+        <h2>Datos del material</h2>
+
+        <label class="etiqueta" for="codigo">ID</label>
+        <mat-form-field appearance="outline">
+          <mat-icon matPrefix>tag</mat-icon>
+          <input matInput id="codigo" type="number" formControlName="codigo" readonly />
+        </mat-form-field>
+
+        <label class="etiqueta" for="nombre">Nombre</label>
+        <mat-form-field appearance="outline">
+          <mat-icon matPrefix>recycling</mat-icon>
+          <input matInput id="nombre" formControlName="nombre" maxlength="60" />
+          @if (formMaterial.get('nombre')?.hasError('required')) {
+            <mat-error>Campo obligatorio, ingrese el nombre</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="fila">
+          <div>
+            <label class="etiqueta" for="puntosPorKg">Puntos por kg</label>
+            <mat-form-field appearance="outline">
+              <mat-icon matPrefix>stars</mat-icon>
+              <input matInput id="puntosPorKg" type="number" min="0" step="1" formControlName="puntosPorKg" />
+              @if (formMaterial.get('puntosPorKg')?.hasError('required')) {
+                <mat-error>Campo obligatorio</mat-error>
+              } @else if (formMaterial.get('puntosPorKg')?.hasError('min') || formMaterial.get('puntosPorKg')?.hasError('pattern')) {
+                <mat-error>Ingresa un número entero mayor o igual a 0</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          <div>
+            <label class="etiqueta" for="factorCo2">Factor CO2</label>
+            <mat-form-field appearance="outline">
+              <mat-icon matPrefix>eco</mat-icon>
+              <input matInput id="factorCo2" type="number" min="0" step="0.01" formControlName="factorCo2" />
+              @if (formMaterial.get('factorCo2')?.hasError('required')) {
+                <mat-error>Campo obligatorio</mat-error>
+              } @else if (formMaterial.get('factorCo2')?.hasError('min')) {
+                <mat-error>No puede ser negativo</mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+
+        <label class="etiqueta" for="descripcion">Descripción</label>
+        <mat-form-field appearance="outline">
+          <mat-icon matPrefix>notes</mat-icon>
+          <textarea matInput id="descripcion" formControlName="descripcion" rows="4" maxlength="200"></textarea>
+          <mat-hint align="end" class="mono">{{ formMaterial.get('descripcion')?.value?.length || 0 }}/200</mat-hint>
+        </mat-form-field>
+
+        <mat-slide-toggle class="interruptor" formControlName="estado">Material activo</mat-slide-toggle>
+
+        <div class="acciones">
+          <a mat-stroked-button routerLink="/materiales/listar">Cancelar</a>
+          <button mat-flat-button type="submit">Guardar cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

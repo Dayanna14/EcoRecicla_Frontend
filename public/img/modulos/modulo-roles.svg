@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Roles">
+<clipPath id="c-modulo-roles"><circle cx="60" cy="60" r="56"/></clipPath>
+<circle cx="60" cy="60" r="56" fill="#dde5b6"/>
+
+<path d="M60 24 L88 34 L88 58 C88 78 76 90 60 97 C44 90 32 78 32 58 L32 34 Z" fill="#2d5d3e"/>
+<path d="M60 31 L82 39 L82 58 C82 74 72 84 60 90 Z" fill="#26503a"/>
+<circle cx="60" cy="52" r="9" fill="none" stroke="#fdf3d7" stroke-width="5"/>
+<rect x="57" y="60" width="6" height="22" rx="2" fill="#fdf3d7"/><rect x="63" y="70" width="7" height="4" rx="1" fill="#fdf3d7"/><rect x="63" y="77" width="5" height="4" rx="1" fill="#fdf3d7"/>
+<g transform="translate(86 28) rotate(0) scale(1.1)"><path d="M-7 7 C-8 -2 -2 -8 8 -8 C9 2 3 8 -7 7 Z" fill="#c9893e"/><path d="M-5.5 5.5 C-2 1.5 2 -2 6.5 -6.5" fill="none" stroke="#fdf3d7" stroke-width="1.3" stroke-linecap="round"/></g>
+</svg>

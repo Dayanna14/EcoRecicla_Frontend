@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 180" role="img" aria-label="Centro de acopio">
+  <ellipse cx="120" cy="160" rx="104" ry="11" fill="#dde5b6"/>
+  <!-- árbol -->
+  <rect x="196" y="104" width="7" height="52" rx="3" fill="#95652e"/>
+  <circle cx="199" cy="96" r="22" fill="#709645"/><circle cx="188" cy="104" r="13" fill="#88a987"/><circle cx="210" cy="88" r="11" fill="#5c6b2c"/>
+  <!-- edificio -->
+  <path d="M40 76 L104 44 L168 76 Z" fill="#2d5d3e"/>
+  <rect x="48" y="76" width="112" height="80" fill="#f0ead2"/>
+  <rect x="48" y="76" width="112" height="8" fill="#b8c7a4"/>
+  <rect x="88" y="108" width="32" height="48" rx="2" fill="#95652e"/>
+  <circle cx="114" cy="133" r="2" fill="#fdf3d7"/>
+  <rect x="58" y="94" width="20" height="16" rx="2" fill="#88a987"/><rect x="130" y="94" width="20" height="16" rx="2" fill="#88a987"/>
+  <!-- hoja en el techo -->
+  <path d="M96 70 C94 58 102 50 116 50 C117 62 110 70 96 70 Z" fill="#c9893e"/>
+  <path d="M98 68 C103 62 108 57 113 53" stroke="#fdf3d7" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  <!-- contenedores -->
+  <g>
+    <rect x="18" y="122" width="26" height="34" rx="3" fill="#2d5d3e"/><rect x="15" y="116" width="32" height="8" rx="2" fill="#1f4a2f"/>
+    <rect x="164" y="122" width="26" height="34" rx="3" fill="#c9893e"/><rect x="161" y="116" width="32" height="8" rx="2" fill="#95652e"/>
+  </g>
+  <g fill="none" stroke="#fdf3d7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <g transform="translate(31 140)"><path d="M-6 3 L-1 -6 L2 -1"/><path d="M6 3 L-4 3"/><path d="M1 -6 L6 2 L2 5"/></g>
+    <g transform="translate(177 140)"><path d="M-6 3 L-1 -6 L2 -1"/><path d="M6 3 L-4 3"/><path d="M1 -6 L6 2 L2 5"/></g>
+  </g>
+</svg>

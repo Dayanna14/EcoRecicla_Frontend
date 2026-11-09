@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Operador de centro">
+  <circle cx="60" cy="60" r="58" fill="#f0ead2"/>
+  <clipPath id="c"><circle cx="60" cy="60" r="58"/></clipPath>
+  <g clip-path="url(#c)">
+    <path d="M18 120 C18 92 36 80 60 80 C84 80 102 92 102 120 Z" fill="#88a987"/>
+    <!-- chaleco -->
+    <path d="M30 120 L36 88 C42 84 50 82 52 82 L56 120 Z" fill="#c9893e"/>
+    <path d="M90 120 L84 88 C78 84 70 82 68 82 L64 120 Z" fill="#c9893e"/>
+    <rect x="34" y="100" width="20" height="4" fill="#fdf3d7"/><rect x="66" y="100" width="20" height="4" fill="#fdf3d7"/>
+  </g>
+  <rect x="53" y="64" width="14" height="14" rx="4" fill="#b8865a"/>
+  <circle cx="60" cy="50" r="20" fill="#c99566"/>
+  <!-- gorra -->
+  <path d="M38 46 C38 30 48 24 60 24 C72 24 82 30 82 46 Z" fill="#2d5d3e"/>
+  <path d="M60 44 L90 46 C90 50 84 51 78 50 L60 49 Z" fill="#1f4a2f"/>
+  <path d="M55 40 C55 34 59 31 66 31 C66 37 62 40 55 40 Z" fill="#fdf3d7"/>
+  <circle cx="53" cy="53" r="2" fill="#0d0a0b"/><circle cx="67" cy="53" r="2" fill="#0d0a0b"/>
+  <path d="M54 60 C57 63 63 63 66 60" stroke="#6e4a22" stroke-width="2" fill="none" stroke-linecap="round"/>
+</svg>

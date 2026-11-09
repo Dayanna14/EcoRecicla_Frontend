@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 180" role="img" aria-label="No hay registros">
+  <ellipse cx="120" cy="158" rx="88" ry="12" fill="#dde5b6"/>
+  <!-- solapas de atrás -->
+  <path d="M62 86 L56 64 L114 54 L120 74 Z" fill="#a66f30"/>
+  <path d="M178 86 L184 64 L126 54 L120 74 Z" fill="#95652e"/>
+  <!-- interior de la caja -->
+  <path d="M62 86 L120 100 L178 86 L120 74 Z" fill="#6e4a22"/>
+  <!-- hojas que brotan -->
+  <path d="M114 90 C104 64 110 38 128 24 C136 46 130 72 114 90 Z" fill="#709645"/>
+  <path d="M115 88 C118 68 122 48 127 29" fill="none" stroke="#5c6b2c" stroke-width="2" stroke-linecap="round"/>
+  <path d="M122 92 C136 72 156 66 172 70 C162 88 140 96 122 92 Z" fill="#88a987"/>
+  <path d="M124 90 C138 80 154 74 168 71" fill="none" stroke="#5c6b2c" stroke-width="2" stroke-linecap="round"/>
+  <path d="M108 92 C92 76 74 74 62 80 C74 94 94 98 108 92 Z" fill="#2d5d3e"/>
+  <path d="M106 91 C92 85 78 81 66 80" fill="none" stroke="#dde5b6" stroke-width="1.6" stroke-linecap="round"/>
+  <!-- caras de adelante -->
+  <path d="M62 86 L120 100 L120 156 L62 140 Z" fill="#c9893e"/>
+  <path d="M178 86 L120 100 L120 156 L178 140 Z" fill="#b57a35"/>
+  <!-- solapas de adelante -->
+  <path d="M62 86 L46 104 L104 118 L120 100 Z" fill="#dba25a"/>
+  <path d="M178 86 L194 104 L136 118 L120 100 Z" fill="#c9893e"/>
+  <!-- etiqueta con hoja -->
+  <path d="M78 128 L104 134 L104 146 L78 140 Z" fill="#fdf3d7" opacity="0.9"/>
+  <path d="M84 139 C84 133 89 130 96 131 C96 137 91 140 84 139 Z" fill="#709645"/>
+  <circle cx="44" cy="52" r="3" fill="#b8c7a4"/><circle cx="196" cy="44" r="4" fill="#dde5b6"/><circle cx="184" cy="22" r="2.5" fill="#c9893e"/>
+</svg>

@@ -1,0 +1,103 @@
+<div class="contenedor">
+  <nav class="migas">
+    <a routerLink="/centrosacopio/listar">Centros de acopio</a>
+    <span>/</span>
+    <span>Editar</span>
+  </nav>
+
+  <h1>Editar centro de acopio</h1>
+  <p class="subtitulo">Actualiza el horario, el estado o la ubicación del centro.</p>
+
+  <div class="grid">
+    <form class="tarjeta formulario" [formGroup]="formCentro" (ngSubmit)="actualizarCentro()">
+      <h2>Datos del centro</h2>
+
+      <label class="etiqueta" for="codigo">ID</label>
+      <mat-form-field appearance="outline">
+        <mat-icon matPrefix>tag</mat-icon>
+        <input matInput id="codigo" type="number" formControlName="codigo" readonly />
+      </mat-form-field>
+
+      <label class="etiqueta" for="nombre">Nombre</label>
+      <mat-form-field appearance="outline">
+        <mat-icon matPrefix>store</mat-icon>
+        <input matInput id="nombre" formControlName="nombre" maxlength="100" />
+        @if (formCentro.get('nombre')?.hasError('required')) {
+          <mat-error>Campo obligatorio, ingrese el nombre</mat-error>
+        }
+      </mat-form-field>
+
+      <div class="fila">
+        <div>
+          <label class="etiqueta" for="apertura">Hora de apertura</label>
+          <mat-form-field appearance="outline">
+            <mat-icon matPrefix>schedule</mat-icon>
+            <input matInput id="apertura" formControlName="apertura" [matTimepicker]="pickerApertura" />
+            <mat-timepicker-toggle matIconSuffix [for]="pickerApertura" />
+            <mat-timepicker #pickerApertura interval="30m" />
+            @if (formCentro.get('apertura')?.hasError('required')) {
+              <mat-error>Campo obligatorio, ingrese la hora de apertura</mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div>
+          <label class="etiqueta" for="cierre">Hora de cierre</label>
+          <mat-form-field appearance="outline">
+            <mat-icon matPrefix>schedule</mat-icon>
+            <input matInput id="cierre" formControlName="cierre" [matTimepicker]="pickerCierre" />
+            <mat-timepicker-toggle matIconSuffix [for]="pickerCierre" />
+            <mat-timepicker #pickerCierre interval="30m" />
+            @if (formCentro.get('cierre')?.hasError('required')) {
+              <mat-error>Campo obligatorio, ingrese la hora de cierre</mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+
+      <label class="etiqueta">Estado</label>
+      <mat-form-field appearance="outline">
+        <mat-icon matPrefix>toggle_on</mat-icon>
+        <mat-select formControlName="estado">
+          @for (e of estados; track e.value) {
+            <mat-option [value]="e.value">{{ e.viewValue }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <div class="fila">
+        <div>
+          <label class="etiqueta" for="latitud">Latitud</label>
+          <mat-form-field appearance="outline">
+            <mat-icon matPrefix>place</mat-icon>
+            <input matInput id="latitud" type="number" formControlName="latitud" readonly />
+          </mat-form-field>
+        </div>
+        <div>
+          <label class="etiqueta" for="longitud">Longitud</label>
+          <mat-form-field appearance="outline">
+            <mat-icon matPrefix>explore</mat-icon>
+            <input matInput id="longitud" type="number" formControlName="longitud" readonly />
+          </mat-form-field>
+        </div>
+      </div>
+
+      @if (direccion) {
+        <p class="direccion">📍 {{ direccion }}</p>
+      }
+
+      <div class="acciones">
+        <a mat-stroked-button routerLink="/centrosacopio/listar">Cancelar</a>
+        <button mat-flat-button type="submit">Guardar cambios</button>
+      </div>
+    </form>
+
+    <!-- Mapa con la ubicación actual (HUF24 CA06) -->
+    <div class="tarjeta mapa-tarjeta">
+      <div class="mapa-ayuda">
+        <mat-icon>open_with</mat-icon>
+        <span>Arrastra el pin o haz clic en el mapa para cambiar la ubicación.</span>
+      </div>
+      <div id="mapaEditar"></div>
+    </div>
+  </div>
+</div>

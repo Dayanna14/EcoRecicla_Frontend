@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 64" width="48" height="64" role="img" aria-label="Centro de acopio inactivo">
+  <ellipse cx="24" cy="61" rx="9" ry="2.5" fill="#0d0a0b" opacity="0.18"/>
+  <path d="M24 60 C24 60 5 38 5 24 A19 19 0 1 1 43 24 C43 38 24 60 24 60 Z" fill="#8a8d85" stroke="#fdf3d7" stroke-width="2.5"/>
+  <circle cx="24" cy="24" r="12.5" fill="#fdf3d7"/>
+  <path d="M17 31 C15.5 22 21.5 15.5 32 15.5 C33 26 27 32 17 31 Z" fill="#c3c5bc"/>
+  <path d="M18.5 29.5 C22 25 26 21 30.5 17.5" fill="none" stroke="#8a8d85" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="M23 25 L22.5 21 M26 22 L27.5 25" stroke="#8a8d85" stroke-width="1.1" stroke-linecap="round"/>
+</svg>

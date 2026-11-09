@@ -1,6 +1,40 @@
 <app-menucomponent></app-menucomponent>
-<div class="contenedor">
-  <h1>Bienvenido a EcoRecicla</h1>
-  <p>Recicla, suma puntos y canjéalos por recompensas.</p>
-  <p class="mono">G1 · Arquitectura de Aplicaciones Web</p>
+
+<div class="contenedor-landing">
+  @if (cargando) {
+    <div class="cargando">
+      <img src="img/logo/ecorecicla-texto-verde.svg" alt="EcoRecicla" />
+      <mat-progress-spinner mode="indeterminate" diameter="48"></mat-progress-spinner>
+      <p>Cargando EcoRecicla…</p>
+    </div>
+  }
+
+  @if (dispositivo === 'escritorio') {
+    <iframe
+      class="landing"
+      [class.visible]="!cargando"
+      title="Landing de EcoRecicla (escritorio)"
+      src="https://embed.figma.com/proto/8QOGktBAwaWtXvsvHZoep9/EcoRecicla?node-id=10-2&page-id=119%3A29&starting-point-node-id=10%3A2&scaling=scale-down-width&content-scaling=fixed&hide-ui=1&footer=false&hotspot-hints=false&disable-default-keyboard-nav=true&embed-host=ecorecicla&client-id=2cMCC0bROayRpROpaMBFVw"
+      (load)="landingCargada()"
+      allowfullscreen>
+    </iframe>
+  } @else if (dispositivo === 'tablet') {
+    <iframe
+      class="landing"
+      [class.visible]="!cargando"
+      title="Landing de EcoRecicla (tablet)"
+      src="https://embed.figma.com/proto/8QOGktBAwaWtXvsvHZoep9/EcoRecicla?node-id=14-3&page-id=119%3A30&starting-point-node-id=14%3A3&scaling=scale-down-width&content-scaling=fixed&hide-ui=1&footer=false&hotspot-hints=false&disable-default-keyboard-nav=true&embed-host=ecorecicla&client-id=2cMCC0bROayRpROpaMBFVw"
+      (load)="landingCargada()"
+      allowfullscreen>
+    </iframe>
+  } @else {
+    <iframe
+      class="landing"
+      [class.visible]="!cargando"
+      title="Landing de EcoRecicla (celular)"
+      src="https://embed.figma.com/proto/8QOGktBAwaWtXvsvHZoep9/EcoRecicla?node-id=19-4&page-id=119%3A31&starting-point-node-id=19%3A4&scaling=scale-down-width&content-scaling=fixed&hide-ui=1&footer=false&hotspot-hints=false&disable-default-keyboard-nav=true&embed-host=ecorecicla&client-id=2cMCC0bROayRpROpaMBFVw"
+      (load)="landingCargada()"
+      allowfullscreen>
+    </iframe>
+  }
 </div>
