@@ -1,0 +1,92 @@
+<div class="container">
+    <div class="header-path">
+        <span>Entregas</span> / <span>Registrar</span>
+    </div>
+    
+    <h1 class="titulo-principal">Registrar entrega de material</h1>
+    <p class="subtitulo-principal">Completa los datos del reciclador, el material y el centro de acopio para registrar la entrega.</p>
+
+    <div class="grid-layout">
+        <!-- Columna Izquierda: Formulario -->
+        <div class="card-formulario">
+            <h2 class="seccion-titulo">Datos de la entrega</h2>
+
+            <form [formGroup]="formEntrega" (ngSubmit)="registrarEntrega()">
+                
+                <!-- Select de Usuario -->
+                <label class="input-label">Usuario (Reciclador)</label>
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Seleccione un usuario</mat-label>
+                    <mat-select formControlName="idUsuario">
+                        @for (u of listaUsuarios; track u) {
+                        <mat-option [value]="u.id_usuario">{{u.nombre}}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+
+                <!-- Select de Material -->
+                <label class="input-label">Material</label>
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Seleccione el material</mat-label>
+                    <mat-select formControlName="idMaterial">
+                        @for (m of listaMateriales; track m) {
+                        <mat-option [value]="m.idMaterial">{{m.nombreMaterial}}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+
+                <!-- Select de Centro de Acopio -->
+                <label class="input-label">Centro de acopio</label>
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Seleccione el centro</mat-label>
+                    <mat-select formControlName="idCentroAcopio">
+                        @for (c of listaCentros; track c) {
+                        <mat-option [value]="c.idCentro">{{c.nombreCentro}}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+
+                <!-- Cantidad en Kilogramos -->
+                <label class="input-label">Cantidad en kg</label>
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Ej. 5.5</mat-label>
+                    <input matInput type="number" formControlName="cantidadKg" placeholder="0.0">
+                    <mat-error *ngIf="formEntrega.get('cantidadKg')?.hasError('min')">
+                        La cantidad debe ser mayor a 0
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- Botones de Acción -->
+                <div class="contenedor-botones">
+                    <button mat-stroked-button class="btn-cancelar" routerLink="/entregas/listar" type="button">Cancelar</button>
+                    <button mat-flat-button class="btn-registrar" type="submit">Registrar entrega</button>
+                </div>
+
+            </form>
+
+            @if(mensaje){
+                <p class="mensaje-alerta">{{mensaje}}</p>
+            }
+        </div>
+
+        <!-- Columna Derecha: Tarjetas de Información / Consejo (Estilo idéntico a tus compañeros) -->
+        <div class="columna-lateral">
+            <div class="card-info">
+                <h3>💡 ¿Cómo funciona el registro?</h3>
+                <p>Al registrar una entrega, el sistema calcula automáticamente los puntos acumulados para el reciclador según el tipo de material y los kilogramos ingresados.</p>
+                
+                <div class="info-item">
+                    <strong>⚖️ Kilogramos:</strong> Debe ser un valor numérico superior a 0.
+                </div>
+                <div class="info-item">
+                    <strong>📍 Centro:</strong> Lugar físico donde se valida y recepciona el material.
+                </div>
+            </div>
+
+            <div class="card-consejo">
+                <h3>📌 Consejo útil</h3>
+                <p>Verifica bien la báscula y selecciona el material correcto antes de presionar registrar para evitar discrepancias en los puntos del usuario.</p>
+            </div>
+        </div>
+    </div>
+</div>

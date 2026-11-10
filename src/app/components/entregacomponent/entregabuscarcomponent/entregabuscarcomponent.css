@@ -1,0 +1,117 @@
+/* Contenedor general */
+.container {
+    padding: 32px 48px;
+    background-color: #fef6e7; /* Fondo crema característico */
+    min-height: calc(100vh - 64px);
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    color: #2b3a2f;
+}
+
+.header-path {
+    font-size: 13px;
+    color: #6b7c6e;
+    margin-bottom: 8px;
+}
+
+.titulo-principal {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1e4620; /* Verde bosque */
+    margin: 0 0 4px 0;
+}
+
+.subtitulo-principal {
+    font-size: 14px;
+    color: #5c6b5e;
+    margin-bottom: 24px;
+}
+
+/* Tarjeta contenedora del buscador */
+.card-formulario-busqueda {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    border: 1px solid #f0e4d0;
+    margin-bottom: 24px;
+}
+
+.form-busqueda-inline {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.input-fecha {
+    flex: 1;
+    max-width: 400px;
+}
+
+::ng-deep .mat-mdc-text-field-wrapper {
+    background-color: #faf8f5 !important;
+    border-radius: 8px !important;
+}
+
+/* Botón de buscar */
+.btn-buscar {
+    background-color: #1e4620 !important;
+    color: #ffffff !important;
+    border-radius: 8px !important;
+    padding: 0 24px !important;
+    height: 56px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-buscar:hover {
+    background-color: #143216 !important;
+}
+
+/* Tarjeta de la tabla de resultados */
+.card-table {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    border: 1px solid #f0e4d0;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    background: transparent !important;
+}
+
+th.mat-header-cell {
+    background-color: #eaf1e7 !important;
+    color: #1e4620 !important;
+    font-weight: 600 !important;
+    font-size: 13px;
+    padding: 12px 16px !important;
+    border-bottom: 1px solid #d5e3d0 !important;
+}
+
+td.mat-cell {
+    color: #3b4a3d !important;
+    font-size: 14px;
+    padding: 14px 16px !important;
+    border-bottom: 1px solid #f7f3ec !important;
+}
+
+.badge-puntos {
+    background-color: #eaf1e7;
+    color: #1e4620;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+.no-data {
+    text-align: center;
+    padding: 40px;
+    color: #6b7c6e;
+    font-size: 14px;
+}

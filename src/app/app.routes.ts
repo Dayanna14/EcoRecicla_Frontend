@@ -24,6 +24,11 @@ import { Tiporecompensainsertcomponent } from './components/tiporecompensacompon
 import { Tiporecompensaupdatecomponent } from './components/tiporecompensacomponent/tiporecompensaupdatecomponent/tiporecompensaupdatecomponent';
 import { Tiporecompensabuscarcomponent } from './components/tiporecompensacomponent/tiporecompensabuscarcomponent/tiporecompensabuscarcomponent';
 import { Tiporecompensarankingcomponent } from './components/tiporecompensacomponent/tiporecompensarankingcomponent/tiporecompensarankingcomponent';
+import { Entregacomponent } from './components/entregacomponent/entregacomponent';
+import { Entregalistcomponent } from './components/entregacomponent/entregalistcomponent/entregalistcomponent';
+import { Entregainsertcomponent } from './components/entregacomponent/entregainsertcomponent/entregainsertcomponent';
+import { Entregaupdatecomponent } from './components/entregacomponent/entregaupdatecomponent/entregaupdatecomponent';
+import { Entregabuscarcomponent } from './components/entregacomponent/entregabuscarcomponent/entregabuscarcomponent';
 
 export const routes: Routes = [
         // ---------- General ----------
@@ -87,6 +92,17 @@ export const routes: Routes = [
     },
 
     // ---------- Jhon: entregas ----------
+    {
+        path: 'entregas',
+        component: Entregacomponent,
+        children: [
+            { path: 'listar', component: Entregalistcomponent },
+            { path: 'insertar', component: Entregainsertcomponent },
+            { path: 'editar/:id', component: Entregaupdatecomponent },
+            { path: 'buscar', component: Entregabuscarcomponent },
+            { path: '', redirectTo: 'listar', pathMatch: 'full' }
+        ]
+    }
 
     // ---------- Franco: canjes ----------
 ];
