@@ -1,40 +1,1465 @@
-.contenedor-landing {
-  position: relative;
-  height: calc(100vh - 64px);
+/* =====================================================================
+   Landing EcoRecicla (HUF03) — solo HTML y CSS
+   Colores: solo variables --eco-* de styles.css. Fuentes: Playfair, Lato, Roboto Mono.
+   Las animaciones que dependen del scroll usan "animation-timeline" (Chrome, Edge, Safari).
+   Si un navegador no las soporta, la página se ve igual pero quieta.
+   ===================================================================== */
+
+/* ---------- 0. Base ---------- */
+.landing {
+  --papel: color-mix(in srgb, var(--eco-crema) 35%, white);
+  --borde: color-mix(in srgb, var(--eco-vanilla) 82%, var(--eco-corcho));
+  --borde-suave: color-mix(in srgb, var(--eco-linen) 82%, var(--eco-corcho));
+  --pista: color-mix(in srgb, var(--eco-vanilla) 70%, var(--eco-corcho));
+  --sombra: 0 6px 18px color-mix(in srgb, var(--eco-verde-bosque) 9%, transparent);
+  --sombra-alta: 0 18px 36px color-mix(in srgb, var(--eco-verde-bosque) 18%, transparent);
   background-color: var(--eco-crema);
+  color: var(--eco-onyx);
+  font-family: 'Lato', sans-serif;
+  overflow-x: clip;
 }
 
-.cargando {
+.landing, .landing *, .landing *::before, .landing *::after { box-sizing: border-box; }
+
+.landing h1, .landing h2, .landing h3 {
+  margin: 0;
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  color: var(--eco-verde-bosque);
+}
+
+.landing p { margin: 0; }
+
+.sprite { position: absolute; width: 0; height: 0; }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.seccion {
+  position: relative;
+  padding: 96px 0;
+  overflow: hidden;
+  scroll-margin-top: 64px;
+}
+
+.fondo-vanilla { background-color: var(--eco-vanilla); }
+
+.contenedor {
+  position: relative;
+  z-index: 1;
+  width: min(1200px, calc(100% - 80px));
+  margin-inline: auto;
+}
+
+.angosto { max-width: 1000px; }
+
+.encabezado {
+  max-width: 1000px;
+  margin: 0 auto 56px;
+  text-align: center;
+}
+
+.kicker {
+  margin-bottom: 12px !important;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--eco-verde-hoja);
+}
+
+.titulo { font-size: 44px; line-height: 1.15; }
+.titulo.izq { font-size: 40px; }
+
+.subtitulo {
+  max-width: 680px;
+  margin: 14px auto 0 !important;
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--eco-charcoal);
+}
+
+.descripcion {
+  margin-top: 16px !important;
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--eco-charcoal);
+}
+
+.nota-ejemplo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 20px !important;
+  font-size: 14px;
+  color: var(--eco-charcoal);
+}
+
+.nota-ejemplo.izq { justify-content: flex-start; }
+
+.nota-ejemplo .mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+  color: var(--eco-verde-hoja);
+}
+
+.rejilla {
+  display: grid;
+  grid-template-columns: minmax(0, 520px) minmax(0, 600px);
+  justify-content: space-between;
+  align-items: center;
+  gap: 48px;
+}
+
+.rejilla.al-reves { grid-template-columns: minmax(0, 600px) minmax(0, 520px); }
+
+/* ---------- Botones: primario verde, contorno y canje ámbar ---------- */
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 26px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  font: 700 16px 'Lato', sans-serif;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s, color 0.2s;
+}
+
+.btn:hover { transform: translateY(-2px); box-shadow: var(--sombra-alta); }
+.btn:active { transform: scale(0.97); }
+
+.btn-primario { background-color: var(--eco-verde-bosque); color: white; }
+.btn-primario:hover { background-color: color-mix(in srgb, var(--eco-verde-bosque) 82%, var(--eco-onyx)); }
+
+.btn-contorno { border-color: var(--eco-verde-bosque); background: transparent; color: var(--eco-verde-bosque); }
+.btn-contorno:hover { background-color: var(--eco-verde-bosque); color: white; }
+
+.btn-ambar { background-color: var(--eco-ambar); color: var(--eco-onyx); }
+.btn-ambar:hover { background-color: var(--eco-corcho); color: white; }
+
+.btn-chico { padding: 10px 20px; font-size: 15px; }
+
+.landing button:focus-visible,
+.landing a:focus-visible,
+.landing label:focus-visible,
+.landing input:focus-visible + * {
+  outline: 3px solid var(--eco-ambar);
+  outline-offset: 3px;
+}
+
+/* Lista con checks */
+.checks {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.checks li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 17px;
+  line-height: 1.4;
+  color: var(--eco-charcoal);
+}
+
+.checks .mat-icon {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  font-size: 22px;
+  color: var(--eco-verde-hoja);
+}
+
+/* Brillo que cruza la tarjeta al pasar el mouse */
+.paso, .tarjeta-r, .beneficio { position: relative; overflow: hidden; }
+
+.paso::after, .tarjeta-r::after, .beneficio::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 35%, color-mix(in srgb, white 45%, transparent) 50%, transparent 65%);
+  transform: translateX(-120%);
+}
+
+.paso:hover::after, .tarjeta-r:hover::after, .beneficio:hover::after {
+  transform: translateX(120%);
+  transition: transform 0.8s ease;
+}
+
+/* Hojas decorativas que se mecen */
+.hoja-deco {
+  position: absolute;
+  z-index: 0;
+  aspect-ratio: 1;
+  color: var(--eco-verde-hoja);
+  pointer-events: none;
+}
+
+.hoja-deco svg, .hoja-cta svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  rotate: var(--giro, 0deg);
+  transform-origin: 50% 95%;
+  animation: mecer 6s ease-in-out infinite;
+}
+
+.hoja-deco.lenta svg { animation-duration: 8s; }
+
+/* ---------- 1. Barra de progreso ---------- */
+.progreso {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  height: 4px;
+  background: linear-gradient(90deg, var(--eco-verde-hoja), var(--eco-ambar));
+  transform: scaleX(0);
+  transform-origin: left;
+  pointer-events: none;
+}
+
+/* ---------- 1. Barra de navegación ---------- */
+.barra {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid var(--borde);
+  background-color: color-mix(in srgb, var(--eco-crema) 92%, transparent);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 12px color-mix(in srgb, var(--eco-onyx) 8%, transparent);
+}
+
+.barra .contenedor { position: static; }
+
+.barra-interior {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 18px 0;
+}
+
+.logo {
+  padding: 0;
+  border: none;
+  background: none;
+  font: 700 30px 'Playfair Display', serif;
+  color: var(--eco-verde-bosque);
+  cursor: pointer;
+}
+
+.enlaces { display: flex; gap: 36px; }
+
+.enlaces button:not(.btn) {
+  position: relative;
+  padding: 4px 0;
+  border: none;
+  background: none;
+  font: 16px 'Lato', sans-serif;
+  color: var(--eco-charcoal);
+  cursor: pointer;
+}
+
+.enlaces button:not(.btn)::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 2px;
+  border-radius: 2px;
+  background-color: var(--eco-ambar);
+  transform: scaleX(0);
+  transition: transform 0.3s;
+}
+
+.enlaces button:not(.btn):hover { color: var(--eco-verde-bosque); }
+.enlaces button:not(.btn):hover::after { transform: scaleX(1); }
+
+.acciones { display: flex; align-items: center; gap: 12px; }
+
+.menu-check, .hamburguesa, .solo-menu, .icono-cerrar { display: none; }
+
+.hamburguesa {
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--eco-verde-bosque);
+  cursor: pointer;
+}
+
+/* ---------- 2. Hero ---------- */
+.hero {
+  padding: 48px 0 64px;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 55% 60% at 78% 45%, color-mix(in srgb, var(--eco-verde-te) 70%, transparent), transparent 70%),
+    var(--eco-crema);
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 560px) minmax(0, 600px);
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+  min-height: 600px;
+}
+
+.etiqueta {
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background-color: var(--eco-verde-te);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--eco-verde-bosque);
+}
+
+.hero h1 { margin: 22px 0 20px; font-size: 56px; line-height: 1.1; }
+
+/* Las 3 frases en ámbar se turnan en el mismo lugar */
+.rotador { display: inline-grid; vertical-align: top; }
+
+.rotador em {
+  grid-area: 1 / 1;
+  font-style: italic;
+  color: var(--eco-ambar);
+}
+
+.rotador em + em { visibility: hidden; }
+
+.propuesta { max-width: 540px; font-size: 18px; line-height: 1.6; color: var(--eco-charcoal); }
+.botones { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 32px; }
+.nota-cuenta { margin-top: 16px !important; font-size: 15px; color: var(--eco-charcoal); }
+.nota-cuenta strong { color: var(--eco-verde-bosque); }
+
+.hero-visual { position: relative; aspect-ratio: 1; perspective: 900px; }
+
+.logo-grande {
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 18px 28px color-mix(in srgb, var(--eco-verde-bosque) 18%, transparent));
+  transition: transform 0.5s ease;
+}
+
+.hero-visual:hover .logo-grande { transform: rotateY(-10deg) rotateX(6deg) scale(1.04); }
+
+.lluvia { position: absolute; inset: -8% 0; pointer-events: none; }
+
+.cae {
+  position: absolute;
+  top: -8%;
+  left: var(--x);
+  z-index: 1;
+  width: var(--t);
+  height: var(--t);
+  opacity: 0;
+}
+
+.cae.frente { z-index: 3; }
+.cae svg { display: block; width: 100%; height: 100%; }
+
+/* ---------- 3. Cinta ---------- */
+.cinta { overflow: hidden; background-color: var(--eco-verde-hoja); color: var(--eco-crema); }
+
+.pista-cinta {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  height: 64px;
+}
+
+.pista-cinta span {
+  padding: 0 18px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.pista-cinta i { font-style: normal; color: var(--eco-ambar); }
+
+/* ---------- 4. Dato de impacto ---------- */
+@property --cifra { syntax: '<integer>'; inherits: false; initial-value: 80; }
+
+.dato { background-color: var(--eco-verde-bosque); }
+.dato-interior { display: flex; align-items: center; gap: 40px; padding: 40px 0; }
+
+.cifra {
+  flex: none;
+  min-width: 176px;
+  font: 700 80px/1 'Playfair Display', serif;
+  color: var(--eco-verde-te);
+  counter-reset: cifra var(--cifra);
+}
+
+.cifra::before { content: counter(cifra) ' %'; }
+.dato-texto { max-width: 720px; font-size: 22px; line-height: 1.5; color: var(--eco-crema); }
+.fuente { margin-top: 8px !important; font-size: 14px; color: var(--eco-salvia-claro); }
+
+
+/* ---------- 5. Cómo funciona ---------- */
+.bloque-pasos { position: relative; view-timeline: --pasos block; }
+
+.pasos {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.paso {
+  padding: 32px 26px;
+  border: 2px solid transparent;
+  border-radius: 16px;
+  background-color: var(--eco-vanilla);
+  box-shadow: var(--sombra);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.paso:hover { transform: translateY(-6px); box-shadow: var(--sombra-alta); }
+
+.circulo {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: var(--eco-verde-bosque);
+  color: white;
+}
+
+.circulo.ambar { background-color: var(--eco-ambar); }
+.circulo .mat-icon { width: 30px; height: 30px; font-size: 30px; }
+.paso h3 { margin: 22px 0 10px; font-size: 24px; line-height: 1.2; }
+.paso p { font-size: 16px; line-height: 1.6; color: var(--eco-charcoal); }
+
+.numero {
+  position: absolute;
+  top: 22px;
+  right: 26px;
+  font: 700 40px 'Playfair Display', serif;
+  color: var(--eco-salvia-claro);
+}
+
+.camino { position: relative; height: 28px; margin-top: 28px; }
+.camino svg { display: block; width: 100%; height: 100%; overflow: visible; }
+
+.camino path {
+  fill: none;
+  stroke-width: 4;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.camino-pista { stroke: var(--eco-salvia-claro); stroke-dasharray: 2 8; }
+.camino-trazo { stroke: var(--eco-verde-hoja); stroke-dasharray: 1; stroke-dashoffset: 0; }
+
+.hito {
+  position: absolute;
+  top: 50%;
+  left: calc(12.5% + var(--n) * 25%);
+  width: 18px;
+  height: 18px;
+  margin: -9px 0 0 -9px;
+  border: 3px solid var(--eco-verde-bosque);
+  border-radius: 50%;
+  background-color: var(--eco-ambar);
+}
+
+/* ---------- 6. Mapa ---------- */
+.ver-mapa { margin-top: 28px; }
+.ver-mapa .mat-icon { width: 20px; height: 20px; font-size: 20px; transition: transform 0.2s; }
+.ver-mapa:hover .mat-icon { transform: translateX(4px); }
+
+.mapa {
+  position: relative;
+  height: 440px;
+  border-radius: 20px;
+  overflow: hidden;
+  background-color: color-mix(in srgb, var(--eco-verde-te) 45%, var(--eco-crema));
+  box-shadow: var(--sombra-alta);
+}
+
+.mapa-base { position: absolute; inset: 0; width: 100%; height: 100%; }
+.parque { fill: var(--eco-verde-te); }
+.rio { fill: none; stroke: var(--eco-salvia-claro); stroke-width: 22; stroke-linecap: round; }
+.calle { fill: none; stroke: white; stroke-width: 6; }
+.avenida { fill: none; stroke: color-mix(in srgb, white 70%, var(--eco-ambar)); stroke-width: 10; }
+
+.pin {
+  position: absolute;
+  top: var(--y);
+  left: var(--x);
+  z-index: 2;
+  width: 36px;
+  height: 46px;
+  margin: -46px 0 0 -18px;
+  transform-origin: 50% 100%;
+  cursor: pointer;
+  transition: scale 0.25s;
+}
+
+.pin img { display: block; width: 100%; height: 100%; }
+.pin:hover { scale: 1.15; }
+
+.yo {
+  position: absolute;
+  top: 52%;
+  left: 47%;
+  width: 18px;
+  height: 18px;
+  margin: -9px 0 0 -9px;
+  border: 3px solid white;
+  border-radius: 50%;
+  background-color: var(--eco-ambar);
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--eco-ambar) 60%, transparent);
+  animation: onda 2s ease-out infinite;
+}
+
+.popup {
+  position: absolute;
+  top: var(--y);
+  left: var(--x);
+  z-index: 4;
+  display: none;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  width: max-content;
+  max-width: 230px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background-color: white;
+  box-shadow: var(--sombra-alta);
+  font-size: 13px;
+  color: var(--eco-charcoal);
+  translate: -50% calc(-100% - 58px);
+  animation: aparecer 0.35s ease-out;
+}
+
+.popup.abajo { translate: -50% 14px; }
+.popup.izq { translate: -12% 14px; }
+.popup.der { translate: -88% calc(-100% - 58px); }
+.popup.abajo.der { translate: -88% 14px; }
+.popup strong { font-size: 15px; color: var(--eco-verde-bosque); }
+
+.estado {
+  margin-top: 2px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background-color: var(--eco-verde-te);
+  font-size: 12px;
+  color: var(--eco-verde-bosque);
+}
+
+.estado.inactivo { background-color: var(--eco-vanilla); color: var(--eco-charcoal); }
+
+/* El pin elegido se agranda y su popup aparece */
+.mapa:has(#c0:checked) .p0, .mapa:has(#c1:checked) .p1, .mapa:has(#c2:checked) .p2,
+.mapa:has(#c3:checked) .p3, .mapa:has(#c4:checked) .p4 { display: flex; }
+
+.mapa:has(#c0:checked) [for='c0'].pin, .mapa:has(#c1:checked) [for='c1'].pin, .mapa:has(#c2:checked) [for='c2'].pin,
+.mapa:has(#c3:checked) [for='c3'].pin, .mapa:has(#c4:checked) [for='c4'].pin {
+  z-index: 3;
+  scale: 1.3;
+  filter: drop-shadow(0 6px 6px color-mix(in srgb, var(--eco-onyx) 30%, transparent));
+}
+
+.lista {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 230px;
+  padding: 12px 10px;
+  border-radius: 12px;
+  background-color: white;
+  box-shadow: var(--sombra-alta);
+  font-size: 13px;
+}
+
+.lista p { padding: 0 4px 4px; font-weight: 700; color: var(--eco-verde-bosque); }
+
+.fila {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 6px;
+  border-radius: 6px;
+  color: var(--eco-charcoal);
+  cursor: pointer;
+}
+
+.fila b { color: var(--eco-verde-hoja); }
+
+.fila:hover, .mapa:has(#c0:checked) .f0, .mapa:has(#c1:checked) .f1, .mapa:has(#c2:checked) .f2 {
+  background-color: var(--eco-verde-te);
+}
+
+.atribucion { position: absolute; right: 12px; bottom: 8px; font-size: 11px; color: var(--eco-charcoal); }
+
+/* ---------- 7. Clasificador (demo) ---------- */
+.demo {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 28px;
+  border: 1px solid var(--borde-suave);
+  border-radius: 20px;
+  background-color: var(--eco-linen);
+  box-shadow: var(--sombra);
+}
+
+.foto {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  height: 220px;
+  border-radius: 14px;
+  overflow: hidden;
+  background-color: var(--eco-verde-te);
+  cursor: pointer;
+}
+
+.objeto { display: none; width: 120px; height: 120px; transition: transform 0.3s; }
+.foto:hover .objeto { transform: scale(1.06) rotate(-3deg); }
+
+.demo:has(#m0:checked) .o0, .demo:has(#m1:checked) .o1,
+.demo:has(#m2:checked) .o2, .demo:has(#m3:checked) .o3 { display: block; animation: aparecer 0.4s ease-out; }
+
+.indicacion {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--eco-verde-bosque);
+}
+
+.indicacion .mat-icon { width: 20px; height: 20px; font-size: 20px; }
+.indicacion.listo, .demo:has(#analizar:checked) .indicacion.esperando { display: none; }
+.demo:has(#analizar:checked) .indicacion.listo { display: flex; }
+
+.escaner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: var(--eco-ambar);
+  box-shadow: 0 0 18px 6px color-mix(in srgb, var(--eco-ambar) 55%, transparent);
+  opacity: 0;
+}
+
+.demo:has(#analizar:checked) .escaner { animation: escanear 1.2s ease-in-out; }
+
+.muestras { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+
+.muestras label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 6px;
+  border: 1.5px solid var(--borde-suave);
+  border-radius: 10px;
+  background-color: white;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--eco-charcoal);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.muestras label:hover { transform: translateY(-2px); }
+.muestras img { width: 22px; height: 22px; }
+
+.demo:has(#m0:checked) [for='m0'], .demo:has(#m1:checked) [for='m1'],
+.demo:has(#m2:checked) [for='m2'], .demo:has(#m3:checked) [for='m3'] {
+  border-color: var(--eco-verde-hoja);
+  background-color: var(--eco-verde-te);
+  color: var(--eco-verde-bosque);
+}
+
+.resultado { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.etiqueta-chica { display: block; font-size: 13px; color: var(--eco-charcoal); }
+.material { font: 700 28px 'Playfair Display', serif; color: var(--eco-verde-bosque); }
+
+.chip {
+  padding: 8px 14px;
+  border-radius: 999px;
+  background-color: var(--eco-charcoal);
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+}
+
+.r { display: none; }
+.demo:has(#analizar:checked) .r-espera { display: none; }
+.demo:has(#analizar:checked) .chip { background-color: var(--eco-verde-bosque); }
+
+.demo:has(#analizar:checked):has(#m0:checked) .r0, .demo:has(#analizar:checked):has(#m1:checked) .r1,
+.demo:has(#analizar:checked):has(#m2:checked) .r2, .demo:has(#analizar:checked):has(#m3:checked) .r3 {
+  display: inline;
+  animation: aparecer 0.3s 1.1s ease-out backwards;
+}
+
+.barras { display: flex; flex-direction: column; gap: 14px; }
+
+.barra-c {
+  display: grid;
+  grid-template-columns: 70px 1fr;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--eco-charcoal);
+}
+
+.pista-c { height: 10px; border-radius: 5px; overflow: hidden; background-color: var(--pista); }
+
+.pista-c i {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: 5px;
+  transition: width 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) 1.1s;
+}
+
+.b-plastico { background-color: var(--eco-verde-bosque); }
+.b-vidrio { background-color: var(--eco-salvia); }
+.b-papel { background-color: var(--eco-ambar); }
+.b-metal { background-color: var(--eco-oliva); }
+
+/* Porcentajes de cada foto de ejemplo */
+.demo:has(#analizar:checked):has(#m0:checked) { --p: 92%; --v: 5%; --pa: 2%; --me: 1%; }
+.demo:has(#analizar:checked):has(#m1:checked) { --p: 8%; --v: 88%; --pa: 1%; --me: 3%; }
+.demo:has(#analizar:checked):has(#m2:checked) { --p: 3%; --v: 1%; --pa: 94%; --me: 2%; }
+.demo:has(#analizar:checked):has(#m3:checked) { --p: 6%; --v: 2%; --pa: 2%; --me: 90%; }
+
+.b-plastico { width: var(--p, 0); }
+.b-vidrio { width: var(--v, 0); }
+.b-papel { width: var(--pa, 0); }
+.b-metal { width: var(--me, 0); }
+
+.corregir { font-size: 14px; color: var(--eco-charcoal); }
+.corregir strong { color: var(--eco-corcho); }
+
+/* ---------- 8. Materiales (tarjetas que giran) ---------- */
+.materiales { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.material-t { height: 240px; cursor: pointer; perspective: 1000px; }
+
+.giro {
+  position: relative;
+  display: block;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.3, 1.2, 0.5, 1);
+}
+
+.material-t:has(input:checked) .giro { transform: rotateY(180deg); }
+
+@media (hover: hover) {
+  .material-t:hover .giro { transform: rotateY(180deg); }
+}
+
+.cara {
   position: absolute;
   inset: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 20px;
-  background-color: var(--eco-crema);
-  z-index: 1;
+  padding: 24px;
+  border: 1px solid var(--borde);
+  border-radius: 16px;
+  background-color: var(--papel);
+  box-shadow: var(--sombra);
+  backface-visibility: hidden;
 }
 
-.cargando img {
-  height: 48px;
+.reverso {
+  align-items: flex-start;
+  gap: 12px;
+  border-color: var(--eco-verde-bosque);
+  background-color: var(--eco-verde-bosque);
+  transform: rotateY(180deg);
 }
 
-.cargando p {
-  margin: 0;
-  color: var(--eco-charcoal);
-  font-size: 15px;
+.circulo-m { display: grid; place-items: center; width: 88px; height: 88px; border-radius: 50%; }
+.circulo-m img { width: 72px; height: 72px; }
+.nombre-m { margin-top: 16px; font: 700 22px 'Playfair Display', serif; color: var(--eco-verde-bosque); }
+.reverso .nombre-m { margin: 0; color: var(--eco-crema); }
+.detalle { margin-top: 6px; font-size: 15px; color: var(--eco-charcoal); }
+
+.pista-giro {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--eco-verde-hoja);
 }
 
-.landing {
-  display: block;
+.pista-giro .mat-icon { width: 16px; height: 16px; font-size: 16px; }
+.linea { display: flex; gap: 8px; font-size: 15px; line-height: 1.4; color: var(--eco-crema); }
+.linea .mat-icon { flex: none; width: 20px; height: 20px; font-size: 20px; }
+.linea .si { color: var(--eco-verde-te); }
+.linea .no { color: var(--eco-ambar); }
+
+/* ---------- 9. Recompensas (carrusel) ---------- */
+.carrusel { position: relative; }
+
+.pista-r {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% - 56px) / 3);
+  gap: 28px;
+  margin: -16px;
+  padding: 16px;
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding: 16px;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+.tarjeta-r {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--borde-suave);
+  border-radius: 16px;
+  background-color: var(--eco-linen);
+  box-shadow: var(--sombra);
+  scroll-snap-align: start;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.tarjeta-r:hover { transform: translateY(-6px); box-shadow: var(--sombra-alta); }
+
+.imagen-r { display: grid; place-items: center; height: 170px; }
+
+.imagen-r .mat-icon {
+  width: 72px;
+  height: 72px;
+  font-size: 72px;
+  color: var(--eco-verde-bosque);
+  transition: transform 0.4s cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+
+.tarjeta-r:hover .imagen-r .mat-icon { transform: scale(1.12) rotate(-8deg); }
+
+.contenido-r {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 22px 24px 24px;
+}
+
+.tipo {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background-color: white;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--eco-corcho);
+}
+
+.contenido-r h3 { font-size: 22px; line-height: 1.25; }
+
+.pie-r {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   width: 100%;
-  height: 100%;
-  border: none;
-  opacity: 0;
-  transition: opacity 0.6s ease;
+  margin-top: auto;
 }
 
-.landing.visible {
+.puntos-r { font: 500 20px 'Roboto Mono', monospace; color: var(--eco-corcho); }
+
+/* Al tocar "Canjear": burbuja con aviso y estallido de color */
+.aviso {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 70px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background-color: var(--eco-verde-bosque);
+  font-size: 14px;
+  color: var(--eco-crema);
+  opacity: 0;
+  translate: 0 10px;
+  pointer-events: none;
+  transition: opacity 0.25s, translate 0.25s;
+}
+
+.aviso a { font-weight: 700; color: var(--eco-verde-te); }
+
+.contenido-r:has(.canjear:focus) .aviso, .aviso:focus-within {
   opacity: 1;
+  translate: 0;
+  pointer-events: auto;
+}
+
+.canjear:focus { animation: estallido 0.7s ease-out; }
+
+.flecha {
+  position: absolute;
+  top: 61px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 50%;
+  background-color: var(--eco-verde-bosque);
+  color: var(--eco-crema);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--eco-onyx) 18%, transparent);
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.flecha:hover { background-color: var(--eco-verde-hoja); transform: scale(1.1); }
+.flecha.izquierda { left: -12px; }
+.flecha.derecha { right: -12px; }
+
+/* ---------- 10. Impacto y ranking ---------- */
+@property --kg { syntax: '<integer>'; inherits: false; initial-value: 48; }
+@property --kgd { syntax: '<integer>'; inherits: false; initial-value: 6; }
+@property --mil { syntax: '<integer>'; inherits: false; initial-value: 1; }
+@property --pts { syntax: '<integer>'; inherits: false; initial-value: 250; }
+@counter-style tres-cifras { system: extends decimal; pad: 3 '0'; }
+@property --co2 { syntax: '<integer>'; inherits: false; initial-value: 31; }
+@property --co2d { syntax: '<integer>'; inherits: false; initial-value: 2; }
+@property --tu { syntax: '<integer>'; inherits: false; initial-value: 4; }
+@property --diego { syntax: '<integer>'; inherits: false; initial-value: 5; }
+
+.paneles { display: grid; grid-template-columns: 600fr 572fr; gap: 28px; align-items: start; }
+
+.panel {
+  padding: 28px;
+  border: 1px solid var(--borde);
+  border-radius: 20px;
+  background-color: var(--papel);
+  box-shadow: var(--sombra);
+}
+
+.panel h3 { margin-bottom: 20px; font-size: 22px; }
+.indicadores { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+
+.indicador {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 13px;
+  color: var(--eco-charcoal);
+}
+
+.cifra-i { font: 500 26px 'Roboto Mono', monospace; color: var(--eco-verde-bosque); }
+.kg { counter-reset: a var(--kg) b var(--kgd); }
+.kg::before { content: counter(a) '.' counter(b); }
+.pts { counter-reset: a var(--mil) b var(--pts); }
+.pts::before { content: counter(a) ' ' counter(b, tres-cifras); }
+.co2 { counter-reset: a var(--co2) b var(--co2d); }
+.co2::before { content: counter(a) '.' counter(b); }
+
+.subpanel { margin: 20px 0 16px !important; font-size: 14px; font-weight: 700; color: var(--eco-charcoal); }
+
+.grafico { display: flex; align-items: flex-end; gap: 28px; height: 196px; }
+
+.columna {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 64px;
+  font-size: 13px;
+  color: var(--eco-charcoal);
+}
+
+.columna b { font: 500 13px 'Roboto Mono', monospace; color: var(--eco-verde-bosque); }
+
+.columna i {
+  width: 100%;
+  height: var(--alto);
+  border-radius: 8px 8px 0 0;
+  background-color: var(--color);
+  transform-origin: bottom;
+  transition: filter 0.2s;
+}
+
+.columna:hover i { filter: brightness(1.15); }
+
+.tabla { display: flex; flex-direction: column; gap: 6px; }
+
+.fila-t {
+  display: grid;
+  grid-template-columns: 50px 1fr 90px 90px;
+  align-items: center;
+  height: 44px;
+  padding: 0 14px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  font-size: 15px;
+  color: var(--eco-charcoal);
+  transition: background-color 0.3s;
+}
+
+.fila-t:not(.cabecera):hover { background-color: var(--eco-verde-te); }
+.fila-t .mono { font-family: 'Roboto Mono', monospace; }
+
+.cabecera {
+  height: 36px;
+  border: none;
+  background-color: var(--eco-verde-te);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--eco-onyx);
+}
+
+.par { background-color: var(--eco-vanilla); }
+
+.tu {
+  position: relative;
+  z-index: 1;
+  border-color: var(--eco-ambar);
+  background-color: var(--eco-linen);
+  font-weight: 700;
+  color: var(--eco-corcho);
+}
+
+.tu .mono { color: var(--eco-charcoal); }
+.puesto-tu { counter-reset: p var(--tu); }
+.puesto-diego { counter-reset: p var(--diego); }
+.puesto-tu::before, .puesto-diego::before { content: counter(p); }
+
+.sube { width: 18px; height: 18px; font-size: 18px; vertical-align: -3px; color: var(--eco-verde-hoja); }
+
+/* ---------- 11. Beneficios ---------- */
+.beneficios { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; align-items: start; }
+
+.beneficio {
+  padding: 42px 30px 30px;
+  border-top: 10px solid var(--color);
+  border-radius: 16px;
+  background-color: var(--eco-crema);
+  box-shadow: var(--sombra);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.beneficio:hover { transform: translateY(-6px); box-shadow: var(--sombra-alta); }
+
+.avatar {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  transition: transform 0.4s cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+
+.beneficio:hover .avatar { transform: rotate(-10deg) scale(1.12); }
+
+.rol {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--eco-verde-hoja);
+}
+
+.beneficio h3 { margin-top: 8px; font-size: 28px; }
+.beneficio .checks { margin-top: 18px; }
+.beneficio .checks li { font-size: 16px; line-height: 1.5; }
+.beneficio .checks .mat-icon { color: var(--color); }
+
+/* ---------- 12. Preguntas frecuentes (mat-expansion-panel) ---------- */
+.faq { display: flex; flex-direction: column; gap: 16px; }
+
+.pregunta.mat-expansion-panel {
+  border: 1.5px solid var(--borde-suave);
+  border-radius: 14px !important;
+  background-color: var(--eco-linen);
+  box-shadow: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  --mat-expansion-header-collapsed-state-height: 72px;
+  --mat-expansion-header-expanded-state-height: 72px;
+}
+
+.pregunta.mat-expanded {
+  border-color: var(--eco-verde-hoja);
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--eco-onyx) 8%, transparent);
+}
+
+.pregunta:hover { border-color: var(--eco-salvia); }
+.pregunta .mat-expansion-panel-header { padding: 0 28px; }
+.pregunta .mat-expansion-panel-header-title { font: 700 20px 'Playfair Display', serif; color: var(--eco-verde-bosque); }
+.signo { font: 700 28px 'Lato', sans-serif; color: var(--eco-ambar); transition: transform 0.3s; }
+.pregunta.mat-expanded .signo { transform: rotate(45deg); }
+.pregunta p { padding: 0 4px 4px; font-size: 16px; line-height: 1.6; color: var(--eco-charcoal); }
+
+/* ---------- 13. Llamado a la acción ---------- */
+.cta {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 64px 72px;
+  border-radius: 24px;
+  overflow: hidden;
+  background-color: var(--eco-verde-bosque);
+}
+
+.cta-texto { position: relative; z-index: 1; max-width: 600px; }
+.cta h2 { font-size: 40px; color: white; }
+.cta-texto p { margin-top: 16px; font-size: 18px; line-height: 1.6; color: var(--eco-verde-te); }
+.cta-boton { z-index: 1; padding: 18px 34px; font-size: 17px; animation: pulso 2.4s ease-in-out infinite; }
+.cta-boton:hover { animation: none; }
+.hoja-cta { position: absolute; aspect-ratio: 1; color: var(--eco-verde-hoja); opacity: 0.4; }
+.hoja-cta.uno { top: -50px; right: 280px; width: 180px; --giro: 25deg; }
+.hoja-cta.dos { top: 60px; right: 90px; width: 140px; --giro: -40deg; }
+
+/* ---------- 14. Pie de página ---------- */
+.pie { border-top: 1px solid var(--borde); }
+.pie-interior { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 36px 0; }
+.pie-logo { font: 700 26px 'Playfair Display', serif; color: var(--eco-verde-bosque); }
+.pie p { font-size: 15px; color: var(--eco-charcoal); }
+
+/* ---------- 15. Volver arriba ---------- */
+.arriba {
+  position: fixed;
+  right: 32px;
+  bottom: 32px;
+  z-index: 150;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border: none;
+  border-radius: 50%;
+  background-color: var(--eco-verde-bosque);
+  color: var(--eco-crema);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--eco-onyx) 22%, transparent);
+  cursor: pointer;
+  transition: translate 0.2s;
+}
+
+.arriba:hover { translate: 0 -3px; }
+.arriba svg { position: absolute; inset: 0; rotate: -90deg; }
+.arriba circle { fill: none; stroke-width: 3; }
+.arriba-pista { stroke: color-mix(in srgb, var(--eco-crema) 25%, transparent); }
+.arriba-anillo { stroke: var(--eco-ambar); stroke-dasharray: 1; stroke-dashoffset: 0; stroke-linecap: round; }
+
+/* =====================================================================
+   ANIMACIONES (al final del archivo se apagan si la persona pidió menos movimiento)
+   ===================================================================== */
+/* Entrada del hero */
+.entrar { animation: subir 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both; animation-delay: calc(var(--e) * 120ms + 100ms); }
+.logo-grande { animation: aparecer-logo 1.1s 0.25s cubic-bezier(0.2, 0.8, 0.2, 1.2) both, flotar 5s 1.4s ease-in-out infinite; }
+
+/* Frases que se turnan: cada una se "escribe" y luego se va */
+.rotador em + em { visibility: visible; }
+.rotador em { animation: frase 9s infinite both; }
+.rotador em:nth-child(2) { animation-delay: 3s; }
+.rotador em:nth-child(3) { animation-delay: 6s; }
+
+/* Hojas cayendo */
+.cae { animation: caer var(--d) linear var(--r) infinite; }
+.cae svg { animation: balanceo 3s ease-in-out infinite alternate; }
+
+/* Cinta: se mueve sola y se pausa con el mouse */
+.pista-cinta { animation: cinta 35s linear infinite; }
+.cinta:hover .pista-cinta { animation-play-state: paused; }
+
+/* Animaciones que siguen el scroll (Chrome, Edge y Safari recientes).
+   En otros navegadores se saltan al final: todo se ve completo y quieto. */
+/* Barra de progreso, barra de navegación y anillo de "volver arriba" */
+.progreso { animation: llenar linear both; animation-timeline: scroll(root); }
+.barra-interior { animation: compactar linear both; animation-timeline: scroll(root); animation-range: 0 120px; }
+.arriba { animation: mostrar-arriba linear both; animation-timeline: scroll(root); animation-range: 300px 600px; }
+.arriba-anillo { animation: anillo linear both; animation-timeline: scroll(root); }
+
+/* Aparecer al hacer scroll */
+.revelar, .paso, .material-t, .tarjeta-r, .beneficio {
+  animation: revelar linear both;
+  animation-timeline: view();
+  animation-range: entry 0% entry 70%;
+}
+
+/* Hojas decorativas con parallax */
+.hoja-deco { animation: parallax linear both; animation-timeline: view(); }
+.hoja-deco.lenta { animation-name: parallax-lento; }
+
+/* Contador del 80 % */
+.cifra { animation: contar-80 linear both; animation-timeline: view(); animation-range: entry 30% cover 45%; }
+
+/* Camino de pasos: se dibuja y cada paso se ilumina cuando llega */
+.camino-trazo { animation: trazo linear both; animation-timeline: --pasos; animation-range: entry 60% exit 30%; }
+.hito { animation: hito linear both; animation-timeline: --pasos; animation-range: entry calc(60% + var(--n) * 25%) entry calc(70% + var(--n) * 25%); }
+.paso .numero { animation: numero linear both; animation-timeline: --pasos; animation-range: entry calc(60% + var(--n) * 25%) entry calc(70% + var(--n) * 25%); }
+
+/* Pines del mapa que caen */
+.pin { animation: caer-pin linear both; animation-timeline: view(); animation-range: entry 20% entry 80%; }
+
+/* Indicadores, gráfico y ranking */
+.kg { animation: contar-kg linear both; animation-timeline: view(); animation-range: entry 40% cover 50%; }
+.pts { animation: contar-pts linear both; animation-timeline: view(); animation-range: entry 40% cover 50%; }
+.co2 { animation: contar-co2 linear both; animation-timeline: view(); animation-range: entry 40% cover 50%; }
+.columna i { animation: crecer linear both; animation-timeline: view(); animation-range: entry 40% cover 50%; }
+.tu { animation: subir-puesto linear both; animation-timeline: view(); animation-range: cover 40% cover 50%; }
+.diego { animation: bajar-puesto linear both; animation-timeline: view(); animation-range: cover 40% cover 50%; }
+.puesto-tu { animation: puesto-tu linear both; animation-timeline: view(); animation-range: cover 40% cover 50%; }
+.puesto-diego { animation: puesto-diego linear both; animation-timeline: view(); animation-range: cover 40% cover 50%; }
+
+/* Sin animaciones con scroll, la barra de progreso y el anillo no tienen sentido */
+@supports not (animation-timeline: view()) {
+  .progreso, .arriba svg { display: none; }
+}
+
+/* ---------- Keyframes ---------- */
+@keyframes subir { from { opacity: 0; transform: translateY(26px); } }
+@keyframes aparecer { from { opacity: 0; transform: translateY(-8px) scale(0.96); } }
+@keyframes aparecer-logo { from { opacity: 0; transform: scale(0.8) rotate(-6deg); } }
+@keyframes flotar { 50% { translate: 0 -10px; } }
+@keyframes mecer { 50% { rotate: calc(var(--giro, 0deg) + 9deg); } }
+@keyframes onda { to { box-shadow: 0 0 0 22px transparent; } }
+@keyframes escanear { 0% { top: 0; opacity: 1; } 100% { top: calc(100% - 3px); opacity: 1; } }
+@keyframes pulso { 0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--eco-ambar) 55%, transparent); } 50% { box-shadow: 0 0 0 14px transparent; } }
+@keyframes estallido { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--eco-ambar) 70%, transparent); } 100% { box-shadow: 0 0 0 26px transparent; } }
+@keyframes cinta { to { transform: translateX(-50%); } }
+
+@keyframes frase {
+  0% { opacity: 0; clip-path: inset(0 100% 0 0); }
+  4% { opacity: 1; }
+  12%, 30% { opacity: 1; clip-path: inset(0 0 0 0); }
+  34%, 100% { opacity: 0; clip-path: inset(0 0 0 0); }
+}
+
+@keyframes caer {
+  0% { top: -8%; opacity: 0; }
+  10%, 85% { opacity: 0.85; }
+  100% { top: 100%; opacity: 0; }
+}
+
+@keyframes balanceo { from { transform: translateX(-14px) rotate(-25deg); } to { transform: translateX(14px) rotate(35deg); } }
+
+@keyframes llenar { to { transform: scaleX(1); } }
+@keyframes compactar { to { padding-block: 10px; } }
+@keyframes mostrar-arriba { from { opacity: 0; scale: 0.6; visibility: hidden; } }
+@keyframes anillo { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes revelar { from { opacity: 0; translate: 0 40px; } }
+@keyframes parallax { from { translate: 0 60px; } to { translate: 0 -60px; } }
+@keyframes parallax-lento { from { translate: 0 110px; } to { translate: 0 -110px; } }
+@keyframes contar-80 { from { --cifra: 0; } to { --cifra: 80; } }
+@keyframes trazo { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+
+@keyframes hito {
+  from { border-color: var(--eco-salvia-claro); background-color: var(--eco-crema); scale: 1; }
+  to { border-color: var(--eco-verde-bosque); background-color: var(--eco-ambar); scale: 1.25; }
+}
+
+@keyframes numero { from { color: var(--eco-salvia-claro); } to { color: var(--eco-ambar); } }
+@keyframes caer-pin { from { opacity: 0; translate: 0 -60px; } }
+@keyframes contar-kg { from { --kg: 0; --kgd: 0; } }
+@keyframes contar-pts { from { --mil: 0; --pts: 0; } }
+@keyframes contar-co2 { from { --co2: 0; --co2d: 0; } }
+@keyframes crecer { from { transform: scaleY(0.03); } }
+@keyframes subir-puesto { from { translate: 0 calc(100% + 6px); } }
+@keyframes bajar-puesto { from { translate: 0 calc(-100% - 6px); } }
+@keyframes puesto-tu { from { --tu: 5; } }
+@keyframes puesto-diego { from { --diego: 4; } }
+
+/* =====================================================================
+   TABLET (hasta 1024 px)
+   ===================================================================== */
+@media (max-width: 1024px) {
+  .seccion { padding: 72px 0; }
+  .titulo { font-size: 38px; }
+  .titulo.izq { font-size: 36px; }
+  .encabezado { margin-bottom: 48px; }
+
+  /* Menú hamburguesa */
+  .hamburguesa { display: grid; order: 2; }
+  .acciones { margin-left: auto; }
+
+  .enlaces {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    display: none;
+    flex-direction: column;
+    gap: 0;
+    padding: 8px 20px 20px;
+    border-bottom: 1px solid var(--borde);
+    background-color: var(--eco-crema);
+    box-shadow: 0 14px 24px color-mix(in srgb, var(--eco-verde-bosque) 14%, transparent);
+  }
+
+  .enlaces button:not(.btn) {
+    padding: 16px 4px;
+    border-bottom: 1px solid var(--borde);
+    font-size: 17px;
+    text-align: left;
+  }
+
+  .menu-check:checked ~ .enlaces { display: flex; animation: aparecer 0.25s ease-out; }
+  .menu-check:checked ~ .hamburguesa .icono-abrir { display: none; }
+  .menu-check:checked ~ .hamburguesa .icono-cerrar { display: inline-block; }
+
+  .hero { padding: 40px 0 56px; }
+  .hero-grid { grid-template-columns: 1fr; gap: 24px; min-height: 0; }
+  .hero-visual { order: -1; width: 320px; justify-self: center; }
+  .hero h1 { font-size: 44px; max-width: 600px; }
+  .dato-interior { gap: 32px; }
+  .cifra { min-width: 156px; }
+  .dato-texto { font-size: 20px; }
+
+  .pasos, .materiales { grid-template-columns: repeat(2, 1fr); }
+  .rejilla, .rejilla.al-reves, .paneles { grid-template-columns: 1fr; }
+  .rejilla.al-reves > :last-child { order: -1; }
+  .pista-r { grid-auto-columns: calc((100% - 28px) / 2); }
+  .beneficios { grid-template-columns: repeat(2, 1fr); }
+  .cta { flex-direction: column; align-items: flex-start; padding: 48px; }
+}
+
+/* =====================================================================
+   CELULAR (hasta 600 px)
+   ===================================================================== */
+@media (max-width: 600px) {
+  .seccion { padding: 56px 0; }
+  .contenedor { width: calc(100% - 40px); }
+  .titulo, .titulo.izq { font-size: 30px; }
+  .subtitulo, .descripcion { font-size: 16px; }
+  .encabezado { margin-bottom: 40px; }
+  .checks li { font-size: 16px; }
+
+  .barra-interior { gap: 6px; padding: 12px 0; }
+  .logo { font-size: 24px; }
+  .acciones { gap: 4px; }
+  .canjear-barra { display: none; }
+  .solo-menu { display: inline-flex; margin-top: 16px; }
+  .acciones .btn-chico { padding: 9px 14px; font-size: 14px; }
+
+  .hero { padding: 32px 0 48px; }
+  .hero-visual { width: 240px; }
+  .etiqueta { font-size: 12px; }
+  .hero h1 { font-size: 36px; }
+  .propuesta { font-size: 17px; }
+  .botones { flex-direction: column; gap: 12px; }
+  .botones .btn { width: 100%; }
+
+  .pista-cinta { height: 52px; }
+  .pista-cinta span { padding: 0 12px; font-size: 13px; }
+
+  .dato-interior { flex-direction: column; align-items: flex-start; gap: 12px; padding: 32px 0; }
+  .cifra { font-size: 64px; }
+  .dato-texto { font-size: 18px; }
+
+  .pasos, .materiales, .beneficios { grid-template-columns: 1fr; gap: 20px; }
+  .paso h3 { font-size: 22px; }
+  .camino, .hoja-deco { display: none; }
+  .material-t { height: 220px; }
+
+  .mapa { height: 340px; }
+  .popup { max-width: 190px; padding: 10px 12px; }
+  .popup strong { font-size: 14px; }
+  .lista { left: 10px; bottom: 10px; width: 200px; }
+
+  .demo { padding: 20px; }
+  .foto { height: 170px; }
+  .muestras { grid-template-columns: repeat(2, 1fr); }
+  .material { font-size: 24px; }
+
+  .pista-r { grid-auto-columns: 100%; gap: 16px; }
+  .flecha { width: 40px; height: 40px; }
+  .flecha.izquierda { left: -6px; }
+  .flecha.derecha { right: -6px; }
+  .contenido-r h3 { font-size: 20px; }
+
+  .panel { padding: 20px; }
+  .indicadores { grid-template-columns: 1fr; gap: 10px; }
+  .grafico { gap: 14px; }
+  .columna { width: 52px; }
+  .fila-t { grid-template-columns: 30px 1fr 56px 56px; padding: 0 8px; font-size: 14px; }
+  .beneficio h3 { font-size: 26px; }
+
+  .pregunta .mat-expansion-panel-header { padding: 0 18px; }
+  .pregunta .mat-expansion-panel-header-title { font-size: 17px; }
+
+  .cta { padding: 32px 24px; }
+  .cta h2 { font-size: 30px; }
+  .cta-texto p { font-size: 16px; }
+  .cta-boton { width: 100%; }
+  .hoja-cta.uno { right: -40px; }
+  .hoja-cta.dos { right: -60px; }
+
+  .pie-interior { flex-direction: column; align-items: flex-start; gap: 6px; padding: 28px 0; }
+  .arriba { right: 16px; bottom: 16px; width: 50px; height: 50px; }
+}
+
+/* =====================================================================
+   MENOS MOVIMIENTO: si el sistema lo pide, todo queda quieto y visible
+   ===================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .landing *,
+  .landing *::before,
+  .landing *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .rotador em + em,
+  .cae {
+    display: none;
+  }
 }

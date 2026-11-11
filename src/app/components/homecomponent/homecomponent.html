@@ -1,40 +1,625 @@
-<app-menucomponent></app-menucomponent>
+<div class="landing" #inicio>
+  <!-- Hoja reutilizable: se dibuja con <use href="#hoja"> -->
+  <svg class="sprite" aria-hidden="true">
+    <symbol id="hoja" viewBox="0 0 100 100">
+      <path fill="currentColor" d="M50 3C78 18 94 50 72 80 62 93 50 97 50 97S38 93 28 80C6 50 22 18 50 3Z" />
+      <path d="M50 12V94M50 38 34 26M50 52 66 40M50 66 36 56M50 78 62 70" fill="none" stroke="var(--eco-crema)"
+        stroke-width="3" stroke-linecap="round" opacity="0.45" />
+    </symbol>
+  </svg>
 
-<div class="contenedor-landing">
-  @if (cargando) {
-    <div class="cargando">
-      <img src="img/logo/ecorecicla-texto-verde.svg" alt="EcoRecicla" />
-      <mat-progress-spinner mode="indeterminate" diameter="48"></mat-progress-spinner>
-      <p>Cargando EcoRecicla…</p>
+  <!-- Barra de progreso de lectura (se llena con el scroll) -->
+  <div class="progreso" aria-hidden="true"></div>
+
+  <!-- ===================== 1. BARRA DE NAVEGACIÓN ===================== -->
+  <header class="barra">
+    <div class="contenedor barra-interior">
+      <button type="button" class="logo" (click)="inicio.scrollIntoView({ behavior: 'smooth' })">EcoRecicla</button>
+
+      <input type="checkbox" id="menu-landing" class="menu-check" #menu />
+      <label for="menu-landing" class="hamburguesa" aria-label="Abrir o cerrar el menú">
+        <mat-icon class="icono-abrir">menu</mat-icon>
+        <mat-icon class="icono-cerrar">close</mat-icon>
+      </label>
+
+      <nav class="enlaces" aria-label="Secciones de la página">
+        <button type="button" (click)="menu.checked = false; comoFunciona.scrollIntoView({ behavior: 'smooth' })">Cómo funciona</button>
+        <button type="button" (click)="menu.checked = false; centros.scrollIntoView({ behavior: 'smooth' })">Centros</button>
+        <button type="button" (click)="menu.checked = false; recompensas.scrollIntoView({ behavior: 'smooth' })">Recompensas</button>
+        <button type="button" (click)="menu.checked = false; impacto.scrollIntoView({ behavior: 'smooth' })">Impacto</button>
+        <button type="button" class="btn btn-ambar solo-menu"
+          (click)="menu.checked = false; beneficios.scrollIntoView({ behavior: 'smooth' })">Canjear</button>
+      </nav>
+
+      <div class="acciones">
+        <button type="button" class="btn btn-ambar btn-chico canjear-barra"
+          (click)="beneficios.scrollIntoView({ behavior: 'smooth' })">Canjear</button>
+        <a class="btn btn-primario btn-chico" routerLink="/login">Iniciar sesión</a>
+      </div>
     </div>
-  }
+  </header>
 
-  @if (dispositivo === 'escritorio') {
-    <iframe
-      class="landing"
-      [class.visible]="!cargando"
-      title="Landing de EcoRecicla (escritorio)"
-      src="https://embed.figma.com/proto/8QOGktBAwaWtXvsvHZoep9/EcoRecicla?node-id=10-2&page-id=119%3A29&starting-point-node-id=10%3A2&scaling=scale-down-width&content-scaling=fixed&hide-ui=1&footer=false&hotspot-hints=false&disable-default-keyboard-nav=true&embed-host=ecorecicla&client-id=2cMCC0bROayRpROpaMBFVw"
-      (load)="landingCargada()"
-      allowfullscreen>
-    </iframe>
-  } @else if (dispositivo === 'tablet') {
-    <iframe
-      class="landing"
-      [class.visible]="!cargando"
-      title="Landing de EcoRecicla (tablet)"
-      src="https://embed.figma.com/proto/8QOGktBAwaWtXvsvHZoep9/EcoRecicla?node-id=14-3&page-id=119%3A30&starting-point-node-id=14%3A3&scaling=scale-down-width&content-scaling=fixed&hide-ui=1&footer=false&hotspot-hints=false&disable-default-keyboard-nav=true&embed-host=ecorecicla&client-id=2cMCC0bROayRpROpaMBFVw"
-      (load)="landingCargada()"
-      allowfullscreen>
-    </iframe>
-  } @else {
-    <iframe
-      class="landing"
-      [class.visible]="!cargando"
-      title="Landing de EcoRecicla (celular)"
-      src="https://embed.figma.com/proto/8QOGktBAwaWtXvsvHZoep9/EcoRecicla?node-id=19-4&page-id=119%3A31&starting-point-node-id=19%3A4&scaling=scale-down-width&content-scaling=fixed&hide-ui=1&footer=false&hotspot-hints=false&disable-default-keyboard-nav=true&embed-host=ecorecicla&client-id=2cMCC0bROayRpROpaMBFVw"
-      (load)="landingCargada()"
-      allowfullscreen>
-    </iframe>
-  }
+  <main>
+    <!-- ===================== 2. HERO ===================== -->
+    <section class="hero">
+      <div class="contenedor hero-grid">
+        <div class="hero-texto">
+          <span class="etiqueta entrar" style="--e: 0">Reciclar tiene recompensa</span>
+          <h1 class="entrar" style="--e: 1">
+            Recicla cerca, suma puntos y
+            <span class="rotador">
+              <em>canjea recompensas</em>
+              <em aria-hidden="true">cuida el planeta</em>
+              <em aria-hidden="true">gana más puntos</em>
+            </span>
+          </h1>
+          <p class="propuesta entrar" style="--e: 2">
+            EcoRecicla te muestra los centros de acopio más cercanos, registra cada entrega de material reciclable y
+            convierte tus kilos en puntos que puedes canjear por beneficios.
+          </p>
+          <div class="botones entrar" style="--e: 3">
+            <a class="btn btn-primario" routerLink="/login">Iniciar sesión</a>
+            <button type="button" class="btn btn-contorno" (click)="comoFunciona.scrollIntoView({ behavior: 'smooth' })">
+              Ver cómo funciona
+            </button>
+          </div>
+          <p class="nota-cuenta entrar" style="--e: 4">
+            ¿Aún no tienes cuenta? <strong>Solicítala en cualquier centro de acopio de EcoRecicla.</strong>
+          </p>
+        </div>
+
+        <div class="hero-visual">
+          <!-- Hojas que caen detrás y delante del logo -->
+          <div class="lluvia" aria-hidden="true">
+            <span class="cae" style="--x: 6%; --t: 26px; --d: 9s; --r: 0s; color: var(--eco-verde-hoja)"><svg viewBox="0 0 100 100"><use href="#hoja" /></svg></span>
+            <span class="cae frente" style="--x: 22%; --t: 34px; --d: 12s; --r: -4s; color: var(--eco-ambar)"><svg viewBox="0 0 100 100"><use href="#hoja" /></svg></span>
+            <span class="cae" style="--x: 38%; --t: 20px; --d: 10s; --r: -7s; color: var(--eco-salvia)"><svg viewBox="0 0 100 100"><use href="#hoja" /></svg></span>
+            <span class="cae" style="--x: 55%; --t: 30px; --d: 13s; --r: -2s; color: var(--eco-verde-hoja)"><svg viewBox="0 0 100 100"><use href="#hoja" /></svg></span>
+            <span class="cae frente" style="--x: 70%; --t: 24px; --d: 11s; --r: -9s; color: var(--eco-salvia)"><svg viewBox="0 0 100 100"><use href="#hoja" /></svg></span>
+            <span class="cae" style="--x: 84%; --t: 36px; --d: 14s; --r: -5s; color: var(--eco-ambar)"><svg viewBox="0 0 100 100"><use href="#hoja" /></svg></span>
+            <span class="cae" style="--x: 94%; --t: 22px; --d: 9.5s; --r: -11s; color: var(--eco-verde-hoja)"><svg viewBox="0 0 100 100"><use href="#hoja" /></svg></span>
+          </div>
+          <img class="logo-grande" src="img/logo/ecorecicla-logo-transparente.svg" width="600" height="600"
+            alt="Logo ilustrado de EcoRecicla con hojas, una botella y envases reciclables" />
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 3. CINTA EN MOVIMIENTO ===================== -->
+    <div class="cinta" aria-label="Plástico, vidrio, papel y cartón, metal. Recicla y gana puntos, canjea recompensas, cuida el planeta.">
+      <div class="pista-cinta" aria-hidden="true">
+        <span>Plástico</span><i>•</i><span>Vidrio</span><i>•</i><span>Papel y cartón</span><i>•</i><span>Metal</span><i>•</i>
+        <span>Recicla y gana puntos</span><i>•</i><span>Canjea recompensas</span><i>•</i><span>Cuida el planeta</span><i>•</i>
+        <span>Plástico</span><i>•</i><span>Vidrio</span><i>•</i><span>Papel y cartón</span><i>•</i><span>Metal</span><i>•</i>
+        <span>Recicla y gana puntos</span><i>•</i><span>Canjea recompensas</span><i>•</i><span>Cuida el planeta</span><i>•</i>
+      </div>
+    </div>
+
+    <!-- ===================== 4. DATO DE IMPACTO ===================== -->
+    <section class="dato" aria-label="Dato de impacto">
+      <div class="contenedor dato-interior">
+        <p class="cifra"><span class="sr-only">80 %</span></p>
+        <div>
+          <p class="dato-texto">
+            Cerca del 80 % de los residuos que se generan en el Perú pueden ser aprovechados de forma sostenible.
+          </p>
+          <p class="fuente">Fuente: Ministerio del Ambiente (2025)</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 5. CÓMO FUNCIONA ===================== -->
+    <section class="seccion" #comoFunciona>
+      <span class="hoja-deco" style="left: 10px; top: 40px; width: 120px; --giro: -35deg" aria-hidden="true"><svg viewBox="0 0 100 100"><use href="#hoja" /></svg></span>
+      <span class="hoja-deco lenta" style="left: 60px; top: 150px; width: 70px; --giro: -70deg; color: var(--eco-salvia)" aria-hidden="true"><svg viewBox="0 0 100 100"><use href="#hoja" /></svg></span>
+      <span class="hoja-deco" style="right: 30px; top: 50px; width: 110px; --giro: 30deg" aria-hidden="true"><svg viewBox="0 0 100 100"><use href="#hoja" /></svg></span>
+      <span class="hoja-deco lenta" style="right: 10px; top: 160px; width: 60px; --giro: 70deg; color: var(--eco-salvia)" aria-hidden="true"><svg viewBox="0 0 100 100"><use href="#hoja" /></svg></span>
+
+      <div class="contenedor">
+        <div class="encabezado revelar">
+          <p class="kicker">Cómo funciona</p>
+          <h2 class="titulo">Cuatro pasos para reciclar con EcoRecicla</h2>
+          <p class="subtitulo">
+            Desde que separas tus residuos hasta que recibes tu recompensa, todo queda registrado en la plataforma.
+          </p>
+        </div>
+
+        <div class="bloque-pasos">
+          <ol class="pasos">
+            <li class="paso" style="--n: 0">
+              <span class="circulo"><mat-icon aria-hidden="true">place</mat-icon></span>
+              <h3>Lleva tu material</h3>
+              <p>Encuentra en el mapa el centro de acopio más cercano y lleva tus residuos separados.</p>
+              <span class="numero" aria-hidden="true">01</span>
+            </li>
+            <li class="paso" style="--n: 1">
+              <span class="circulo"><mat-icon aria-hidden="true">assignment</mat-icon></span>
+              <h3>Registra tu entrega</h3>
+              <p>El operador del centro pesa el material y registra la entrega a tu nombre.</p>
+              <span class="numero" aria-hidden="true">02</span>
+            </li>
+            <li class="paso" style="--n: 2">
+              <span class="circulo"><mat-icon aria-hidden="true">star</mat-icon></span>
+              <h3>Gana puntos</h3>
+              <p>Recibes puntos según los kilos y el tipo de material que entregaste.</p>
+              <span class="numero" aria-hidden="true">03</span>
+            </li>
+            <li class="paso" style="--n: 3">
+              <span class="circulo ambar"><mat-icon aria-hidden="true">redeem</mat-icon></span>
+              <h3>Canjea recompensas</h3>
+              <p>Usa tus puntos en descuentos, productos y experiencias del catálogo.</p>
+              <span class="numero" aria-hidden="true">04</span>
+            </li>
+          </ol>
+
+          <!-- Camino que se dibuja con el scroll -->
+          <div class="camino" aria-hidden="true">
+            <svg viewBox="0 0 1200 28" preserveAspectRatio="none">
+              <path class="camino-pista" d="M0 14 C150 -2 300 30 450 14 S750 -2 900 14 S1100 30 1200 14" />
+              <path class="camino-trazo" pathLength="1" d="M0 14 C150 -2 300 30 450 14 S750 -2 900 14 S1100 30 1200 14" />
+            </svg>
+            <span class="hito" style="--n: 0"></span>
+            <span class="hito" style="--n: 1"></span>
+            <span class="hito" style="--n: 2"></span>
+            <span class="hito" style="--n: 3"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 6. MAPA DE CENTROS ===================== -->
+    <section class="seccion" #centros>
+      <div class="contenedor rejilla">
+        <div class="revelar">
+          <p class="kicker">Centros de acopio</p>
+          <h2 class="titulo izq">Encuentra el centro más cercano a ti</h2>
+          <p class="descripcion">
+            En el mapa interactivo ves todos los centros de acopio activos, ordenados por distancia desde tu ubicación.
+          </p>
+          <ul class="checks">
+            <li><mat-icon aria-hidden="true">check_circle</mat-icon>Ubicación aproximada con tu permiso</li>
+            <li><mat-icon aria-hidden="true">check_circle</mat-icon>Horario y estado de cada centro</li>
+            <li><mat-icon aria-hidden="true">check_circle</mat-icon>Ruta en OpenStreetMap con un clic</li>
+          </ul>
+          <a class="btn btn-contorno ver-mapa" routerLink="/centrosacopio/mapa">
+            Ver el mapa <mat-icon aria-hidden="true">arrow_forward</mat-icon>
+          </a>
+        </div>
+
+        <!-- Vista previa del mapa (dibujada, datos de ejemplo). Tocar un pin cambia el popup. -->
+        <div class="mapa revelar">
+          <input type="radio" name="centro" id="c0" class="sr-only" checked />
+          <input type="radio" name="centro" id="c1" class="sr-only" />
+          <input type="radio" name="centro" id="c2" class="sr-only" />
+          <input type="radio" name="centro" id="c3" class="sr-only" />
+          <input type="radio" name="centro" id="c4" class="sr-only" />
+
+          <svg class="mapa-base" viewBox="0 0 600 440" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <path class="parque" d="M10 40C70 20 170 30 200 80 220 140 150 190 80 180 20 170-10 100 10 40Z" />
+            <path class="parque" d="M430 270C500 250 590 280 590 340 595 420 500 440 450 430 400 410 380 300 430 270Z" />
+            <path class="rio" d="M-20 300C80 260 160 330 260 300S440 240 620 290" />
+            <path class="calle" d="M0 120H600M0 230H600M0 180H600M218 0V440M458 0V440M332 0V440M573 0V440" />
+            <path class="avenida" d="M0 40 600 400" />
+          </svg>
+
+          <label for="c0" class="pin" style="--x: 20%; --y: 16%; --n: 0" aria-label="Centro de acopio Miraflores"><img src="img/mapa/pin-activo.svg" alt="" /></label>
+          <label for="c1" class="pin" style="--x: 55%; --y: 34%; --n: 1" aria-label="Punto Verde Surco"><img src="img/mapa/pin-activo.svg" alt="" /></label>
+          <label for="c2" class="pin" style="--x: 78%; --y: 20%; --n: 2" aria-label="EcoPunto Barranco"><img src="img/mapa/pin-activo.svg" alt="" /></label>
+          <label for="c3" class="pin" style="--x: 40%; --y: 66%; --n: 3" aria-label="Centro San Isidro"><img src="img/mapa/pin-activo.svg" alt="" /></label>
+          <label for="c4" class="pin" style="--x: 86%; --y: 74%; --n: 4" aria-label="Acopio Lince"><img src="img/mapa/pin-inactivo.svg" alt="" /></label>
+
+          <span class="yo" aria-hidden="true"></span>
+
+          <div class="popup p0 abajo izq" style="--x: 20%; --y: 16%"><strong>Centro de acopio Miraflores</strong><span>Lun – Sáb · 8:00 – 18:00</span><b class="estado">Activo</b></div>
+          <div class="popup p1 abajo" style="--x: 55%; --y: 34%"><strong>Punto Verde Surco</strong><span>Lun – Vie · 9:00 – 17:00</span><b class="estado">Activo</b></div>
+          <div class="popup p2 abajo der" style="--x: 78%; --y: 20%"><strong>EcoPunto Barranco</strong><span>Mar – Dom · 8:00 – 16:00</span><b class="estado">Activo</b></div>
+          <div class="popup p3" style="--x: 40%; --y: 66%"><strong>Centro San Isidro</strong><span>Lun – Sáb · 7:00 – 15:00</span><b class="estado">Activo</b></div>
+          <div class="popup p4 der" style="--x: 86%; --y: 74%"><strong>Acopio Lince</strong><span>En mantenimiento</span><b class="estado inactivo">Inactivo</b></div>
+
+          <div class="lista">
+            <p>Más cerca de ti</p>
+            <label for="c0" class="fila f0"><span>Centro Miraflores</span><b>0.8 km</b></label>
+            <label for="c1" class="fila f1"><span>Punto Verde Surco</span><b>1.6 km</b></label>
+            <label for="c2" class="fila f2"><span>EcoPunto Barranco</span><b>2.4 km</b></label>
+          </div>
+          <span class="atribucion">© OpenStreetMap</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 7. CLASIFICADOR CON IA (demo) ===================== -->
+    <section class="seccion fondo-vanilla">
+      <div class="contenedor rejilla al-reves">
+        <!-- Demo: eliges una foto de ejemplo y tocas la foto para clasificar -->
+        <div class="demo revelar">
+          <input type="radio" name="muestra" id="m0" class="sr-only" checked />
+          <input type="radio" name="muestra" id="m1" class="sr-only" />
+          <input type="radio" name="muestra" id="m2" class="sr-only" />
+          <input type="radio" name="muestra" id="m3" class="sr-only" />
+          <input type="checkbox" id="analizar" class="sr-only" />
+
+          <label for="analizar" class="foto">
+            <img class="objeto o0" src="img/materiales/material-plastico.svg" alt="Botella" />
+            <img class="objeto o1" src="img/materiales/material-vidrio.svg" alt="Frasco" />
+            <img class="objeto o2" src="img/materiales/material-papel.svg" alt="Caja" />
+            <img class="objeto o3" src="img/materiales/material-metal.svg" alt="Lata" />
+            <span class="escaner" aria-hidden="true"></span>
+            <span class="indicacion esperando"><mat-icon aria-hidden="true">touch_app</mat-icon> Toca la foto para clasificar</span>
+            <span class="indicacion listo"><mat-icon aria-hidden="true">refresh</mat-icon> Toca para probar de nuevo</span>
+          </label>
+
+          <div class="muestras" role="group" aria-label="Fotos de ejemplo">
+            <label for="m0"><img src="img/materiales/material-plastico.svg" alt="" /> Botella</label>
+            <label for="m1"><img src="img/materiales/material-vidrio.svg" alt="" /> Frasco</label>
+            <label for="m2"><img src="img/materiales/material-papel.svg" alt="" /> Caja</label>
+            <label for="m3"><img src="img/materiales/material-metal.svg" alt="" /> Lata</label>
+          </div>
+
+          <div class="resultado">
+            <div>
+              <span class="etiqueta-chica">Material sugerido</span>
+              <strong class="material">
+                <span class="r-espera">¿?</span>
+                <span class="r r0">Plástico</span><span class="r r1">Vidrio</span><span class="r r2">Papel</span><span class="r r3">Metal</span>
+              </strong>
+            </div>
+            <span class="chip">
+              <span class="r-espera">Esperando foto</span>
+              <span class="r r0">92 % de confianza</span><span class="r r1">88 % de confianza</span>
+              <span class="r r2">94 % de confianza</span><span class="r r3">90 % de confianza</span>
+            </span>
+          </div>
+
+          <div class="barras">
+            <div class="barra-c"><span>Plástico</span><span class="pista-c"><i class="b-plastico"></i></span></div>
+            <div class="barra-c"><span>Vidrio</span><span class="pista-c"><i class="b-vidrio"></i></span></div>
+            <div class="barra-c"><span>Papel</span><span class="pista-c"><i class="b-papel"></i></span></div>
+            <div class="barra-c"><span>Metal</span><span class="pista-c"><i class="b-metal"></i></span></div>
+          </div>
+          <p class="corregir">¿No es correcto? En la app puedes <strong>corregir el material</strong>.</p>
+        </div>
+
+        <div class="revelar">
+          <p class="kicker">Clasificador con IA</p>
+          <h2 class="titulo izq">¿No sabes qué material es? Tómale una foto</h2>
+          <p class="descripcion">
+            El clasificador reconoce si tu residuo es plástico, vidrio, papel o metal y te muestra el porcentaje de
+            confianza. Si se equivoca, puedes corregirlo.
+          </p>
+          <ul class="checks">
+            <li><mat-icon aria-hidden="true">check_circle</mat-icon>Funciona directamente en tu navegador</li>
+            <li><mat-icon aria-hidden="true">check_circle</mat-icon>La foto no se envía a ningún servidor</li>
+            <li><mat-icon aria-hidden="true">check_circle</mat-icon>Reduce errores antes de ir al centro de acopio</li>
+          </ul>
+          <p class="nota-ejemplo izq"><mat-icon aria-hidden="true">info</mat-icon>Demo con fotos de ejemplo.</p>
+        </div>
+      </div>
+    </section>
+
+        <!-- ===================== 8. MATERIALES ACEPTADOS ===================== -->
+    <section class="seccion">
+      <div class="contenedor">
+        <div class="encabezado revelar">
+          <p class="kicker">Materiales aceptados</p>
+          <h2 class="titulo">¿Qué puedes reciclar?</h2>
+          <p class="subtitulo">Cada material tiene su propio valor en puntos por kilo y su factor de CO₂ evitado.</p>
+        </div>
+
+        <!-- Cada tarjeta gira (mouse encima o tocándola) y muestra qué sí y qué no llevar -->
+        <div class="materiales">
+          <label class="material-t revelar">
+            <input type="checkbox" class="sr-only" />
+            <span class="giro">
+              <span class="cara frente">
+                <span class="circulo-m" style="background-color: var(--eco-verde-te)"><img src="img/materiales/material-plastico.svg" alt="" /></span>
+                <span class="nombre-m">Plástico</span>
+                <span class="detalle">Botellas PET y envases</span>
+                <span class="pista-giro"><mat-icon aria-hidden="true">sync</mat-icon> Toca para ver más</span>
+              </span>
+              <span class="cara reverso">
+                <span class="nombre-m">Plástico</span>
+                <span class="linea"><mat-icon class="si">check_circle</mat-icon>Botellas PET, envases de limpieza y tapas</span>
+                <span class="linea"><mat-icon class="no">cancel</mat-icon>Bolsas sucias o envases con restos de comida</span>
+              </span>
+            </span>
+          </label>
+          <label class="material-t revelar">
+            <input type="checkbox" class="sr-only" />
+            <span class="giro">
+              <span class="cara frente">
+                <span class="circulo-m" style="background-color: var(--eco-salvia-claro)"><img src="img/materiales/material-vidrio.svg" alt="" /></span>
+                <span class="nombre-m">Vidrio</span>
+                <span class="detalle">Botellas y frascos</span>
+                <span class="pista-giro"><mat-icon aria-hidden="true">sync</mat-icon> Toca para ver más</span>
+              </span>
+              <span class="cara reverso">
+                <span class="nombre-m">Vidrio</span>
+                <span class="linea"><mat-icon class="si">check_circle</mat-icon>Botellas y frascos limpios, sin tapa</span>
+                <span class="linea"><mat-icon class="no">cancel</mat-icon>Espejos, focos o vidrio de ventanas</span>
+              </span>
+            </span>
+          </label>
+          <label class="material-t revelar">
+            <input type="checkbox" class="sr-only" />
+            <span class="giro">
+              <span class="cara frente">
+                <span class="circulo-m" style="background-color: var(--eco-linen)"><img src="img/materiales/material-papel.svg" alt="" /></span>
+                <span class="nombre-m">Papel y cartón</span>
+                <span class="detalle">Hojas, cajas y periódicos</span>
+                <span class="pista-giro"><mat-icon aria-hidden="true">sync</mat-icon> Toca para ver más</span>
+              </span>
+              <span class="cara reverso">
+                <span class="nombre-m">Papel y cartón</span>
+                <span class="linea"><mat-icon class="si">check_circle</mat-icon>Hojas, periódicos y cajas desarmadas</span>
+                <span class="linea"><mat-icon class="no">cancel</mat-icon>Servilletas usadas o cartón con grasa</span>
+              </span>
+            </span>
+          </label>
+          <label class="material-t revelar">
+            <input type="checkbox" class="sr-only" />
+            <span class="giro">
+              <span class="cara frente">
+                <span class="circulo-m" style="background-color: var(--eco-vanilla)"><img src="img/materiales/material-metal.svg" alt="" /></span>
+                <span class="nombre-m">Metal</span>
+                <span class="detalle">Latas de aluminio y acero</span>
+                <span class="pista-giro"><mat-icon aria-hidden="true">sync</mat-icon> Toca para ver más</span>
+              </span>
+              <span class="cara reverso">
+                <span class="nombre-m">Metal</span>
+                <span class="linea"><mat-icon class="si">check_circle</mat-icon>Latas de bebidas y conservas enjuagadas</span>
+                <span class="linea"><mat-icon class="no">cancel</mat-icon>Latas de pintura o aerosoles</span>
+              </span>
+            </span>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 9. CATÁLOGO DE RECOMPENSAS ===================== -->
+    <section class="seccion fondo-vanilla" #recompensas>
+      <div class="contenedor">
+        <div class="encabezado revelar">
+          <p class="kicker">Recompensas</p>
+          <h2 class="titulo">Canjea tus puntos por beneficios reales</h2>
+          <p class="subtitulo">
+            Descuentos, productos y experiencias sostenibles. Cuando alcanzas los puntos de una recompensa, te avisamos.
+          </p>
+        </div>
+
+        <!-- Carrusel: se desliza con el dedo, la rueda del mouse o las flechas -->
+        <div class="carrusel revelar">
+          <button type="button" class="flecha izquierda" aria-label="Recompensas anteriores"
+            (click)="pista.scrollLeft <= 5 ? pista.scrollTo({ left: pista.scrollWidth }) : pista.scrollBy({ left: -pista.clientWidth })">
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+
+          <ul class="pista-r" #pista>
+            <li class="tarjeta-r">
+              <div class="imagen-r" style="background-color: var(--eco-verde-te)"><mat-icon aria-hidden="true">sell</mat-icon></div>
+              <div class="contenido-r">
+                <span class="tipo">Descuento</span>
+                <h3>20 % de descuento en tienda ecológica</h3>
+                <div class="pie-r"><span class="puntos-r">250 pts</span><button type="button" class="btn btn-ambar btn-chico canjear">Canjear</button></div>
+                <p class="aviso">¡Buena elección! <a routerLink="/login">Inicia sesión</a> para canjear.</p>
+              </div>
+            </li>
+            <li class="tarjeta-r">
+              <div class="imagen-r" style="background-color: var(--eco-salvia-claro)"><mat-icon aria-hidden="true">local_drink</mat-icon></div>
+              <div class="contenido-r">
+                <span class="tipo">Producto</span>
+                <h3>Botella reutilizable de acero</h3>
+                <div class="pie-r"><span class="puntos-r">400 pts</span><button type="button" class="btn btn-ambar btn-chico canjear">Canjear</button></div>
+                <p class="aviso">¡Buena elección! <a routerLink="/login">Inicia sesión</a> para canjear.</p>
+              </div>
+            </li>
+            <li class="tarjeta-r">
+              <div class="imagen-r" style="background-color: var(--eco-linen)"><mat-icon aria-hidden="true">spa</mat-icon></div>
+              <div class="contenido-r">
+                <span class="tipo">Experiencia</span>
+                <h3>Taller de compostaje en casa</h3>
+                <div class="pie-r"><span class="puntos-r">600 pts</span><button type="button" class="btn btn-ambar btn-chico canjear">Canjear</button></div>
+                <p class="aviso">¡Buena elección! <a routerLink="/login">Inicia sesión</a> para canjear.</p>
+              </div>
+            </li>
+            <li class="tarjeta-r">
+              <div class="imagen-r" style="background-color: var(--eco-salvia-claro)"><mat-icon aria-hidden="true">shopping_bag</mat-icon></div>
+              <div class="contenido-r">
+                <span class="tipo">Producto</span>
+                <h3>Kit de bolsas reutilizables</h3>
+                <div class="pie-r"><span class="puntos-r">300 pts</span><button type="button" class="btn btn-ambar btn-chico canjear">Canjear</button></div>
+                <p class="aviso">¡Buena elección! <a routerLink="/login">Inicia sesión</a> para canjear.</p>
+              </div>
+            </li>
+            <li class="tarjeta-r">
+              <div class="imagen-r" style="background-color: var(--eco-verde-te)"><mat-icon aria-hidden="true">storefront</mat-icon></div>
+              <div class="contenido-r">
+                <span class="tipo">Descuento</span>
+                <h3>10 % de descuento en mercado orgánico</h3>
+                <div class="pie-r"><span class="puntos-r">200 pts</span><button type="button" class="btn btn-ambar btn-chico canjear">Canjear</button></div>
+                <p class="aviso">¡Buena elección! <a routerLink="/login">Inicia sesión</a> para canjear.</p>
+              </div>
+            </li>
+            <li class="tarjeta-r">
+              <div class="imagen-r" style="background-color: var(--eco-linen)"><mat-icon aria-hidden="true">factory</mat-icon></div>
+              <div class="contenido-r">
+                <span class="tipo">Experiencia</span>
+                <h3>Visita guiada a una planta de reciclaje</h3>
+                <div class="pie-r"><span class="puntos-r">500 pts</span><button type="button" class="btn btn-ambar btn-chico canjear">Canjear</button></div>
+                <p class="aviso">¡Buena elección! <a routerLink="/login">Inicia sesión</a> para canjear.</p>
+              </div>
+            </li>
+          </ul>
+
+          <button type="button" class="flecha derecha" aria-label="Recompensas siguientes"
+            (click)="pista.scrollLeft + pista.clientWidth >= pista.scrollWidth - 5 ? pista.scrollTo({ left: 0 }) : pista.scrollBy({ left: pista.clientWidth })">
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+        </div>
+        <p class="nota-ejemplo"><mat-icon aria-hidden="true">info</mat-icon>Recompensas de ejemplo. El catálogo real lo administra EcoRecicla.</p>
+      </div>
+    </section>
+
+    <!-- ===================== 10. IMPACTO Y RANKING ===================== -->
+    <section class="seccion" #impacto>
+      <span class="hoja-deco" style="left: 10px; top: 50px; width: 90px; --giro: -25deg" aria-hidden="true"><svg viewBox="0 0 100 100"><use href="#hoja" /></svg></span>
+      <span class="hoja-deco lenta" style="right: 20px; top: 40px; width: 100px; --giro: 35deg; color: var(--eco-salvia)" aria-hidden="true"><svg viewBox="0 0 100 100"><use href="#hoja" /></svg></span>
+
+      <div class="contenedor">
+        <div class="encabezado revelar">
+          <p class="kicker">Impacto ambiental</p>
+          <h2 class="titulo">Mide tu aporte y sube en el ranking</h2>
+          <p class="subtitulo">
+            Cada entrega suma kilos, puntos y CO₂ evitado. Compara tu avance con otros recicladores y motívate a seguir.
+          </p>
+        </div>
+
+        <div class="paneles">
+          <div class="panel revelar">
+            <h3>Mi impacto</h3>
+            <div class="indicadores">
+              <div class="indicador" style="background-color: var(--eco-verde-te)"><span class="cifra-i kg"><span class="sr-only">48.6</span></span><span>kg reciclados</span></div>
+              <div class="indicador" style="background-color: var(--eco-linen)"><span class="cifra-i pts"><span class="sr-only">1 250</span></span><span>puntos</span></div>
+              <div class="indicador" style="background-color: var(--eco-salvia-claro)"><span class="cifra-i co2"><span class="sr-only">31.2</span></span><span>kg de CO₂ evitado</span></div>
+            </div>
+            <p class="subpanel">Kg reciclados por material</p>
+            <div class="grafico" role="img" aria-label="Kilos reciclados: plástico 18.4, vidrio 11.6, papel 14.8 y metal 3.8">
+              <div class="columna" style="--alto: 150px; --color: var(--eco-verde-bosque)"><b>18.4</b><i></i><span>Plástico</span></div>
+              <div class="columna" style="--alto: 95px; --color: var(--eco-salvia)"><b>11.6</b><i></i><span>Vidrio</span></div>
+              <div class="columna" style="--alto: 120px; --color: var(--eco-ambar)"><b>14.8</b><i></i><span>Papel</span></div>
+              <div class="columna" style="--alto: 31px; --color: var(--eco-oliva)"><b>3.8</b><i></i><span>Metal</span></div>
+            </div>
+          </div>
+
+          <div class="panel revelar">
+            <h3>Ranking de recicladores</h3>
+            <div class="tabla" role="table" aria-label="Ranking de recicladores (ejemplo)">
+              <div class="fila-t cabecera" role="row"><span role="columnheader">#</span><span role="columnheader">Reciclador</span><span role="columnheader">Kg</span><span role="columnheader">Puntos</span></div>
+              <div class="fila-t" role="row"><b role="cell">1</b><span role="cell">Lucía M.</span><span role="cell" class="mono">86.4</span><span role="cell" class="mono">2 160</span></div>
+              <div class="fila-t par" role="row"><b role="cell">2</b><span role="cell">Carlos R.</span><span role="cell" class="mono">74.1</span><span role="cell" class="mono">1 850</span></div>
+              <div class="fila-t" role="row"><b role="cell">3</b><span role="cell">Ana T.</span><span role="cell" class="mono">61.0</span><span role="cell" class="mono">1 520</span></div>
+              <div class="fila-t tu" role="row"><b role="cell" class="puesto-tu"><span class="sr-only">4</span></b><span role="cell">Tú <mat-icon class="sube" aria-label="subiste un puesto">arrow_upward</mat-icon></span><span role="cell" class="mono">48.6</span><span role="cell" class="mono">1 250</span></div>
+              <div class="fila-t diego" role="row"><b role="cell" class="puesto-diego"><span class="sr-only">5</span></b><span role="cell">Diego P.</span><span role="cell" class="mono">40.2</span><span role="cell" class="mono">1 005</span></div>
+            </div>
+          </div>
+        </div>
+        <p class="nota-ejemplo"><mat-icon aria-hidden="true">info</mat-icon>Datos de ejemplo.</p>
+      </div>
+    </section>
+
+    <!-- ===================== 11. BENEFICIOS POR USUARIO ===================== -->
+    <section class="seccion fondo-vanilla" #beneficios>
+      <div class="contenedor">
+        <div class="encabezado revelar">
+          <p class="kicker">Beneficios</p>
+          <h2 class="titulo">Una plataforma para cada participante</h2>
+          <p class="subtitulo">EcoRecicla conecta a quienes reciclan con quienes reciben y gestionan el material.</p>
+        </div>
+
+        <div class="beneficios">
+          <article class="beneficio revelar" style="--color: var(--eco-verde-bosque)">
+            <img class="avatar" src="img/avatares/avatar-reciclador.svg" alt="" />
+            <p class="rol">Reciclador</p>
+            <h3>Recicla y gana</h3>
+            <ul class="checks">
+              <li><mat-icon aria-hidden="true">check_circle</mat-icon>Encuentra centros de acopio cercanos en el mapa.</li>
+              <li><mat-icon aria-hidden="true">check_circle</mat-icon>Identifica tu material con IA antes de llevarlo.</li>
+              <li><mat-icon aria-hidden="true">check_circle</mat-icon>Acumula puntos, canjea recompensas y recibe alertas.</li>
+              <li><mat-icon aria-hidden="true">check_circle</mat-icon>Conoce tu impacto ambiental y tu lugar en el ranking.</li>
+            </ul>
+          </article>
+          <article class="beneficio revelar" style="--color: var(--eco-ambar)">
+            <img class="avatar" src="img/avatares/avatar-operador.svg" alt="" />
+            <p class="rol">Operador de centro</p>
+            <h3>Registra y controla</h3>
+            <ul class="checks">
+              <li><mat-icon aria-hidden="true">check_circle</mat-icon>Registra las entregas de material en pocos pasos.</li>
+              <li><mat-icon aria-hidden="true">check_circle</mat-icon>Corrige una entrega si hubo un error de pesaje.</li>
+              <li><mat-icon aria-hidden="true">check_circle</mat-icon>Mantén actualizado el horario y estado de tu centro.</li>
+              <li><mat-icon aria-hidden="true">check_circle</mat-icon>Marca como entregados los canjes de los recicladores.</li>
+            </ul>
+          </article>
+          <article class="beneficio revelar" style="--color: var(--eco-verde-hoja)">
+            <img class="avatar" src="img/avatares/avatar-administrador.svg" alt="" />
+            <p class="rol">Administrador</p>
+            <h3>Gestiona y decide</h3>
+            <ul class="checks">
+              <li><mat-icon aria-hidden="true">check_circle</mat-icon>Gestiona usuarios, roles, materiales y recompensas.</li>
+              <li><mat-icon aria-hidden="true">check_circle</mat-icon>Registra centros de acopio con su ubicación en el mapa.</li>
+              <li><mat-icon aria-hidden="true">check_circle</mat-icon>Supervisa entregas y canjes del sistema.</li>
+              <li><mat-icon aria-hidden="true">check_circle</mat-icon>Toma decisiones con reportes y gráficos.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 12. PREGUNTAS FRECUENTES ===================== -->
+    <section class="seccion">
+      <div class="contenedor angosto">
+        <div class="encabezado revelar">
+          <p class="kicker">Preguntas frecuentes</p>
+          <h2 class="titulo">Resolvemos tus dudas</h2>
+          <p class="subtitulo">Lo esencial para empezar a reciclar con EcoRecicla.</p>
+        </div>
+
+        <mat-accordion class="faq revelar" displayMode="flat">
+          <mat-expansion-panel class="pregunta" expanded hideToggle>
+            <mat-expansion-panel-header><mat-panel-title>¿Cómo obtengo mi cuenta?</mat-panel-title><span class="signo" aria-hidden="true">+</span></mat-expansion-panel-header>
+            <p>Acércate a cualquier centro de acopio de EcoRecicla y solicítala. El administrador crea tu cuenta y te entrega tu usuario para ingresar.</p>
+          </mat-expansion-panel>
+          <mat-expansion-panel class="pregunta" hideToggle>
+            <mat-expansion-panel-header><mat-panel-title>¿Qué materiales puedo llevar?</mat-panel-title><span class="signo" aria-hidden="true">+</span></mat-expansion-panel-header>
+            <p>Plástico, vidrio, papel y cartón, y metal. Llévalos limpios y separados por tipo; en la sección de materiales aceptados ves qué sí y qué no se recibe.</p>
+          </mat-expansion-panel>
+          <mat-expansion-panel class="pregunta" hideToggle>
+            <mat-expansion-panel-header><mat-panel-title>¿Cómo se calculan mis puntos?</mat-panel-title><span class="signo" aria-hidden="true">+</span></mat-expansion-panel-header>
+            <p>El operador pesa tu entrega y cada material tiene un valor en puntos por kilo. Tus puntos son los kilos entregados por el valor de ese material.</p>
+          </mat-expansion-panel>
+          <mat-expansion-panel class="pregunta" hideToggle>
+            <mat-expansion-panel-header><mat-panel-title>¿La foto del clasificador se guarda?</mat-panel-title><span class="signo" aria-hidden="true">+</span></mat-expansion-panel-header>
+            <p>No. El clasificador funciona directamente en tu navegador y la foto no se envía a ningún servidor.</p>
+          </mat-expansion-panel>
+          <mat-expansion-panel class="pregunta" hideToggle>
+            <mat-expansion-panel-header><mat-panel-title>¿Cómo canjeo mis puntos?</mat-panel-title><span class="signo" aria-hidden="true">+</span></mat-expansion-panel-header>
+            <p>Ingresa con tu cuenta, elige en el catálogo una recompensa que alcance con tus puntos y confirma el canje. El operador del centro lo marca como entregado.</p>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+    </section>
+
+    <!-- ===================== 13. LLAMADO A LA ACCIÓN ===================== -->
+    <section class="seccion cta-seccion fondo-vanilla" aria-label="Empieza a reciclar">
+      <div class="contenedor">
+        <div class="cta revelar">
+          <span class="hoja-cta uno" aria-hidden="true"><svg viewBox="0 0 100 100"><use href="#hoja" /></svg></span>
+          <span class="hoja-cta dos" aria-hidden="true"><svg viewBox="0 0 100 100"><use href="#hoja" /></svg></span>
+          <div class="cta-texto">
+            <h2>Empieza a reciclar hoy</h2>
+            <p>
+              Ingresa con tu cuenta, ubica tu centro de acopio más cercano y suma tus primeros puntos. ¿Aún no tienes
+              cuenta? Solicítala en cualquier centro de acopio.
+            </p>
+          </div>
+          <a class="btn btn-ambar cta-boton" routerLink="/login">Iniciar sesión</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== 14. PIE DE PÁGINA ===================== -->
+  <footer class="pie">
+    <div class="contenedor pie-interior">
+      <span class="pie-logo">EcoRecicla</span>
+      <p>© 2026 EcoRecicla · Grupo 1 · Arquitectura de Aplicaciones Web, UPC</p>
+    </div>
+  </footer>
+
+  <!-- ===================== 15. VOLVER ARRIBA (el anillo se llena con el scroll) ===================== -->
+  <button type="button" class="arriba" aria-label="Volver arriba" (click)="inicio.scrollIntoView({ behavior: 'smooth' })">
+    <svg viewBox="0 0 56 56" aria-hidden="true">
+      <circle class="arriba-pista" cx="28" cy="28" r="25" />
+      <circle class="arriba-anillo" cx="28" cy="28" r="25" pathLength="1" />
+    </svg>
+    <mat-icon>arrow_upward</mat-icon>
+  </button>
 </div>
