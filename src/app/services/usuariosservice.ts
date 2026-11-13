@@ -20,4 +20,16 @@ export class UsuariosService {
   insert(usuario: UsuariosDTOInsert): Observable<UsuariosDTOInsert> {
     return this.http.post<UsuariosDTOInsert>(this.apiURL, usuario);
   }
+
+  listId(id: number): Observable<UsuariosDTOList> {
+    return this.http.get<UsuariosDTOList>(`${this.apiURL}/${id}`);
+  }
+
+  update(usuario: UsuariosDTOInsert): Observable<UsuariosDTOInsert> {
+    return this.http.put<UsuariosDTOInsert>(this.apiURL, usuario);
+  }
+
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiURL}/${id}`);
+  }
 }

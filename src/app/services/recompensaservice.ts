@@ -21,4 +21,16 @@ export class RecompensaService {
   insert(recompensa: RecompensaDTOInsert): Observable<RecompensaDTOInsert> {
     return this.http.post<RecompensaDTOInsert>(this.apiURL, recompensa);
   }
+
+  listId(id: number): Observable<RecompensaDTOList> {
+    return this.http.get<RecompensaDTOList>(`${this.apiURL}/${id}`);
+  }
+
+  update(recompensa: RecompensaDTOInsert): Observable<RecompensaDTOInsert> {
+    return this.http.put<RecompensaDTOInsert>(this.apiURL, recompensa);
+  }
+
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiURL}/${id}`);
+  }
 }

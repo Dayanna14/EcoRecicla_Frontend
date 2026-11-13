@@ -1,0 +1,49 @@
+<div class="contenedor">
+  <div class="encabezado">
+    <div>
+      <h1>Usuarios</h1>
+      <p class="subtitulo">Gestiona las cuentas de la plataforma.</p>
+    </div>
+    <a mat-flat-button routerLink="/usuarios/insertar">Registrar usuario</a>
+  </div>
+
+  <div class="tarjeta">
+    <table mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="c1">
+        <th mat-header-cell *matHeaderCellDef>ID</th>
+        <td mat-cell *matCellDef="let element" class="mono">{{ element.id_usuario }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="c2">
+        <th mat-header-cell *matHeaderCellDef>Nombre</th>
+        <td mat-cell *matCellDef="let element" class="nombre">{{ element.nombre }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="c3">
+        <th mat-header-cell *matHeaderCellDef>Email</th>
+        <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="c4">
+        <th mat-header-cell *matHeaderCellDef>Rol</th>
+        <td mat-cell *matCellDef="let element">{{ nombreRol(element.idRol) }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="c5">
+        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+        <td mat-cell *matCellDef="let element">
+          <!-- Editar (HUF11) -->
+          <a mat-icon-button class="btn-editar" aria-label="Editar usuario" [routerLink]="['/usuarios/editar', element.id_usuario]">
+            <mat-icon>edit</mat-icon>
+          </a>
+          <!-- Eliminar (HUF12) -->
+          <button mat-icon-button class="btn-eliminar" aria-label="Eliminar usuario" (click)="eliminar(element)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+      <tr class="mat-row" *matNoDataRow>

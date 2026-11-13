@@ -1,7 +1,7 @@
 <mat-toolbar class="barra">
-      <a routerLink="/home" class="logo">
-      <img src="ecorecicla-texto-crema.svg" alt="EcoRecicla" />
-    </a>
+  <a routerLink="/home" class="logo">
+    <img src="ecorecicla-texto-crema.svg" alt="EcoRecicla" />
+  </a>
 
   <!-- Dayana: Roles -->
   <button mat-button [matMenuTriggerFor]="menuRoles">Roles</button>
@@ -19,9 +19,21 @@
     <button mat-menu-item routerLink="/centrosacopio/buscar">Buscar</button>
     <button mat-menu-item routerLink="/centrosacopio/mapa">Mapa</button>
   </mat-menu>
-    <!-- Nayara: Usuarios y Recompensas -->
+  <!-- Nayara: Usuarios y Recompensas -->
+  <button mat-button [matMenuTriggerFor]="menuUsuarios">Usuarios</button>
+  <mat-menu #menuUsuarios="matMenu">
+    <button mat-menu-item routerLink="/usuarios/listar">Listar</button>
+    <button mat-menu-item routerLink="/usuarios/insertar">Registrar</button>
+    <button mat-menu-item routerLink="/usuarios/editar/:id">Editar</button>
+  </mat-menu>
 
-    <!-- Axel: Tipos de recompensa y Materiales -->
+  <button mat-button [matMenuTriggerFor]="menuRecompensas">Recompensas</button>
+  <mat-menu #menuRecompensas="matMenu">
+    <button mat-menu-item routerLink="/recompensas/listar">Listar</button>
+    <button mat-menu-item routerLink="/recompensas/insertar">Registrar</button>
+  </mat-menu>
+
+  <!-- Axel: Tipos de recompensa y Materiales -->
   <button mat-button [matMenuTriggerFor]="menuTipos">Tipos de recompensa</button>
   <mat-menu #menuTipos="matMenu">
     <button mat-menu-item routerLink="/tiporecompensas/listar">Listar</button>
@@ -39,14 +51,13 @@
     <button mat-menu-item routerLink="/materiales/ranking">Ranking</button>
   </mat-menu>
 
+  <!-- Jhon: Entregas -->
+  <button mat-button [matMenuTriggerFor]="menuEntregas">Entregas</button>
+  <mat-menu #menuEntregas="matMenu">
+    <button mat-menu-item routerLink="/entregas/listar">Listar</button>
+    <button mat-menu-item routerLink="/entregas/insertar">Registrar</button>
+    <button mat-menu-item routerLink="/entregas/buscar">Buscar</button>
+  </mat-menu>
 
-    <!-- Jhon: Entregas -->
-    <button mat-button [matMenuTriggerFor]="menuEntregas">Entregas</button>
-    <mat-menu #menuEntregas="matMenu">
-      <button mat-menu-item routerLink="/entregas/listar">Listar</button>
-      <button mat-menu-item routerLink="/entregas/insertar">Registrar</button>
-      <button mat-menu-item routerLink="/entregas/buscar">Buscar</button>
-    </mat-menu>
-
-     <!-- Franco: Canjes -->
+  <!-- Franco: Canjes -->
 </mat-toolbar>

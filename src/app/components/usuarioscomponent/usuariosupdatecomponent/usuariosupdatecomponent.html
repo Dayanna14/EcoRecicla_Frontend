@@ -1,0 +1,60 @@
+<div class="contenedor">
+  <nav class="migas">
+    <a routerLink="/usuarios/listar">Usuarios</a>
+    <span>/</span>
+    <span>Editar</span>
+  </nav>
+
+  <h1>Editar usuario</h1>
+  <p class="subtitulo">Modifica los datos o el rol de la cuenta.</p>
+
+  <div class="grid">
+    <div>
+      <form class="tarjeta formulario" [formGroup]="formUsuario" (ngSubmit)="actualizarUsuario()">
+        <h2>Datos del usuario</h2>
+
+        <!-- ID solo lectura -->
+        <label class="etiqueta" for="codigo">ID</label>
+        <mat-form-field appearance="outline">
+          <mat-icon matPrefix>tag</mat-icon>
+          <input matInput id="codigo" formControlName="codigo" readonly />
+        </mat-form-field>
+
+        <!-- Nombre -->
+        <label class="etiqueta" for="nombre">Nombre</label>
+        <mat-form-field appearance="outline">
+          <mat-icon matPrefix>person</mat-icon>
+          <input matInput id="nombre" formControlName="nombre" maxlength="35" />
+          @if (formUsuario.get('nombre')?.hasError('required')) {
+            <mat-error>Campo obligatorio, ingrese el nombre</mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Email -->
+        <label class="etiqueta" for="email">Email</label>
+        <mat-form-field appearance="outline">
+          <mat-icon matPrefix>mail</mat-icon>
+          <input matInput id="email" type="email" formControlName="email" maxlength="70" />
+          @if (formUsuario.get('email')?.hasError('required')) {
+            <mat-error>Campo obligatorio, ingrese el email</mat-error>
+          } @else if (formUsuario.get('email')?.hasError('email')) {
+            <mat-error>Ingrese un email válido</mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Contraseña -->
+        <label class="etiqueta" for="contrasenia">Contraseña</label>
+        <mat-form-field appearance="outline">
+          <mat-icon matPrefix>lock</mat-icon>
+          <input matInput id="contrasenia" type="password" formControlName="contrasenia" maxlength="70" />
+          <mat-hint>Ingresa la contraseña (nueva o actual)</mat-hint>
+          @if (formUsuario.get('contrasenia')?.hasError('required')) {
+            <mat-error>Campo obligatorio, ingrese la contraseña</mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Rol (FK) -->
+        <label class="etiqueta" for="rol">Rol</label>
+        <mat-form-field appearance="outline">
+          <mat-icon matPrefix>badge</mat-icon>
+          
