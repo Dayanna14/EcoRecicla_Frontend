@@ -7,6 +7,10 @@ import { Centroacopiolistcomponent } from './components/centroacopiocomponent/ce
 import { Centroacopioinsertcomponent } from './components/centroacopiocomponent/centroacopioinsertcomponent/centroacopioinsertcomponent';
 import { Mapacentroscomponent } from './components/centroacopiocomponent/mapacentroscomponent/mapacentroscomponent';
 import { Homecomponent } from './components/homecomponent/homecomponent';
+import { Canjelistcomponent } from './components/canjecomponent/canjelistcomponent/canjelistcomponent';
+import { Canjeinsertcomponent } from './components/canjecomponent/canjeinsertcomponent/canjeinsertcomponent';
+import { Canjebuscarcomponent } from './components/canjecomponent/canjebuscarcomponent/canjebuscarcomponent';
+import { Canjecomponent } from './components/canjecomponent/canjecomponent';
 
 export const routes: Routes = [
         // ---------- General ----------
@@ -43,5 +47,15 @@ export const routes: Routes = [
     // ---------- Jhon: entregas ----------
 
     // ---------- Franco: canjes ----------
+    {
+        path: 'canjes',
+        component: Canjecomponent,
+        children: [
+            { path: 'listar', component: Canjelistcomponent},
+            { path: 'insertar', component: Canjeinsertcomponent}, 
+            { path: 'mapa', component: Canjebuscarcomponent },
+            { path: '', redirectTo: 'listar', pathMatch: 'full' }
+        ]
+    }
 
 ];
