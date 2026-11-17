@@ -10,10 +10,11 @@ import { RecompensaService } from '../../../services/recompensaservice';
 import { Tiporecompensaservice } from '../../../services/tiporecompensaservice';
 import { RecompensaDTOList } from '../../../models/RecompensaDTOList';
 import { TipoRecompensaDTOList } from '../../../models/TipoRecompensaDTOList';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-recompensalistcomponent',
-  imports: [MatTableModule, MatPaginatorModule, MatIconModule, MatButtonModule, RouterLink, MatDialogModule],
+  imports: [MatTableModule, MatPaginatorModule, MatIconModule, MatButtonModule, RouterLink, MatDialogModule, MatCardModule],
   templateUrl: './recompensalistcomponent.html',
   styleUrl: './recompensalistcomponent.css',
 })
@@ -21,6 +22,8 @@ export class Recompensalistcomponent implements OnInit {
   displayedColumns: string[] = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7'];
   dataSource = new MatTableDataSource<RecompensaDTOList>();
   tipos: TipoRecompensaDTOList[] = [];
+  vista: 'tabla' | 'tarjetas' = 'tabla';
+  pagina: RecompensaDTOList[] = []; // recompensas de la página actual (para las tarjetas)
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild('dialogEliminar') dialogEliminar!: TemplateRef<any>;
@@ -34,6 +37,11 @@ export class Recompensalistcomponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // Las tarjetas muestran la misma página que el paginador
+    this.dataSource.connect().subscribe(datos => {
+      this.pagina = datos;
+      this.cdr.detectChanges();
+    });
     this.listar();
     this.listarTipos();
   }
