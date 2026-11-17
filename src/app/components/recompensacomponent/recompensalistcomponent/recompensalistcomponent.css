@@ -111,3 +111,79 @@ h2[mat-dialog-title] .mono {
   border-radius: 8px;
   display: block;
 }
+
+/* ---------- Selector de vista ---------- */
+.selector-vista {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  --mat-button-outlined-container-shape: 8px;
+  --mat-button-outlined-outline-color: var(--eco-verde-bosque);
+}
+
+.selector-vista button {
+  color: var(--eco-verde-bosque);
+}
+
+.selector-vista button.activa {
+  background-color: var(--eco-verde-te);
+  font-weight: 700;
+}
+
+/* ---------- Vista tarjetas ---------- */
+.grid-tarjetas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  padding: 8px 0 16px;
+}
+
+.recompensa-card {
+  border: 1px solid var(--eco-vanilla);
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: var(--mat-sys-surface);
+}
+
+.recompensa-card .foto {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  background-color: var(--eco-vanilla);
+}
+
+.recompensa-card mat-card-content {
+  padding: 12px 16px 0;
+}
+
+.recompensa-card .nombre {
+  margin: 0 0 4px;
+  font-size: 16px;
+}
+
+.recompensa-card .tipo {
+  margin: 0;
+  font-size: 13px;
+  color: var(--eco-charcoal);
+}
+
+.recompensa-card .costo {
+  margin: 8px 0;
+  font-weight: 700;
+  color: var(--eco-verde-bosque);
+}
+
+.estado {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  background-color: var(--eco-verde-te);
+  color: var(--eco-verde-bosque);
+}
+
+.estado.inactiva {
+  background-color: #f6e3de;
+  color: var(--eco-error);
+}
