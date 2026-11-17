@@ -1,11 +1,20 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { EntregaDTOList } from '../../../models/EntregaDTOList'; // Ajusta la ruta según tu estructura de carpetas
+import { EntregaDTOList } from '../../../models/EntregaDTOList';
 import { Entregaservice } from '../../../services/entregaservice';
+import { UsuariosService } from '../../../services/usuariosservice';
+import { Materialservice } from '../../../services/materialservice';
+import { Centroacopioservice } from '../../../services/centroacopioservice';
+import { MaterialDTOList } from '../../../models/MaterialDTOList';
+import { CentroAcopioDTOList } from '../../../models/CentroAcopioDTOList';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { UsuariosDTOInsert } from '../../../models/UsuariosDTOInsert';
+import { MaterialDTOInsert } from '../../../models/MaterialDTOInsert';
+import { CentroAcopioDTOInsert } from '../../../models/CentroAcopioDTOInsert';
+import { UsuariosDTOList } from '../../../models/UsuariosDTOList';
 
 @Component({
   selector: 'app-entregalistcomponent',
@@ -21,19 +30,26 @@ import { CommonModule } from '@angular/common';
   styleUrl: './entregalistcomponent.css',
 })
 export class Entregalistcomponent implements OnInit {
-  // Columnas que mostrará tu tabla (ajustadas a los datos de EntregaDTOList)
-  // Define las columnas que renderizará la tabla
-displayedColumns: string[] = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7'];
-
+  displayedColumns: string[] = ['c1', 'usuario', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7'];
   dataSource: EntregaDTOList[] = [];
+
+  listaUsuarios: UsuariosDTOList[] = [];
+  listaMateriales: MaterialDTOList[] = [];
+  listaCentros: CentroAcopioDTOList[] = [];
 
   constructor(
     private entregaService: Entregaservice,
+    private usuarioService: UsuariosService,
+    private materialService: Materialservice,
+    private centroAcopioService: Centroacopioservice,
     private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.listarEntregas();
+    this.listarUsuarios();
+    this.listarMateriales();
+    this.listarCentros();
   }
 
   listarEntregas(): void {
@@ -49,10 +65,37 @@ displayedColumns: string[] = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7'];
     });
   }
 
+  listarUsuarios(): void {
+    this.usuarioService.list().subscribe({
+      next: (data) => {
+        this.listaUsuarios = data;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  listarMateriales(): void {
+    this.materialService.list().subscribe({
+      next: (data) => {
+        this.listaMateriales = data;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  listarCentros(): void {
+    this.centroAcopioService.list().subscribe({
+      next: (data) => {
+        this.listaCentros = data;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
   eliminarEntrega(id: number): void {
     this.entregaService.delete(id).subscribe({
       next: () => {
-        this.listarEntregas(); // Recarga la tabla tras eliminar
+        this.listarEntregas();
         this.cdr.detectChanges();
       },
       error: (err) => {

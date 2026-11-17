@@ -1,0 +1,49 @@
+<div class="contenedor">
+  <nav class="migas">
+    <a routerLink="/tiporecompensas/listar">Tipos de recompensa</a>
+    <span>/</span>
+    <span>Editar</span>
+  </nav>
+
+  <h1>Editar tipo de recompensa</h1>
+  <p class="subtitulo">Actualiza los datos de la categoría de recompensas.</p>
+
+  <div class="grid">
+    <div>
+      <form class="tarjeta formulario" [formGroup]="formTipo" (ngSubmit)="actualizarTipo()">
+        <h2>Datos del tipo</h2>
+
+        <label class="etiqueta" for="codigo">ID</label>
+        <mat-form-field appearance="outline">
+          <mat-icon matPrefix>tag</mat-icon>
+          <input matInput id="codigo" type="number" formControlName="codigo" readonly />
+        </mat-form-field>
+
+        <label class="etiqueta" for="nombreTipoRecompensa">Nombre</label>
+        <mat-form-field appearance="outline">
+          <mat-icon matPrefix>category</mat-icon>
+          <input matInput id="nombreTipoRecompensa" formControlName="nombreTipoRecompensa" maxlength="50" />
+          <mat-hint align="end" class="mono">{{ formTipo.get('nombreTipoRecompensa')?.value?.length || 0 }}/50</mat-hint>
+          @if (formTipo.get('nombreTipoRecompensa')?.hasError('required')) {
+            <mat-error>Campo obligatorio, ingrese el nombre</mat-error>
+          }
+        </mat-form-field>
+
+        <label class="etiqueta" for="descripcion">Descripción</label>
+        <mat-form-field appearance="outline">
+          <mat-icon matPrefix>notes</mat-icon>
+          <textarea matInput id="descripcion" formControlName="descripcion" rows="3" maxlength="50"></textarea>
+          <mat-hint align="end" class="mono">{{ formTipo.get('descripcion')?.value?.length || 0 }}/50</mat-hint>
+          @if (formTipo.get('descripcion')?.hasError('required')) {
+            <mat-error>Campo obligatorio, ingrese la descripción</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="acciones">
+          <a mat-stroked-button routerLink="/tiporecompensas/listar">Cancelar</a>
+          <button mat-flat-button type="submit">Guardar cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -9,7 +9,13 @@ import { CommonModule } from '@angular/common';
 import { EntregaDTOInsert } from '../../../models/EntregaDTOInsert';
 import { Entregaservice } from '../../../services/entregaservice';
 
-
+// Servicios y Modelos para cargar los nombres reales en los combos
+import { UsuariosService } from '../../../services/usuariosservice';
+import { Materialservice } from '../../../services/materialservice';
+import { Centroacopioservice } from '../../../services/centroacopioservice';
+import { UsuariosDTOList } from '../../../models/UsuariosDTOList';
+import { MaterialDTOList } from '../../../models/MaterialDTOList';
+import { CentroAcopioDTOList } from '../../../models/CentroAcopioDTOList';
 
 @Component({
   selector: 'app-entregaupdatecomponent',
@@ -31,19 +37,16 @@ export class Entregaupdatecomponent implements OnInit {
   id: number = 0;
   mensaje: string = '';
 
-  // Listas temporales o de tus servicios cuando los integres
-  listaUsuarios: any[] = [
-    { id_usuario: 1, nombre: 'Usuario de Prueba 1' }
-  ];
-  listaMateriales: any[] = [
-    { idMaterial: 1, nombreMaterial: 'Plástico (Prueba)' }
-  ];
-  listaCentros: any[] = [
-    { idCentro: 1, nombreCentro: 'Centro de Acopio (Prueba)' }
-  ];
+  // Listas tipadas para los mat-select
+  listaUsuarios: UsuariosDTOList[] = [];
+  listaMateriales: MaterialDTOList[] = [];
+  listaCentros: CentroAcopioDTOList[] = [];
 
   constructor(
     private entregaService: Entregaservice,
+    private usuarioService: UsuariosService,
+    private materialService: Materialservice,
+    private centroAcopioService: Centroacopioservice,
     private formBuilder: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
@@ -51,11 +54,20 @@ export class Entregaupdatecomponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Capturamos el ID de la URL (ej. /entregas/editar/5)
+    // 1. Cargamos los combos primero para que las opciones estén listas en el select
+    this.cargarCombos();
+
+    // 2. Capturamos el ID de la URL (ej. /entregas/editar/5)
     this.route.params.subscribe(params => {
       this.id = +params['id'];
       this.initForm();
     });
+  }
+
+  cargarCombos(): void {
+    this.usuarioService.list().subscribe(data => this.listaUsuarios = data);
+    this.materialService.list().subscribe(data => this.listaMateriales = data);
+    this.centroAcopioService.list().subscribe(data => this.listaCentros = data);
   }
 
   initForm(): void {
@@ -68,7 +80,7 @@ export class Entregaupdatecomponent implements OnInit {
       puntosGenerados: [0]
     });
 
-    // Cargamos los datos actuales para rellenar el formulario
+    // Cargamos los datos actuales de la entrega para rellenar el formulario
     this.entregaService.listId(this.id).subscribe({
       next: (data: any) => {
         this.formEntrega.patchValue({
@@ -93,11 +105,11 @@ export class Entregaupdatecomponent implements OnInit {
       return;
     }
 
-const entrega: EntregaDTOInsert = {
+    const entrega: EntregaDTOInsert = {
       idEntrega: this.formEntrega.value.idEntrega,
       cantidadKg: this.formEntrega.value.cantidadKg,
       puntosGenerados: this.formEntrega.value.puntosGenerados || 0,
-      fecha: new Date(), // <--- ¡Faltaba agregar esto aquí también!
+      fecha: new Date(),
       idMaterial: this.formEntrega.value.idMaterial,
       idCentroAcopio: this.formEntrega.value.idCentroAcopio,
       idUsuario: this.formEntrega.value.idUsuario

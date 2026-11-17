@@ -1,0 +1,77 @@
+<div class="contenedor">
+  <div class="encabezado">
+    <div>
+      <h1>Tipos de recompensa</h1>
+      <p class="subtitulo">Gestiona las categorías de recompensas que se pueden canjear.</p>
+    </div>
+    <div class="botones-encabezado">
+      <a mat-stroked-button routerLink="/tiporecompensas/buscar">
+        <mat-icon>search</mat-icon>
+        Buscar
+      </a>
+      <a mat-flat-button routerLink="/tiporecompensas/insertar">Registrar tipo</a>
+    </div>
+  </div>
+
+  <div class="tarjeta">
+    <table mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="c1">
+        <th mat-header-cell *matHeaderCellDef>ID</th>
+        <td mat-cell *matCellDef="let element" class="mono">{{ element.idTipoRecompensa }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="c2">
+        <th mat-header-cell *matHeaderCellDef>Nombre</th>
+        <td mat-cell *matCellDef="let element" class="nombre">{{ element.nombreTipoRecompensa }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="c3">
+        <th mat-header-cell *matHeaderCellDef>Descripción</th>
+        <td mat-cell *matCellDef="let element">{{ element.descripcion }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="c4">
+        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+        <td mat-cell *matCellDef="let element">
+          <a mat-icon-button class="btn-editar" aria-label="Editar tipo de recompensa" [routerLink]="['/tiporecompensas/editar', element.idTipoRecompensa]">
+            <mat-icon>edit</mat-icon>
+          </a>
+          <button mat-icon-button class="btn-eliminar" aria-label="Eliminar tipo de recompensa" (click)="eliminar(element)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+      <tr class="mat-row" *matNoDataRow>
+        <td class="sin-datos" [attr.colspan]="displayedColumns.length">
+          No hay tipos de recompensa registrados.
+        </td>
+      </tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10]" showFirstLastButtons></mat-paginator>
+  </div>
+</div>
+
+<!-- Confirmación de eliminar: se abre con MatDialog -->
+<ng-template #dialogEliminar let-tipo>
+  <div class="icono-eliminar">
+    <mat-icon>delete</mat-icon>
+  </div>
+
+  <h2 mat-dialog-title>¿Eliminar el tipo <span class="mono">{{ tipo.nombreTipoRecompensa }}</span>?</h2>
+
+  <mat-dialog-content>
+    <p class="texto-dialogo">
+      Este tipo de recompensa dejará de existir en EcoRecicla. Esta acción no se puede deshacer.
+    </p>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end" class="acciones-dialogo">
+    <button mat-stroked-button [mat-dialog-close]="false" cdkFocusInitial>Cancelar</button>
+    <button mat-flat-button class="btn-confirmar" [mat-dialog-close]="true">Eliminar</button>
+  </mat-dialog-actions>
+</ng-template>

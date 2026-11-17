@@ -20,35 +20,35 @@
                     <input matInput type="number" formControlName="idEntrega" readonly>
                 </mat-form-field>
 
-                <!-- Select de Usuario -->
+                <!-- Select de Usuario con nombres reales -->
                 <label class="input-label">Usuario (Reciclador)</label>
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Seleccione un usuario</mat-label>
                     <mat-select formControlName="idUsuario">
-                        @for (u of listaUsuarios; track u) {
-                        <mat-option [value]="u.id_usuario">{{u.nombre}}</mat-option>
+                        @for (u of listaUsuarios; track u.id_usuario) {
+                        <mat-option [value]="u.id_usuario">{{ u.nombre }}</mat-option>
                         }
                     </mat-select>
                 </mat-form-field>
 
-                <!-- Select de Material -->
+                <!-- Select de Material con nombres reales -->
                 <label class="input-label">Material</label>
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Seleccione el material</mat-label>
                     <mat-select formControlName="idMaterial">
-                        @for (m of listaMateriales; track m) {
-                        <mat-option [value]="m.idMaterial">{{m.nombreMaterial}}</mat-option>
+                        @for (m of listaMateriales; track m.idMaterial) {
+                        <mat-option [value]="m.idMaterial">{{ m.nombre }}</mat-option>
                         }
                     </mat-select>
                 </mat-form-field>
 
-                <!-- Select de Centro de Acopio -->
+                <!-- Select de Centro de Acopio con nombres reales -->
                 <label class="input-label">Centro de acopio</label>
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Seleccione el centro</mat-label>
                     <mat-select formControlName="idCentroAcopio">
-                        @for (c of listaCentros; track c) {
-                        <mat-option [value]="c.idCentro">{{c.nombreCentro}}</mat-option>
+                        @for (c of listaCentros; track c.idCentro) {
+                        <mat-option [value]="c.idCentro">{{ c.nombre }}</mat-option>
                         }
                     </mat-select>
                 </mat-form-field>

@@ -1,0 +1,102 @@
+<div class="contenedor">
+  <nav class="migas">
+    <a routerLink="/tiporecompensas/listar">Tipos de recompensa</a>
+    <span>/</span>
+    <span>Registrar</span>
+  </nav>
+
+  <h1>Registrar tipo de recompensa</h1>
+  <p class="subtitulo">Crea una nueva categoría para agrupar las recompensas de EcoRecicla.</p>
+
+  <div class="grid">
+    <!-- Columna izquierda: formulario -->
+    <div>
+      <form class="tarjeta formulario" [formGroup]="form" #formDir="ngForm" (ngSubmit)="registrar(formDir)">
+        <h2>Datos del tipo</h2>
+
+        <label class="etiqueta" for="nombreTipoRecompensa">Nombre</label>
+        <mat-form-field appearance="outline">
+          <mat-icon matPrefix>category</mat-icon>
+          <input
+            matInput
+            id="nombreTipoRecompensa"
+            formControlName="nombreTipoRecompensa"
+            placeholder="Descuento"
+            maxlength="50"
+          />
+          <mat-hint align="end" class="mono">{{ form.get('nombreTipoRecompensa')?.value?.length || 0 }}/50</mat-hint>
+          @if (form.get('nombreTipoRecompensa')?.hasError('required')) {
+            <mat-error>Campo obligatorio, ingrese el nombre</mat-error>
+          }
+        </mat-form-field>
+
+        <label class="etiqueta" for="descripcion">Descripción</label>
+        <mat-form-field appearance="outline">
+          <mat-icon matPrefix>notes</mat-icon>
+          <textarea
+            matInput
+            id="descripcion"
+            formControlName="descripcion"
+            rows="3"
+            maxlength="50"
+            placeholder="Cupones de descuento en tiendas aliadas"
+          ></textarea>
+          <mat-hint align="end" class="mono">{{ form.get('descripcion')?.value?.length || 0 }}/50</mat-hint>
+          @if (form.get('descripcion')?.hasError('required')) {
+            <mat-error>Campo obligatorio, ingrese la descripción</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="acciones">
+          <a mat-stroked-button routerLink="/tiporecompensas/listar">Cancelar</a>
+          <button mat-flat-button type="submit">Registrar tipo</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Columna derecha: ayuda para el usuario -->
+    <aside class="lateral">
+      <div class="tarjeta">
+        <h2>¿Qué es un tipo de recompensa?</h2>
+        <p class="texto">
+          Es la categoría a la que pertenece cada recompensa que los recicladores pueden canjear con
+          sus puntos.
+        </p>
+        <ul class="ejemplos">
+          <li>
+            <mat-icon>sell</mat-icon>
+            <div>
+              <strong>Descuento</strong>
+              <span>Cupones para comprar en tiendas aliadas.</span>
+            </div>
+          </li>
+          <li>
+            <mat-icon>redeem</mat-icon>
+            <div>
+              <strong>Producto</strong>
+              <span>Artículos físicos como bolsas o botellas reutilizables.</span>
+            </div>
+          </li>
+          <li>
+            <mat-icon>confirmation_number</mat-icon>
+            <div>
+              <strong>Experiencia</strong>
+              <span>Entradas a eventos o talleres ecológicos.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="consejo">
+        <mat-icon>lightbulb</mat-icon>
+        <div>
+          <strong>Consejo</strong>
+          <p>
+            Usa nombres cortos y generales. Después, al registrar una recompensa, solo tendrás que
+            elegir su tipo de la lista.
+          </p>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
