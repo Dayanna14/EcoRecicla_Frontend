@@ -72,25 +72,25 @@ export const routes: Routes = [
 
   // ---------- Nayara: usuarios, recompensas ----------
   {
-    path: 'usuarios',
-    component: Usuarioscomponent,
-    children: [
-      { path: 'listar', component: Usuarioslistcomponent },
-      { path: 'insertar', component: Usuariosinsertcomponent },
-      { path: 'editar/:id', component: Usuariosupdatecomponent },
-      { path: '', redirectTo: 'listar', pathMatch: 'full' },
-    ],
-  },
-  {
-    path: 'recompensas',
-    component: Recompensacomponent,
-    children: [
-      { path: 'listar', component: Recompensalistcomponent },
-      { path: 'insertar', component: Recompensainsertcomponent },
-      { path: 'editar/:id', component: Recompensaupdatecomponent },
-      { path: '', redirectTo: 'listar', pathMatch: 'full' },
-    ],
-  },
+        path: 'usuarios',
+        component: Usuarioscomponent,
+        children: [
+            { path: 'listar', component: Usuarioslistcomponent },
+            { path: 'insertar', component: Usuariosinsertcomponent },
+            { path: 'editar/:id', component: Usuariosupdatecomponent },
+            { path: '', redirectTo: 'listar', pathMatch: 'full' }
+        ]
+    },
+    {
+        path: 'recompensas',
+        component: Recompensacomponent,
+        children: [
+            { path: 'listar', component: Recompensalistcomponent },
+            { path: 'insertar', component: Recompensainsertcomponent },
+            { path: 'editar/:id', component: Recompensaupdatecomponent },
+            { path: '', redirectTo: 'listar', pathMatch: 'full' }
+        ]
+    },
 
   // ---------- Axel: tiporecompensas, materiales ----------
   {
