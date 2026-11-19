@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,12 +9,13 @@ import { CommonModule } from '@angular/common';
 import { Entregaservice } from '../../../services/entregaservice';
 import { EntregaDTOInsert } from '../../../models/EntregaDTOInsert';
 
-
-
-// --- COMENTADO TEMPORALMENTE HASTA QUE TUS COMPAÑEROS LOS CREEN ---
-// import { Usuarioservice } from '../../services/usuarioservice';
-// import { Materialservice } from '../../services/materialservice';
-// import { Centroacopioservice } from '../../services/centroacopioservice';
+// Servicios y Modelos para cargar los nombres reales en los combos
+import { UsuariosService } from '../../../services/usuariosservice';
+import { Materialservice } from '../../../services/materialservice';
+import { Centroacopioservice } from '../../../services/centroacopioservice';
+import { UsuariosDTOList } from '../../../models/UsuariosDTOList';
+import { MaterialDTOList } from '../../../models/MaterialDTOList';
+import { CentroAcopioDTOList } from '../../../models/CentroAcopioDTOList';
 
 @Component({
   selector: 'app-entregainsertcomponent',
@@ -25,7 +26,8 @@ import { EntregaDTOInsert } from '../../../models/EntregaDTOInsert';
     MatSelectModule,
     MatButtonModule,
     ReactiveFormsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    RouterLink
   ],
   templateUrl: './entregainsertcomponent.html',
   styleUrl: './entregainsertcomponent.css',
@@ -34,27 +36,20 @@ export class Entregainsertcomponent implements OnInit {
   formEntrega!: FormGroup;
   mensaje: string = '';
 
-  // Listas temporales de prueba para que el mat-select no falle visualmente
-  listaUsuarios: any[] = [
-    { id_usuario: 1, nombre: 'Usuario de Prueba 1' }
-  ];
-  listaMateriales: any[] = [
-    { idMaterial: 1, nombreMaterial: 'Plástico (Prueba)' }
-  ];
-  listaCentros: any[] = [
-    { idCentro: 1, nombreCentro: 'Centro de Acopio (Prueba)' }
-  ];
+  // Listas tipadas para los mat-select
+  listaUsuarios: UsuariosDTOList[] = [];
+  listaMateriales: MaterialDTOList[] = [];
+  listaCentros: CentroAcopioDTOList[] = [];
 
   constructor(
     private entregaService: Entregaservice,
-    // private usuarioService: Usuarioservice,      // <-- Comentado
-    // private materialService: Materialservice,    // <-- Comentado
-    // private centroAcopioService: Centroacopioservice, // <-- Comentado
+    private usuarioService: UsuariosService,
+    private materialService: Materialservice,
+    private centroAcopioService: Centroacopioservice,
     private formBuilder: FormBuilder,
     private router: Router,
     private snackBar: MatSnackBar
   ) {
-    // Definición del formulario reactivo
     this.formEntrega = this.formBuilder.group({
       idUsuario: ['', Validators.required],
       idMaterial: ['', Validators.required],
@@ -69,12 +64,9 @@ export class Entregainsertcomponent implements OnInit {
   }
 
   cargarCombos(): void {
-    /* 
-      TODO: Descomentar cuando tus compañeros terminen sus servicios
-      this.usuarioService.list().subscribe(data => this.listaUsuarios = data);
-      this.materialService.list().subscribe(data => this.listaMateriales = data);
-      this.centroAcopioService.list().subscribe(data => this.listaCentros = data);
-    */
+    this.usuarioService.list().subscribe(data => this.listaUsuarios = data);
+    this.materialService.list().subscribe(data => this.listaMateriales = data);
+    this.centroAcopioService.list().subscribe(data => this.listaCentros = data);
   }
 
   registrarEntrega() {
@@ -83,17 +75,16 @@ export class Entregainsertcomponent implements OnInit {
       return;
     }
 
- const entrega: EntregaDTOInsert = {
-  idEntrega: 0,
-  cantidadKg: this.formEntrega.value.cantidadKg,
-  puntosGenerados: this.formEntrega.value.puntosGenerados || 0,
-  fecha: new Date(),
-  idMaterial: this.formEntrega.value.idMaterial,
-  idCentroAcopio: this.formEntrega.value.idCentroAcopio,
-  idUsuario: this.formEntrega.value.idUsuario
-};
+    const entrega: EntregaDTOInsert = {
+      idEntrega: 0,
+      cantidadKg: this.formEntrega.value.cantidadKg,
+      puntosGenerados: this.formEntrega.value.puntosGenerados || 0,
+      fecha: new Date(),
+      idMaterial: this.formEntrega.value.idMaterial,
+      idCentroAcopio: this.formEntrega.value.idCentroAcopio,
+      idUsuario: this.formEntrega.value.idUsuario
+    };
 
-    // Envía los datos reales al POST de tu backend que ya tienes listo
     this.entregaService.insert(entrega).subscribe({
       next: (response: any) => {
         const puntos = response?.puntosGenerados || entrega.puntosGenerados;
