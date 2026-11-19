@@ -3,6 +3,6 @@ export class CanjeDTOInsert {
     fecha: Date = new Date()
     puntosUsados: number = 0
     estado: string = ''
-    recompensaIdRecompensa: number = 0
-    usuarioId_usuario: number = 0
+    idRecompensa: number = 0
+    Id_usuario: number = 0
 }
