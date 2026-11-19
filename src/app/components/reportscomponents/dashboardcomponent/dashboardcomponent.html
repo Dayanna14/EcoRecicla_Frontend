@@ -1,0 +1,59 @@
+<div class="contenedor">
+  <header class="banda">
+    <div>
+      <h1>Dashboard de reportes</h1>
+      <p class="actualizado">Actualizado hoy a las {{ horaActualizacion | date: 'HH:mm' }}</p>
+    </div>
+    <div class="acciones">
+      <button mat-stroked-button class="btn-actualizar" (click)="actualizar()">
+        <mat-icon>refresh</mat-icon> Actualizar
+      </button>
+      <button mat-flat-button class="btn-exportar" (click)="exportar()">
+        <mat-icon>download</mat-icon> Exportar
+      </button>
+    </div>
+  </header>
+
+  <!-- Tarjetas de números -->
+  <section class="kpis">
+    <div class="kpi">
+      <div class="kpi-cabecera"><span>Usuarios registrados</span><mat-icon>group</mat-icon></div>
+      <p class="kpi-valor mono">{{ totalUsuarios ?? '—' }}</p>
+      <p class="kpi-nota">Cuentas en la plataforma</p>
+    </div>
+    <div class="kpi">
+      <div class="kpi-cabecera"><span>Kg reciclados</span><mat-icon>scale</mat-icon></div>
+      <p class="kpi-valor mono">{{ totalKg !== null ? (totalKg | number: '1.0-1') + ' kg' : '—' }}</p>
+      <p class="kpi-nota">Suma de todas las entregas</p>
+    </div>
+    <div class="kpi">
+      <div class="kpi-cabecera"><span>Canjes realizados</span><mat-icon>redeem</mat-icon></div>
+      <p class="kpi-valor mono">{{ totalCanjes ?? '—' }}</p>
+      <p class="kpi-nota">Recompensas canjeadas</p>
+    </div>
+    <div class="kpi">
+      <div class="kpi-cabecera"><span>Entregas con más de 100 pts</span><mat-icon>emoji_events</mat-icon></div>
+      <p class="kpi-valor mono">{{ entregas100 ?? '—' }}</p>
+      <p class="kpi-nota">Entregas destacadas</p>
+    </div>
+  </section>
+
+  <!-- Reportes: cada integrante reemplaza su "en construcción" por su componente -->
+  <section class="reportes">
+    <!-- Axel: Materiales más entregados -->
+    <div class="pendiente"><mat-icon>construction</mat-icon><p>Materiales más entregados</p><span>Reporte en construcción</span></div>
+
+    <!-- Dayana -->
+    <app-reportrolcomponent></app-reportrolcomponent>
+    <app-reportcentrocomponent></app-reportcentrocomponent>
+
+    <!-- Nayara: Recompensas más canjeadas -->
+    <div class="pendiente"><mat-icon>construction</mat-icon><p>Recompensas más canjeadas</p><span>Reporte en construcción</span></div>
+
+    <!-- Franco: Canjes por usuario -->
+    <div class="pendiente"><mat-icon>construction</mat-icon><p>Canjes por usuario</p><span>Reporte en construcción</span></div>
+
+    <!-- Axel: Tipos de recompensa más canjeados -->
+    <div class="pendiente"><mat-icon>construction</mat-icon><p>Tipos de recompensa más canjeados</p><span>Reporte en construcción</span></div>
+  </section>
+</div>

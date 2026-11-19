@@ -4,6 +4,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { RolDTOList } from '../models/RolDTOList';
 import { Observable } from 'rxjs';
 import { RolDTOInsert } from '../models/RolDTOInsert';
+import { RolMasUtilizadoDTO } from '../models/RolMasUtilizadoDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -36,5 +37,11 @@ export class Rolservice {
   searchByName(nombre: string): Observable<RolDTOList[]> {
     const params = new HttpParams().set('nombre', nombre);
     return this.http.get<RolDTOList[]>(`${this.apiURL}/buscar`, { params });
+  }
+
+  
+  // Reporte: cantidad de usuarios por rol (dashboard)
+  rolMasUtilizado(): Observable<RolMasUtilizadoDTO[]> {
+    return this.http.get<RolMasUtilizadoDTO[]>(`${this.apiURL}/rol-mas-utilizado`);
   }
 }

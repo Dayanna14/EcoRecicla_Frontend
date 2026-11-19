@@ -1,0 +1,21 @@
+<div class="tarjeta">
+  <h2>Centros con más puntos generados</h2>
+  <p class="subtitulo">Puntos otorgados por las entregas en cada centro</p>
+
+  @if (hayError) {
+    <div class="error">
+      <mat-icon>warning</mat-icon>
+      <p class="error-titulo">No se pudo cargar este reporte</p>
+      <p>Los demás reportes siguen disponibles.</p>
+      <button mat-button (click)="obtenerReporte()">
+        <mat-icon>refresh</mat-icon> Reintentar
+      </button>
+    </div>
+  } @else if (lista.length === 0) {
+    <p class="vacio">Aún no hay entregas registradas en los centros.</p>
+  } @else {
+    <div class="grafico">
+      <canvas baseChart [type]="chartType" [data]="chartData" [options]="chartOptions"></canvas>
+    </div>
+  }
+</div>

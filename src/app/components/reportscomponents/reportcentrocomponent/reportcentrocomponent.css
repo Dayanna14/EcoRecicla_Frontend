@@ -1,0 +1,72 @@
+:host {
+  display: block;
+}
+
+.tarjeta {
+  background: var(--eco-linen);
+  border: 1px solid var(--eco-vanilla);
+  border-radius: 16px;
+  padding: 20px;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+h2 {
+  font-family: 'Playfair Display', serif;
+  color: var(--eco-verde-bosque);
+  font-size: 1.15rem;
+  margin: 0 0 4px;
+    padding-bottom: 8px;
+  border-bottom: 1px solid var(--eco-vanilla);
+}
+
+.subtitulo {
+  color: var(--eco-charcoal);
+  font-size: 0.85rem;
+  margin: 0 0 12px;
+}
+
+.grafico {
+  position: relative;
+  height: 220px;
+}
+
+.vacio {
+  color: var(--eco-charcoal);
+  text-align: center;
+  padding: 40px 0;
+}
+
+.error {
+  background: #f6e3de;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  color: var(--eco-charcoal);
+}
+
+.error mat-icon {
+  color: var(--eco-error);
+}
+
+.error-titulo {
+  color: var(--eco-error);
+  font-weight: 700;
+  margin: 8px 0 4px;
+}
+
+.error button {
+  color: var(--eco-verde-bosque);
+}
+.tarjeta {
+  transition: transform 0.2s, box-shadow 0.2s;
+  animation: subir 0.5s 0.2s ease both;
+}
+.tarjeta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(45, 93, 62, 0.15);
+}
+@keyframes subir {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}

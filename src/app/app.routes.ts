@@ -37,11 +37,25 @@ import { Recompensacomponent } from './components/recompensacomponent/recompensa
 import { Recompensalistcomponent } from './components/recompensacomponent/recompensalistcomponent/recompensalistcomponent';
 import { Recompensainsertcomponent } from './components/recompensacomponent/recompensainsertcomponent/recompensainsertcomponent';
 import { Recompensaupdatecomponent } from './components/recompensacomponent/recompensaupdatecomponent/recompensaupdatecomponent';
+import { Reportscomponents } from './components/reportscomponents/reportscomponents';
+import { Dashboardcomponent } from './components/reportscomponents/dashboardcomponent/dashboardcomponent';
+
 
 export const routes: Routes = [
   // ---------- General ----------
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: Homecomponent, title: 'EcoRecicla | Inicio' },
+
+  
+  // ---------- Reportes (dashboard): cada uno agrega aquí su reporte ----------
+  {
+    path: 'reportes',
+    component: Reportscomponents,
+    children: [
+      { path: 'dashboard', component: Dashboardcomponent, title: 'EcoRecicla | Reportes' },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+    ],
+  },
 
   // ---------- Dayana: Roles ----------
   {
