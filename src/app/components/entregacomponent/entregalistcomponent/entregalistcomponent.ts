@@ -75,12 +75,10 @@ export class Entregalistcomponent implements OnInit {
       next: (data) => {
         this.dataSource.data = data;
         this.dataSource.paginator = this.paginator;
-        this.cdr.markForCheck();
       },
       error: (error) => {
         console.error('Error al listar las entregas', error);
         this.notificar('No se pudo cargar la lista de entregas', 'error');
-        this.cdr.markForCheck();
       }
     });
   }
@@ -89,7 +87,6 @@ export class Entregalistcomponent implements OnInit {
     this.usuarioService.list().subscribe({
       next: (data) => {
         this.listaUsuarios = data;
-        this.cdr.markForCheck();
       }
     });
   }
@@ -98,7 +95,6 @@ export class Entregalistcomponent implements OnInit {
     this.materialService.list().subscribe({
       next: (data) => {
         this.listaMateriales = data;
-        this.cdr.markForCheck();
       }
     });
   }
@@ -107,7 +103,6 @@ export class Entregalistcomponent implements OnInit {
     this.centroAcopioService.list().subscribe({
       next: (data) => {
         this.listaCentros = data;
-        this.cdr.markForCheck();
       }
     });
   }
@@ -129,12 +124,10 @@ export class Entregalistcomponent implements OnInit {
       next: () => {
         this.notificar('Entrega eliminada correctamente', 'exito');
         this.listarEntregas();
-        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error al eliminar la entrega', err);
         this.notificar(err.error?.message ?? 'No se pudo eliminar la entrega', 'error');
-        this.cdr.markForCheck();
       }
     });
   }

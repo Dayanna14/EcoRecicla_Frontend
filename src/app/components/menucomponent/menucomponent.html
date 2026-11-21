@@ -93,4 +93,27 @@
   }
 
   <!-- Franco: Canjes -->
+
+
+  <span class="spacer"></span>
+
+ @if (username) {
+    <div class="user-container">
+      <div class="user-profile">
+        <img [src]="avatarRol" alt="Avatar" class="user-avatar" />
+        <div class="user-text-group">
+          <!-- ARRIBA: El nombre real que viene del DTO -->
+          <span class="user-name">{{ nombreUsuario || username.split('@')[0] }}</span>
+          <!-- ABAJO: El correo electrónico -->
+          <span class="user-email" title="{{ username }}">{{ username }}</span>
+        </div>
+      </div>
+
+      <button mat-button type="button" class="logout-button" aria-label="Cerrar sesión" (click)="cerrarSesion()">
+        <mat-icon aria-hidden="true" style="color: aliceblue;">logout</mat-icon>
+        <span style="color: aliceblue;">Cerrar sesión</span>
+      </button>
+    </div>
+  }
+
 </mat-toolbar>
