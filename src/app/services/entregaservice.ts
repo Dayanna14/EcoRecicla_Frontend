@@ -4,6 +4,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { EntregaDTOList } from '../models/EntregaDTOList';
 import { EntregaDTOInsert } from '../models/EntregaDTOInsert';
 import { Observable } from 'rxjs';
+import { EntregaPorFechaDTO } from '../models/EntregaPorFechaDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -35,9 +36,9 @@ export class Entregaservice {
 
   // Métodos adicionales basados en los endpoints específicos de tu Controller de Spring Boot:
 
-  buscarPorFecha(fecha: string): Observable<any[]> {
+  buscarPorFecha(fecha: string): Observable<EntregaPorFechaDTO[]> {
     const params = new HttpParams().set('fecha', fecha);
-    return this.http.get<any[]>(`${this.apiURL}/buscar/fecha`, { params });
+    return this.http.get<EntregaPorFechaDTO[]>(`${this.apiURL}/buscar/fecha`, { params });
   }
 
   obtenerReporteDetallado(idUsuario?: number, idMaterial?: number): Observable<any[]> {

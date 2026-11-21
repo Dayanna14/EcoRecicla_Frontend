@@ -1,7 +1,7 @@
 /* Contenedor general */
 .container {
     padding: 32px 48px;
-    background-color: #fef6e7; /* Fondo crema característico */
+    background-color: #fef6e7;
     min-height: calc(100vh - 64px);
     font-family: Roboto, "Helvetica Neue", sans-serif;
     color: #2b3a2f;
@@ -16,7 +16,7 @@
 .titulo-principal {
     font-size: 28px;
     font-weight: 700;
-    color: #1e4620; /* Verde bosque */
+    color: #1e4620;
     margin: 0 0 4px 0;
 }
 
@@ -111,7 +111,7 @@ td.mat-cell {
 
 .no-data {
     text-align: center;
-    padding: 40px;
+    padding: 30px;
     color: #6b7c6e;
     font-size: 14px;
 }

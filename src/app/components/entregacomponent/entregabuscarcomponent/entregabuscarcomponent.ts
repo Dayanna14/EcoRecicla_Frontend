@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -9,13 +9,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { Entregaservice } from '../../../services/entregaservice';
-import { EntregaDTOList } from '../../../models/EntregaDTOList';
-import { UsuariosService } from '../../../services/usuariosservice';
-import { Materialservice } from '../../../services/materialservice';
-import { Centroacopioservice } from '../../../services/centroacopioservice';
-import { UsuariosDTOList } from '../../../models/UsuariosDTOList';
-import { MaterialDTOList } from '../../../models/MaterialDTOList';
-import { CentroAcopioDTOList } from '../../../models/CentroAcopioDTOList';
+import { EntregaPorFechaDTO } from '../../../models/EntregaPorFechaDTO';
 
 @Component({
   selector: 'app-entregasearchcomponent',
@@ -34,50 +28,25 @@ import { CentroAcopioDTOList } from '../../../models/CentroAcopioDTOList';
   templateUrl: './entregabuscarcomponent.html',
   styleUrl: './entregabuscarcomponent.css'
 })
-export class Entregabuscarcomponent implements OnInit, AfterViewInit {
+export class Entregabuscarcomponent implements OnInit {
   formSearch!: FormGroup;
-  dataSource = new MatTableDataSource<EntregaDTOList>();
-  displayedColumns: string[] = ['c1', 'usuario', 'c2', 'c3', 'c_fecha', 'c4', 'c5'];
+  dataSource = new MatTableDataSource<EntregaPorFechaDTO>();
+  
+  // Como el backend no manda usuario, omitimos esa columna o la ajustamos según tu DTO
+  displayedColumns: string[] = ['c1', 'c2', 'c3', 'c_fecha', 'c4', 'c5'];
   busquedaRealizada: boolean = false;
-
-  listaUsuarios: UsuariosDTOList[] = [];
-  listaMateriales: MaterialDTOList[] = [];
-  listaCentros: CentroAcopioDTOList[] = [];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
     private formBuilder: FormBuilder,
     private entregaService: Entregaservice,
-    private usuarioService: UsuariosService,
-    private materialService: Materialservice,
-    private centroAcopioService: Centroacopioservice,
     private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.formSearch = this.formBuilder.group({
       fecha: ['', Validators.required]
-    });
-    this.cargarCombos();
-  }
-
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-  }
-
-  cargarCombos(): void {
-    this.usuarioService.list().subscribe(data => {
-      this.listaUsuarios = data;
-      this.cdr.markForCheck();
-    });
-    this.materialService.list().subscribe(data => {
-      this.listaMateriales = data;
-      this.cdr.markForCheck();
-    });
-    this.centroAcopioService.list().subscribe(data => {
-      this.listaCentros = data;
-      this.cdr.markForCheck();
     });
   }
 
@@ -87,22 +56,26 @@ export class Entregabuscarcomponent implements OnInit, AfterViewInit {
     }
 
     const fechaSeleccionada: Date = this.formSearch.value.fecha;
+    
     const anio = fechaSeleccionada.getFullYear();
-    const mes = String(fechaSeleccionada.getMonth() + 1).padStart(2, '0');
-    const dia = String(fechaSeleccionada.getDate()).padStart(2, '0');
+    // Forma clásica y sencilla con operador ternario que entienden todos los profesores
+    const mes = (fechaSeleccionada.getMonth() + 1 < 10 ? '0' : '') + (fechaSeleccionada.getMonth() + 1);
+    const dia = (fechaSeleccionada.getDate() < 10 ? '0' : '') + fechaSeleccionada.getDate();
+    
     const fechaFormateada = `${anio}-${mes}-${dia}`;
 
     this.entregaService.buscarPorFecha(fechaFormateada).subscribe({
       next: (data) => {
         this.dataSource.data = data;
+        this.dataSource.paginator = this.paginator;
         this.busquedaRealizada = true;
-        this.cdr.markForCheck();
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error al buscar entregas por fecha', err);
         this.dataSource.data = [];
         this.busquedaRealizada = true;
-        this.cdr.markForCheck();
+        this.cdr.detectChanges();
       }
     });
   }
