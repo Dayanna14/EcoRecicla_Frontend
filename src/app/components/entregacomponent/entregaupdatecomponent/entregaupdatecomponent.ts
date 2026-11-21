@@ -108,8 +108,8 @@ export class Entregaupdatecomponent implements OnInit {
     const entrega: EntregaDTOInsert = {
       idEntrega: this.formEntrega.value.idEntrega,
       cantidadKg: this.formEntrega.value.cantidadKg,
-      puntosGenerados: this.formEntrega.value.puntosGenerados || 0,
-      fecha: new Date(),
+      puntosGeneredos: this.formEntrega.value.puntosGenerados || 0,
+      fecha: new Date().toISOString(),
       idMaterial: this.formEntrega.value.idMaterial,
       idCentroAcopio: this.formEntrega.value.idCentroAcopio,
       idUsuario: this.formEntrega.value.idUsuario
