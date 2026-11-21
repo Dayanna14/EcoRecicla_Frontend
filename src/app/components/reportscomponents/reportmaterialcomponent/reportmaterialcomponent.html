@@ -1,0 +1,114 @@
+<div class="tarjeta" (click)="abrirDetalle()">
+  <div class="cabecera">
+    <span class="icono"><mat-icon>recycling</mat-icon></span>
+    <h2>Materiales más entregados</h2>
+  </div>
+
+  @if (hayError) {
+    <div class="error">
+      <mat-icon>warning</mat-icon>
+      <p class="error-titulo">No se pudo cargar este reporte</p>
+      <p>Los demás reportes siguen disponibles.</p>
+      <button mat-button (click)="obtenerReporte(); $event.stopPropagation()">
+        <mat-icon>refresh</mat-icon> Reintentar
+      </button>
+    </div>
+  } @else if (lista.length === 0) {
+    <p class="vacio">Aún no hay entregas de materiales registradas.</p>
+  } @else {
+    <div class="grafico">
+      <canvas baseChart type="doughnut" [data]="chartData" [options]="chartOptions"></canvas>
+    </div>
+
+    @if (lider) {
+      <p class="lider">
+        <mat-icon>emoji_events</mat-icon>
+        Líder: <b>{{ lider.nombreMaterial }}</b> · <span class="mono">{{ lider.totalKgReciclados }} kg</span> · {{ porcentajeLider }} % del total
+      </p>
+    }
+
+    <p class="ver-detalle">Ver detalle <mat-icon>arrow_forward</mat-icon></p>
+  }
+</div>
+
+<!-- Ventana de detalle (se abre con MatDialog) -->
+<ng-template #dialogDetalle>
+  <div class="detalle">
+    <div class="detalle-cabecera">
+      <span class="icono"><mat-icon>recycling</mat-icon></span>
+      <div>
+        <h2 mat-dialog-title>Materiales más entregados</h2>
+        <p class="detalle-sub">¿Qué se recicla más?</p>
+      </div>
+      <button mat-icon-button mat-dialog-close aria-label="Cerrar"><mat-icon>close</mat-icon></button>
+    </div>
+
+    <mat-dialog-content>
+      @if (cargandoDetalle) {
+        <p class="cargando">Cargando…</p>
+      } @else {
+        <p class="seccion">EN TOTAL</p>
+        <div class="totales">
+          <div><span>Kg reciclados</span><b class="mono">{{ totalKg }} kg</b></div>
+          <div><span>Entregas</span><b class="mono">{{ totalEntregas }}</b></div>
+          <div><span>Materiales con entregas</span><b class="mono">{{ lista.length }}</b></div>
+        </div>
+
+        <p class="seccion">CADA MATERIAL</p>
+        <table class="tabla">
+          <thead>
+            <tr>
+              <th>#</th><th>Material</th><th>Kg</th><th>% del total</th>
+              <th>Entregas</th><th>Kg por entrega</th><th>Pts por kg</th><th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (f of filas.slice(0, maxFilas); track f.nombre) {
+              <tr>
+                <td>{{ f.posicion }} @if (f.posicion === 1) { <span class="estrella">★</span> }</td>
+                <td>{{ f.nombre }}</td>
+                <td class="mono">{{ f.kg }}</td>
+                <td>
+                  <div class="barrita"><span [style.width.%]="f.porcentaje" [class.barrita-lider]="f.posicion === 1"></span></div>
+                  <small>{{ f.porcentaje }} %</small>
+                </td>
+                <td class="mono">{{ f.entregas }}</td>
+                <td class="mono">{{ f.promedio }}</td>
+                <td class="mono">{{ f.puntosPorKg ?? '—' }}</td>
+                <td>
+                  @if (f.activo === null) {
+                    <span class="estado">—</span>
+                  } @else {
+                    <span class="estado" [class.inactivo]="!f.activo">{{ f.activo ? 'Activo' : 'Inactivo' }}</span>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+        @if (filas.length > maxFilas) {
+          <p class="mas">Se muestran los {{ maxFilas }} primeros de {{ filas.length }} materiales.</p>
+        }
+        <a class="ver-todos" routerLink="/materiales/listar" mat-dialog-close>Ver todos los materiales →</a>
+
+        <p class="seccion">PARA TENER EN CUENTA</p>
+        @if (avisos.length === 0) {
+          <p class="aviso aviso-ok"><mat-icon>check_circle</mat-icon> Todo en orden: todos los materiales activos tienen entregas.</p>
+        } @else {
+          @for (aviso of avisos; track aviso) {
+            <p class="aviso"><mat-icon>error_outline</mat-icon> {{ aviso }}</p>
+          }
+        }
+      }
+
+      <div class="calculo">
+        <mat-icon>info</mat-icon>
+        <p><b>¿Cómo se calcula?</b> Se suman los kilos de todas las entregas registradas de cada material. Los materiales que todavía no tienen entregas no aparecen en el gráfico.</p>
+      </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+      <button mat-flat-button class="btn-cerrar" mat-dialog-close>Cerrar</button>
+    </mat-dialog-actions>
+  </div>
+</ng-template>

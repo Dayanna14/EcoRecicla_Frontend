@@ -3,6 +3,7 @@ import { DatePipe, DecimalPipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Reportrolcomponent } from '../reportrolcomponent/reportrolcomponent';
 import { Reportcentrocomponent } from '../reportcentrocomponent/reportcentrocomponent';
+import { Reportmaterialcomponent } from '../reportmaterialcomponent/reportmaterialcomponent';
 import { UsuariosService } from '../../../services/usuariosservice';
 import { Materialservice } from '../../../services/materialservice';
 import { Canjeservice } from '../../../services/canjeservice';
@@ -11,7 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-dashboardcomponent',
-  imports: [MatIconModule, MatButtonModule, DecimalPipe, DatePipe, Reportrolcomponent, Reportcentrocomponent],
+  imports: [MatIconModule, MatButtonModule, DecimalPipe, DatePipe, Reportrolcomponent, Reportcentrocomponent, Reportmaterialcomponent],
   templateUrl: './dashboardcomponent.html',
   styleUrl: './dashboardcomponent.css',
 })
@@ -27,6 +28,7 @@ export class Dashboardcomponent  implements OnInit {
   // El padre (dashboard) accede a sus hijos (reportes) para pedirles que se recarguen
   @ViewChild(Reportrolcomponent) reporteRol!: Reportrolcomponent;
   @ViewChild(Reportcentrocomponent) reporteCentro!: Reportcentrocomponent;
+  @ViewChild(Reportmaterialcomponent) reporteMaterial!: Reportmaterialcomponent;
 
   constructor(
     private uS: UsuariosService,
@@ -63,6 +65,7 @@ export class Dashboardcomponent  implements OnInit {
     this.cargarNumeros();
     this.reporteRol.obtenerReporte();
     this.reporteCentro.obtenerReporte();
+    this.reporteMaterial.obtenerReporte();
     this.horaActualizacion = new Date();
     this.cdr.detectChanges();
   }

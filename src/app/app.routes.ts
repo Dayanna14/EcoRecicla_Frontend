@@ -17,7 +17,6 @@ import { Materialinsertcomponent } from './components/materialcomponent/material
 import { Materialupdatecomponent } from './components/materialcomponent/materialupdatecomponent/materialupdatecomponent';
 import { Materialbuscarcomponent } from './components/materialcomponent/materialbuscarcomponent/materialbuscarcomponent';
 import { Materialclasificarcomponent } from './components/materialcomponent/materialclasificarcomponent/materialclasificarcomponent';
-import { Materialrankingcomponent } from './components/materialcomponent/materialrankingcomponent/materialrankingcomponent';
 import { Tiporecompensacomponent } from './components/tiporecompensacomponent/tiporecompensacomponent';
 import { Tiporecompensalistcomponent } from './components/tiporecompensacomponent/tiporecompensalistcomponent/tiporecompensalistcomponent';
 import { Tiporecompensainsertcomponent } from './components/tiporecompensacomponent/tiporecompensainsertcomponent/tiporecompensainsertcomponent';
@@ -128,7 +127,6 @@ export const routes: Routes = [
       { path: 'editar/:id', component: Materialupdatecomponent },
       { path: 'buscar', component: Materialbuscarcomponent },
       { path: 'clasificar', component: Materialclasificarcomponent },
-      { path: 'ranking', component: Materialrankingcomponent },
       { path: '', redirectTo: 'listar', pathMatch: 'full' },
     ],
   },
