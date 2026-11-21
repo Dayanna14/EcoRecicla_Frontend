@@ -188,3 +188,7 @@ h3 {
   line-height: 1.4;
   color: var(--eco-charcoal);
 }
+/* Al exportar el dashboard no se imprime el menú */
+@media print {
+  app-menucomponent { display: none; }
+}

@@ -21,16 +21,33 @@
           <mat-error>Campo obligatorio, ingrese el nombre</mat-error>
         }
       </mat-form-field>
-
-      <label class="etiqueta" for="horario">Horario</label>
-      <mat-form-field appearance="outline">
-        <mat-icon matPrefix>schedule</mat-icon>
-        <input matInput id="horario" formControlName="horario" placeholder="08:00-18:00" maxlength="100" />
-        @if (form.get('horario')?.hasError('required')) {
-          <mat-error>Campo obligatorio, ingrese el horario</mat-error>
-        }
-      </mat-form-field>
-
+    <!-- es el agregado de timepicker -->
+      <div class="fila">
+        <div>
+          <label class="etiqueta" for="apertura">Hora de apertura</label>
+          <mat-form-field appearance="outline">
+            <mat-icon matPrefix>schedule</mat-icon>
+            <input matInput id="apertura" formControlName="apertura" [matTimepicker]="pickerApertura" />
+            <mat-timepicker-toggle matIconSuffix [for]="pickerApertura" />
+            <mat-timepicker #pickerApertura interval="30m" />
+            @if (form.get('apertura')?.hasError('required')) {
+              <mat-error>Campo obligatorio, ingrese la hora de apertura</mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div>
+          <label class="etiqueta" for="cierre">Hora de cierre</label>
+          <mat-form-field appearance="outline">
+            <mat-icon matPrefix>schedule</mat-icon>
+            <input matInput id="cierre" formControlName="cierre" [matTimepicker]="pickerCierre" />
+            <mat-timepicker-toggle matIconSuffix [for]="pickerCierre" />
+            <mat-timepicker #pickerCierre interval="30m" />
+            @if (form.get('cierre')?.hasError('required')) {
+              <mat-error>Campo obligatorio, ingrese la hora de cierre</mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
       <label class="etiqueta">Operador responsable</label>
       <mat-form-field appearance="outline">
         <mat-icon matPrefix>person</mat-icon>

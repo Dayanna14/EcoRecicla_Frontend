@@ -1,0 +1,88 @@
+<div class="contenedor">
+  <nav class="migas">
+    <a routerLink="/recompensas/listar">Recompensas</a>
+    <span>/</span>
+    <span>Registrar</span>
+  </nav>
+
+  <h1>Registrar recompensa</h1>
+  <p class="subtitulo">Amplía el catálogo de beneficios que los recicladores pueden canjear.</p>
+
+  <div class="grid">
+    <div>
+      <form class="tarjeta formulario" [formGroup]="form" #formDir="ngForm" (ngSubmit)="registrar(formDir)">
+        <h2>Datos de la recompensa</h2>
+
+        <label class="etiqueta" for="nombre">Nombre</label>
+        <mat-form-field appearance="outline">
+          <mat-icon matPrefix>card_giftcard</mat-icon>
+          <input matInput id="nombre" formControlName="nombre" placeholder="Ej. Descuento 10%" maxlength="50" />
+          @if (form.get('nombre')?.hasError('required')) {
+            <mat-error>Campo obligatorio, ingrese el nombre</mat-error>
+          }
+        </mat-form-field>
+
+        <label class="etiqueta" for="tipo">Tipo de recompensa</label>
+        <mat-form-field appearance="outline">
+          <mat-icon matPrefix>category</mat-icon>
+          <mat-select id="tipo" formControlName="tipo" placeholder="Seleccione un tipo">
+            @for (t of tipos; track t.idTipoRecompensa) {
+              <mat-option [value]="t.idTipoRecompensa">{{ t.nombreTipoRecompensa }}</mat-option>
+            }
+          </mat-select>
+          @if (form.get('tipo')?.hasError('required')) {
+            <mat-error>Campo obligatorio, seleccione el tipo</mat-error>
+          }
+        </mat-form-field>
+
+        <label class="etiqueta" for="costoPuntos">Costo en puntos</label>
+        <mat-form-field appearance="outline">
+          <mat-icon matPrefix>stars</mat-icon>
+          <input matInput id="costoPuntos" type="number" formControlName="costoPuntos" placeholder="Ej. 150" />
+          @if (form.get('costoPuntos')?.hasError('required')) {
+            <mat-error>Campo obligatorio, ingrese el costo</mat-error>
+          } @else if (form.get('costoPuntos')?.hasError('min')) {
+            <mat-error>El costo debe ser mayor a 0</mat-error>
+          }
+        </mat-form-field>
+
+        <label class="etiqueta" for="estado">Estado</label>
+        <mat-form-field appearance="outline">
+          <mat-icon matPrefix>toggle_on</mat-icon>
+          <mat-select id="estado" formControlName="estado" placeholder="Seleccione el estado">
+            @for (e of estados; track e.viewValue) {
+              <mat-option [value]="e.value">{{ e.viewValue }}</mat-option>
+            }
+          </mat-select>
+          @if (form.get('estado')?.hasError('required')) {
+            <mat-error>Campo obligatorio, seleccione el estado</mat-error>
+          }
+        </mat-form-field>
+
+        <label class="etiqueta" for="imagenUrl">Imagen (URL)</label>
+        <mat-form-field appearance="outline">
+          <mat-icon matPrefix>image</mat-icon>
+          <input matInput id="imagenUrl" formControlName="imagenUrl" placeholder="https://..." maxlength="500" />
+          @if (form.get('imagenUrl')?.hasError('required')) {
+            <mat-error>Campo obligatorio, ingrese la URL de la imagen</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="acciones">
+          <a mat-stroked-button routerLink="/recompensas/listar">Cancelar</a>
+          <button mat-flat-button type="submit" [disabled]="form.invalid">Registrar recompensa</button>
+        </div>
+      </form>
+    </div>
+
+    <aside class="lateral">
+      <div class="consejo">
+        <mat-icon>lightbulb</mat-icon>
+        <div>
+          <strong>Consejo</strong>
+          <p>Las recompensas inactivas no se muestran a los recicladores. Usa una imagen cuadrada para que se vea bien.</p>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>

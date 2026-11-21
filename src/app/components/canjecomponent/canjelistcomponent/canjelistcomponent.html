@@ -1,0 +1,74 @@
+<div class="container">
+  <div>
+    <h2>Lista de Canjes</h2>
+  </div>
+  <div>
+    @if(dataSource.length > 0){
+    <!-- Tabla Angular Material -->
+    <table mat-table [dataSource]="dataSource" class="mat-shadow-2">
+      
+      <!-- c1: ID Canje -->
+      <ng-container matColumnDef="c1">
+        <th mat-header-cell *matHeaderCellDef>ID</th>
+        <td mat-cell *matCellDef="let element">{{ element.idCanje }}</td>
+      </ng-container>
+
+      <!-- c2: Fecha -->
+      <ng-container matColumnDef="c2">
+        <th mat-header-cell *matHeaderCellDef>Fecha</th>
+        <td mat-cell *matCellDef="let element">{{ element.fecha | date:'shortDate' }}</td>
+      </ng-container>
+
+      <!-- c3: Puntos Usados -->
+      <ng-container matColumnDef="c3">
+        <th mat-header-cell *matHeaderCellDef>Puntos Usados</th>
+        <td mat-cell *matCellDef="let element">-{{ element.puntosUsados }} pts</td>
+      </ng-container>
+
+      <!-- c4: Estado -->
+      <ng-container matColumnDef="c4">
+        <th mat-header-cell *matHeaderCellDef>Estado</th>
+        <td mat-cell *matCellDef="let element">{{ element.estado }}</td>
+      </ng-container>
+
+      <!-- c5: Recompensa ID -->
+      <ng-container matColumnDef="c5">
+        <th mat-header-cell *matHeaderCellDef>Recompensa ID</th>
+        <td mat-cell *matCellDef="let element">{{ element.recompensaIdRecompensa }}</td>
+      </ng-container>
+
+      <!-- c6: Usuario ID -->
+      <ng-container matColumnDef="c6">
+        <th mat-header-cell *matHeaderCellDef>Usuario ID</th>
+        <td mat-cell *matCellDef="let element">{{ element.usuarioId_usuario }}</td>
+      </ng-container>
+
+      <!-- c7: Eliminar -->
+      <ng-container matColumnDef="c7">
+        <th mat-header-cell *matHeaderCellDef>Eliminar</th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button class="btn-eliminar" (click)="eliminarCanje(element.idCanje)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <!-- c8: Editar -->
+      <ng-container matColumnDef="c8">
+        <th mat-header-cell *matHeaderCellDef>Editar</th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-button class="btn-editar" [routerLink]="['/canjes/editar', element.idCanje]">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+    
+    }@else {
+    <p>No hay canjes registrados</p>
+    }
+  </div>
+</div>

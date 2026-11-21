@@ -1,0 +1,117 @@
+<div class="tarjeta" (click)="abrirDetalle()">
+  <div class="cabecera">
+    <span class="icono"><mat-icon>group</mat-icon></span>
+    <h2>Usuarios por rol</h2>
+  </div>
+
+  @if (hayError) {
+    <div class="error">
+      <mat-icon>warning</mat-icon>
+      <p class="error-titulo">No se pudo cargar este reporte</p>
+      <p>Los demás reportes siguen disponibles.</p>
+      <button mat-button (click)="obtenerReporte()">
+        <mat-icon>refresh</mat-icon> Reintentar
+      </button>
+    </div>
+  } @else if (lista.length === 0) {
+    <p class="vacio">Aún no hay usuarios registrados.</p>
+  } @else {
+    <div class="cuerpo">
+      <div class="grafico">
+        <canvas baseChart [type]="chartType" [data]="chartData" [options]="chartOptions"></canvas>
+        <span class="total mono">{{ total }}</span>
+      </div>
+
+      @if (lider) {
+        <div class="dato">
+          @if (empatados.length > 1) {
+            <span class="dato-etiqueta">Roles con más usuarios (empate)</span>
+            <span class="dato-nombre">{{ empatados.join(' y ') }}</span>
+            <span class="dato-valor mono">{{ lider.cantidadUsuarios }} usuarios cada uno</span>
+          } @else {
+            <span class="dato-etiqueta">Rol con más usuarios</span>
+            <span class="dato-nombre">{{ nombreRol(lider.nombreRol) }}</span>
+            <span class="dato-valor mono">{{ lider.cantidadUsuarios }} usuarios · {{ porcentajeLider }} %</span>
+          }
+        </div>
+      }
+    </div>
+
+    <p class="ver-detalle">Ver detalle <mat-icon>arrow_forward</mat-icon></p>
+  }
+</div>
+
+<!-- Ventana de detalle (se abre con MatDialog, igual que la confirmación de eliminar) -->
+<ng-template #dialogDetalle>
+  <div class="detalle">
+    <div class="detalle-cabecera">
+      <span class="icono"><mat-icon>group</mat-icon></span>
+      <div>
+        <h2 mat-dialog-title>Usuarios por rol</h2>
+        <p class="detalle-sub">¿Quiénes usan EcoRecicla? · <span class="mono">{{ total }}</span> usuarios en total</p>
+      </div>
+      <button mat-icon-button mat-dialog-close aria-label="Cerrar"><mat-icon>close</mat-icon></button>
+    </div>
+
+    <mat-dialog-content>
+      <!-- 1. Cómo se reparten -->
+      <p class="seccion">CÓMO SE REPARTEN</p>
+      <div class="reparto">
+        @for (r of repartos; track r.nombre) {
+          <span [style.width.%]="r.porcentaje" [style.background]="r.color"></span>
+        }
+      </div>
+      <div class="reparto-leyenda">
+        @for (r of repartos; track r.nombre) {
+          <span>
+            <i [style.background]="r.color"></i>
+            {{ r.nombre }} <b class="mono">{{ r.cantidad }}</b> · {{ r.porcentaje }} %
+          </span>
+        }
+      </div>
+
+      <!-- 2. Últimos registrados por rol -->
+      <p class="seccion">ÚLTIMOS REGISTRADOS EN CADA ROL</p>
+      @if (cargandoDetalle) {
+        <p class="cargando">Cargando…</p>
+      } @else {
+        <div class="grupos">
+          @for (g of grupos; track g.nombre) {
+            <div class="grupo">
+              <p class="grupo-titulo" [style.color]="g.color">{{ g.nombre }} · <span class="mono">{{ g.cantidad }}</span></p>
+              @for (nombre of g.ultimos; track nombre) {
+                <p class="grupo-nombre">{{ nombre }}</p>
+              }
+              @if (g.restantes > 0) {
+                <p class="grupo-mas">y {{ g.restantes }} más</p>
+              }
+            </div>
+          }
+        </div>
+        <a class="ver-todos" routerLink="/usuarios/listar" mat-dialog-close>Ver todos los usuarios →</a>
+      }
+
+      <!-- 3. Avisos automáticos -->
+      <p class="seccion">PARA TENER EN CUENTA</p>
+      @if (!cargandoDetalle) {
+        @if (avisos.length === 0) {
+          <p class="aviso aviso-ok"><mat-icon>check_circle</mat-icon> Todo en orden: todos los roles tienen usuarios.</p>
+        } @else {
+          @for (aviso of avisos; track aviso) {
+            <p class="aviso"><mat-icon>error_outline</mat-icon> {{ aviso }}</p>
+          }
+        }
+      }
+
+      <!-- 4. Cómo se calcula -->
+      <div class="calculo">
+        <mat-icon>info</mat-icon>
+        <p><b>¿Cómo se calcula?</b> Se cuentan los usuarios registrados en cada rol. Los roles que todavía no tienen usuarios no aparecen en el gráfico.</p>
+      </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+      <button mat-flat-button class="btn-cerrar" mat-dialog-close>Cerrar</button>
+    </mat-dialog-actions>
+  </div>
+</ng-template>

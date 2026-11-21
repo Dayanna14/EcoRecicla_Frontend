@@ -1,0 +1,85 @@
+<div class="contenedor">
+  <nav class="migas">
+    <a routerLink="/canjes/registrar">Canjes</a>
+    <span>/</span>
+    <span>Registrar</span>
+  </nav>
+
+  <h1>Registrar nuevo canje</h1>
+  <p class="subtitulo">Completa los datos necesarios para registrar el canje de puntos del usuario.</p>
+
+  <div class="grid-simple">
+    <!-- Formulario de registro de canje -->
+    <form class="tarjeta formulario" [formGroup]="form" #formDir="ngForm" (ngSubmit)="registrar(formDir)">
+      <h2>Datos del canje</h2>
+
+      <!-- Fecha del Canje -->
+      <label class="etiqueta" for="fecha">Fecha</label>
+      <mat-form-field appearance="outline">
+        <mat-icon matPrefix>calendar_today</mat-icon>
+        <input matInput id="fecha" type="date" formControlName="fecha" />
+        @if (form.get('fecha')?.hasError('required')) {
+          <mat-error>Campo obligatorio, seleccione la fecha</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Puntos Usados -->
+      <label class="etiqueta" for="puntosUsados">Puntos usados</label>
+      <mat-form-field appearance="outline">
+        <mat-icon matPrefix>stars</mat-icon>
+        <input matInput id="puntosUsados" type="number" formControlName="puntosUsados" placeholder="150" min="1" />
+        @if (form.get('puntosUsados')?.hasError('required')) {
+          <mat-error>Campo obligatorio, ingrese los puntos</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Recompensa seleccionable -->
+      <label class="etiqueta">Recompensa</label>
+      <mat-form-field appearance="outline">
+        <mat-icon matPrefix>card_giftcard</mat-icon>
+        <mat-select formControlName="idRecompensa" placeholder="Seleccione una recompensa">
+          @for (r of recompensas; track r.idRecompensa) {
+            <mat-option [value]="r.idRecompensa">{{ r.nombre }} · {{ r.puntosRequeridos }} pts</mat-option>
+          }
+        </mat-select>
+        @if (form.get('idRecompensa')?.hasError('required')) {
+          <mat-error>Campo obligatorio, seleccione la recompensa</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Usuario (Id_usuario) seleccionable -->
+      <label class="etiqueta">Usuario responsable</label>
+      <mat-form-field appearance="outline">
+        <mat-icon matPrefix>person</mat-icon>
+        <mat-select formControlName="Id_usuario" placeholder="Seleccione un usuario">
+          @for (u of usuarios; track u.id_usuario) {
+            <mat-option [value]="u.id_usuario">{{ u.nombre }} · {{ u.email }}</mat-option>
+          }
+        </mat-select>
+        @if (form.get('Id_usuario')?.hasError('required')) {
+          <mat-error>Campo obligatorio, seleccione el usuario</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Estado -->
+      <label class="etiqueta">Estado</label>
+      <mat-form-field appearance="outline">
+        <mat-icon matPrefix>toggle_on</mat-icon>
+        <mat-select formControlName="estado">
+          @for (e of estados; track e.value) {
+            <mat-option [value]="e.value">{{ e.viewValue }}</mat-option>
+          }
+        </mat-select>
+        @if (form.get('estado')?.hasError('required')) {
+          <mat-error>Campo obligatorio, seleccione el estado</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Botones de Acción -->
+      <div class="acciones">
+        <a mat-stroked-button routerLink="/canjes/registrar">Cancelar</a>
+        <button mat-flat-button type="submit">Registrar canje</button>
+      </div>
+    </form>
+  </div>
+</div>

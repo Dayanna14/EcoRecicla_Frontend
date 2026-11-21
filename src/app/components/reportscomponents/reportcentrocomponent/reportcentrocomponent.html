@@ -1,0 +1,114 @@
+<div class="tarjeta" (click)="abrirDetalle()">
+  <div class="cabecera">
+    <span class="icono"><mat-icon>place</mat-icon></span>
+    <h2>Centros con más puntos</h2>
+  </div>
+
+  @if (hayError) {
+    <div class="error">
+      <mat-icon>warning</mat-icon>
+      <p class="error-titulo">No se pudo cargar este reporte</p>
+      <p>Los demás reportes siguen disponibles.</p>
+      <button mat-button (click)="obtenerReporte()">
+        <mat-icon>refresh</mat-icon> Reintentar
+      </button>
+    </div>
+  } @else if (lista.length === 0) {
+    <p class="vacio">Aún no hay entregas registradas en los centros.</p>
+  } @else {
+    <div class="grafico">
+      <canvas baseChart [type]="chartType" [data]="chartData" [options]="chartOptions"></canvas>
+    </div>
+
+    @if (lider) {
+      <p class="lider">
+        <mat-icon>emoji_events</mat-icon>
+        Líder: <b>{{ lider.nombreCentro }}</b> · <span class="mono">{{ lider.totalPuntos }} pts</span> · {{ porcentajeLider }} % del total
+      </p>
+    }
+
+    <p class="ver-detalle">Ver detalle <mat-icon>arrow_forward</mat-icon></p>
+  }
+</div>
+
+<!-- Ventana de detalle (se abre con MatDialog) -->
+<ng-template #dialogDetalle>
+  <div class="detalle">
+    <div class="detalle-cabecera">
+      <span class="icono"><mat-icon>place</mat-icon></span>
+      <div>
+        <h2 mat-dialog-title>Centros con más puntos</h2>
+        <p class="detalle-sub">¿Dónde se recicla más?</p>
+      </div>
+      <button mat-icon-button mat-dialog-close aria-label="Cerrar"><mat-icon>close</mat-icon></button>
+    </div>
+
+    <mat-dialog-content>
+      @if (cargandoDetalle) {
+        <p class="cargando">Cargando…</p>
+      } @else {
+        <p class="seccion">EN TOTAL</p>
+        <div class="totales">
+          <div><span>Puntos generados</span><b class="mono">{{ totalPuntos }}</b></div>
+          <div><span>Entregas</span><b class="mono">{{ totalEntregas }}</b></div>
+          <div><span>Kg reciclados</span><b class="mono">{{ totalKg }} kg</b></div>
+        </div>
+
+        <p class="seccion">CADA CENTRO</p>
+        <table class="tabla">
+          <thead>
+            <tr>
+              <th>#</th><th>Centro</th><th>Puntos</th><th>% del total</th>
+              <th>Entregas</th><th>Kg</th><th>Pts por entrega</th><th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (f of filas.slice(0, maxFilas); track f.nombre) {
+              <tr>
+                <td>{{ f.posicion }} @if (f.posicion === 1) { <span class="estrella">★</span> }</td>
+                <td>{{ f.nombre }}</td>
+                <td class="mono">{{ f.puntos }}</td>
+                <td>
+                  <div class="barrita"><span [style.width.%]="f.porcentaje" [class.barrita-lider]="f.posicion === 1"></span></div>
+                  <small>{{ f.porcentaje }} %</small>
+                </td>
+                <td class="mono">{{ f.entregas }}</td>
+                <td class="mono">{{ f.kg }}</td>
+                <td class="mono">{{ f.promedio }}</td>
+                <td>
+                  @if (f.activo === null) {
+                    <span class="estado">—</span>
+                  } @else {
+                    <span class="estado" [class.inactivo]="!f.activo">{{ f.activo ? 'Activo' : 'Inactivo' }}</span>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+        @if (filas.length > maxFilas) {
+          <p class="mas">Se muestran los {{ maxFilas }} primeros de {{ filas.length }} centros.</p>
+        }
+        <a class="ver-todos" routerLink="/centrosacopio/listar" mat-dialog-close>Ver todos los centros →</a>
+
+        <p class="seccion">PARA TENER EN CUENTA</p>
+        @if (avisos.length === 0) {
+          <p class="aviso aviso-ok"><mat-icon>check_circle</mat-icon> Todo en orden: todos los centros tienen entregas.</p>
+        } @else {
+          @for (aviso of avisos; track aviso) {
+            <p class="aviso"><mat-icon>error_outline</mat-icon> {{ aviso }}</p>
+          }
+        }
+      }
+
+      <div class="calculo">
+        <mat-icon>info</mat-icon>
+        <p><b>¿Cómo se calcula?</b> Se suman los puntos de todas las entregas registradas en cada centro. Los centros que todavía no tienen entregas no aparecen en el gráfico.</p>
+      </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+      <button mat-flat-button class="btn-cerrar" mat-dialog-close>Cerrar</button>
+    </mat-dialog-actions>
+  </div>
+</ng-template>

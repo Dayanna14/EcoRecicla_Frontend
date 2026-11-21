@@ -4,6 +4,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { CentroAcopioDTOList } from '../models/CentroAcopioDTOList';
 import { Observable } from 'rxjs';
 import { CentroAcopioDTOInsert } from '../models/CentroAcopioDTOInsert';
+import { CentroAcopioPuntosDTO } from '../models/CentroAcopioPuntosDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -37,4 +38,11 @@ export class Centroacopioservice {
     const params = new HttpParams().set('estado', estado);
     return this.http.get<CentroAcopioDTOList[]>(`${this.apiURL}/buscar`, { params });
   }
+
+  
+  // Reporte: centros con más puntos generados (dashboard)
+  centrosMasPuntos(): Observable<CentroAcopioPuntosDTO[]> {
+    return this.http.get<CentroAcopioPuntosDTO[]>(`${this.apiURL}/centros-mas-puntos`);
+  }
+
 }
