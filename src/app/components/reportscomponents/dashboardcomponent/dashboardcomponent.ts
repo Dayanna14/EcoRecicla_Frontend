@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Reportrolcomponent } from '../reportrolcomponent/reportrolcomponent';
 import { Reportcentrocomponent } from '../reportcentrocomponent/reportcentrocomponent';
 import { Reportmaterialcomponent } from '../reportmaterialcomponent/reportmaterialcomponent';
+import { Reporttiporecompensacomponent } from '../reporttiporecompensacomponent/reporttiporecompensacomponent';
 import { UsuariosService } from '../../../services/usuariosservice';
 import { Materialservice } from '../../../services/materialservice';
 import { Canjeservice } from '../../../services/canjeservice';
@@ -12,7 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-dashboardcomponent',
-  imports: [MatIconModule, MatButtonModule, DecimalPipe, DatePipe, Reportrolcomponent, Reportcentrocomponent, Reportmaterialcomponent],
+  imports: [MatIconModule, MatButtonModule, DecimalPipe, DatePipe, Reportrolcomponent, Reportcentrocomponent, Reportmaterialcomponent, Reporttiporecompensacomponent],
   templateUrl: './dashboardcomponent.html',
   styleUrl: './dashboardcomponent.css',
 })
@@ -29,6 +30,7 @@ export class Dashboardcomponent  implements OnInit {
   @ViewChild(Reportrolcomponent) reporteRol!: Reportrolcomponent;
   @ViewChild(Reportcentrocomponent) reporteCentro!: Reportcentrocomponent;
   @ViewChild(Reportmaterialcomponent) reporteMaterial!: Reportmaterialcomponent;
+  @ViewChild(Reporttiporecompensacomponent) reporteTipoRecompensa!: Reporttiporecompensacomponent;
 
   constructor(
     private uS: UsuariosService,
@@ -66,6 +68,7 @@ export class Dashboardcomponent  implements OnInit {
     this.reporteRol.obtenerReporte();
     this.reporteCentro.obtenerReporte();
     this.reporteMaterial.obtenerReporte();
+    this.reporteTipoRecompensa.obtenerReporte();
     this.horaActualizacion = new Date();
     this.cdr.detectChanges();
   }

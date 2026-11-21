@@ -22,7 +22,6 @@ import { Tiporecompensalistcomponent } from './components/tiporecompensacomponen
 import { Tiporecompensainsertcomponent } from './components/tiporecompensacomponent/tiporecompensainsertcomponent/tiporecompensainsertcomponent';
 import { Tiporecompensaupdatecomponent } from './components/tiporecompensacomponent/tiporecompensaupdatecomponent/tiporecompensaupdatecomponent';
 import { Tiporecompensabuscarcomponent } from './components/tiporecompensacomponent/tiporecompensabuscarcomponent/tiporecompensabuscarcomponent';
-import { Tiporecompensarankingcomponent } from './components/tiporecompensacomponent/tiporecompensarankingcomponent/tiporecompensarankingcomponent';
 import { Entregacomponent } from './components/entregacomponent/entregacomponent';
 import { Entregalistcomponent } from './components/entregacomponent/entregalistcomponent/entregalistcomponent';
 import { Entregainsertcomponent } from './components/entregacomponent/entregainsertcomponent/entregainsertcomponent';
@@ -114,7 +113,6 @@ export const routes: Routes = [
       { path: 'insertar', component: Tiporecompensainsertcomponent },
       { path: 'editar/:id', component: Tiporecompensaupdatecomponent },
       { path: 'buscar', component: Tiporecompensabuscarcomponent },
-      { path: 'ranking', component: Tiporecompensarankingcomponent },
       { path: '', redirectTo: 'listar', pathMatch: 'full' },
     ],
   },
