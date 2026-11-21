@@ -40,7 +40,6 @@ export class Entregalistcomponent implements OnInit {
   listaMateriales: MaterialDTOList[] = [];
   listaCentros: CentroAcopioDTOList[] = [];
 
-  idEdicionSeleccionada: number = 0;
   @ViewChild('dialogEliminar') dialogEliminar!: TemplateRef<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -61,16 +60,26 @@ export class Entregalistcomponent implements OnInit {
     this.listarCentros();
   }
 
+  // Notificaciones con los estilos globales noti-exito / noti-advertencia / noti-error
+  notificar(texto: string, tipo: 'exito' | 'advertencia' | 'error'): void {
+    this.snackBar.open(texto, 'Cerrar', {
+      duration: 4000,
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+      panelClass: ['noti-' + tipo],
+    });
+  }
+
   listarEntregas(): void {
     this.entregaService.list().subscribe({
       next: (data) => {
         this.dataSource.data = data;
-        // Asignación directa tal como lo hacen en el módulo de centros
         this.dataSource.paginator = this.paginator;
         this.cdr.markForCheck();
       },
       error: (error) => {
         console.error('Error al listar las entregas', error);
+        this.notificar('No se pudo cargar la lista de entregas', 'error');
         this.cdr.markForCheck();
       }
     });
@@ -103,34 +112,28 @@ export class Entregalistcomponent implements OnInit {
     });
   }
 
-  abrirDialogoEliminar(id: number): void {
-    this.idEdicionSeleccionada = id;
-    const dialogRef = this.dialog.open(this.dialogEliminar, {
-      width: '350px',
-      panelClass: 'custom-dialog-container'
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.confirmarEliminacion();
-      }
-    });
+  // Abre la confirmación escrita en el HTML; la entrega llega al template como "data"
+  eliminar(entrega: EntregaDTOList): void {
+    this.dialog
+      .open(this.dialogEliminar, { data: entrega, width: '440px' })
+      .afterClosed()
+      .subscribe(confirmado => {
+        if (confirmado) {
+          this.confirmarEliminacion(entrega.idEntrega);
+        }
+      });
   }
 
-  confirmarEliminacion(): void {
-    this.entregaService.delete(this.idEdicionSeleccionada).subscribe({
+  confirmarEliminacion(id: number): void {
+    this.entregaService.delete(id).subscribe({
       next: () => {
-        this.snackBar.open('Entrega eliminada correctamente', 'Cerrar', {
-          duration: 3000,
-          horizontalPosition: 'end',
-          verticalPosition: 'top'
-        });
+        this.notificar('Entrega eliminada correctamente', 'exito');
         this.listarEntregas();
         this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Error al eliminar la entrega', err);
-        this.snackBar.open('Error al eliminar la entrega', 'Cerrar', { duration: 3000 });
+        this.notificar(err.error?.message ?? 'No se pudo eliminar la entrega', 'error');
         this.cdr.markForCheck();
       }
     });

@@ -38,18 +38,30 @@ import { Recompensainsertcomponent } from './components/recompensacomponent/reco
 import { Recompensaupdatecomponent } from './components/recompensacomponent/recompensaupdatecomponent/recompensaupdatecomponent';
 import { Reportscomponents } from './components/reportscomponents/reportscomponents';
 import { Dashboardcomponent } from './components/reportscomponents/dashboardcomponent/dashboardcomponent';
+import { Logincomponent } from './components/logincomponent/logincomponent';
+import { authGuard } from './core/guards/auth-guard';
+import { roleGuard } from './core/guards/role-guard';
+import { Menucomponent } from './components/menucomponent/menucomponent';
 
 
 export const routes: Routes = [
-  // ---------- General ----------
+    // ---------- General ----------
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: Homecomponent, title: 'EcoRecicla | Inicio' },
+  { path: 'login', component: Logincomponent, title: 'EcoRecicla | Iniciar sesión' },
 
-  
+  {
+  path: 'menu',
+  component: Menucomponent,
+  canActivate: [authGuard],
+  title: 'EcoRecicla | Menú',
+  },
   // ---------- Reportes (dashboard): cada uno agrega aquí su reporte ----------
   {
     path: 'reportes',
     component: Reportscomponents,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ADMINISTRADOR', 'OPERADOR_CENTRO'] },
     children: [
       { path: 'dashboard', component: Dashboardcomponent, title: 'EcoRecicla | Reportes' },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -60,6 +72,8 @@ export const routes: Routes = [
   {
     path: 'roles',
     component: Rolcomponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ADMINISTRADOR'] },
     children: [
       { path: 'listar', component: Rollistcomponent },
       { path: 'insertar', component: Rolinsertcomponent },
@@ -73,6 +87,8 @@ export const routes: Routes = [
   {
     path: 'centrosacopio',
     component: Centroacopiocomponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ADMINISTRADOR', 'OPERADOR_CENTRO', 'RECICLADOR'] },
     children: [
       { path: 'listar', component: Centroacopiolistcomponent },
       { path: 'insertar', component: Centroacopioinsertcomponent },
@@ -87,6 +103,8 @@ export const routes: Routes = [
   {
         path: 'usuarios',
         component: Usuarioscomponent,
+        canActivate: [authGuard, roleGuard],
+        data: { roles: ['ADMINISTRADOR'] },
         children: [
             { path: 'listar', component: Usuarioslistcomponent },
             { path: 'insertar', component: Usuariosinsertcomponent },
@@ -97,10 +115,18 @@ export const routes: Routes = [
     {
         path: 'recompensas',
         component: Recompensacomponent,
+        canActivate: [authGuard, roleGuard],
+        data: { roles: ['ADMINISTRADOR', 'RECICLADOR'] },
         children: [
             { path: 'listar', component: Recompensalistcomponent },
-            { path: 'insertar', component: Recompensainsertcomponent },
-            { path: 'editar/:id', component: Recompensaupdatecomponent },
+            { path: 'insertar', component: Recompensainsertcomponent,
+                    canActivate: [roleGuard],
+                    data: { roles: ['ADMINISTRADOR'] },
+             },
+            { path: 'editar/:id', component: Recompensaupdatecomponent,
+                    canActivate: [roleGuard],
+                    data: { roles: ['ADMINISTRADOR'] },
+             },
             { path: '', redirectTo: 'listar', pathMatch: 'full' }
         ]
     },
@@ -109,6 +135,8 @@ export const routes: Routes = [
   {
     path: 'tiporecompensas',
     component: Tiporecompensacomponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ADMINISTRADOR'] },
     children: [
       { path: 'listar', component: Tiporecompensalistcomponent },
       { path: 'insertar', component: Tiporecompensainsertcomponent },
@@ -121,6 +149,8 @@ export const routes: Routes = [
   {
     path: 'materiales',
     component: Materialcomponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ADMINISTRADOR', 'OPERADOR_CENTRO'] },
     children: [
       { path: 'listar', component: Materiallistcomponent },
       { path: 'insertar', component: Materialinsertcomponent },
@@ -135,6 +165,8 @@ export const routes: Routes = [
   {
     path: 'entregas',
     component: Entregacomponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ADMINISTRADOR', 'OPERADOR_CENTRO', 'RECICLADOR'] },
     children: [
       { path: 'listar', component: Entregalistcomponent },
       { path: 'insertar', component: Entregainsertcomponent },
@@ -145,4 +177,8 @@ export const routes: Routes = [
   },
 
   // ---------- Franco: canjes ----------
+
+  // ---------- Fallback ----------
+  { path: '**', redirectTo: 'login' },
+
 ];

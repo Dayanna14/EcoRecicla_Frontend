@@ -11,6 +11,7 @@ import { Tiporecompensaservice } from '../../../services/tiporecompensaservice';
 import { RecompensaDTOList } from '../../../models/RecompensaDTOList';
 import { TipoRecompensaDTOList } from '../../../models/TipoRecompensaDTOList';
 import { MatCardModule } from '@angular/material/card';
+import { Loginservice } from '../../../services/loginservice';
 
 @Component({
   selector: 'app-recompensalistcomponent',
@@ -34,6 +35,7 @@ export class Recompensalistcomponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
+    private readonly loginService: Loginservice,
   ) {}
 
   ngOnInit(): void {
@@ -95,5 +97,10 @@ export class Recompensalistcomponent implements OnInit {
         this.cdr.detectChanges();
       },
     });
+  }
+
+
+  get esAdministrador(): boolean {
+    return this.loginService.hasAnyRole(['ADMINISTRADOR']);
   }
 }

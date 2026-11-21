@@ -1,0 +1,66 @@
+<div class="pantalla">
+  <section class="lado-logo">
+    <img class="logo" src="img/logo/ecorecicla-logo.svg" alt="Logo ilustrado de EcoRecicla" />
+    <p class="frase">Recicla cerca, suma puntos y canjea recompensas.</p>
+  </section>
+
+  <section class="lado-form">
+    <div class="tarjeta">
+      <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        <h1>Iniciar sesión</h1>
+        <p class="intro">Ingresa con el usuario que te asignó EcoRecicla.</p>
+
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>Usuario</mat-label>
+          <mat-icon matPrefix aria-hidden="true">person</mat-icon>
+          <input matInput type="text" formControlName="username" autocomplete="username" />
+          @if (form.controls.username.hasError('required')) {
+            <mat-error>Ingresa tu usuario.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>Contraseña</mat-label>
+          <mat-icon matPrefix aria-hidden="true">lock</mat-icon>
+          <input
+            matInput
+            [type]="ocultarClave() ? 'password' : 'text'"
+            formControlName="password"
+            autocomplete="current-password"
+          />
+          <button
+            type="button"
+            matIconButton
+            matSuffix
+            class="ojo"
+            (click)="alternarClave()"
+            [attr.aria-label]="ocultarClave() ? 'Mostrar contraseña' : 'Ocultar contraseña'"
+            [attr.aria-pressed]="!ocultarClave()"
+          >
+            <mat-icon aria-hidden="true">{{ ocultarClave() ? 'visibility' : 'visibility_off' }}</mat-icon>
+          </button>
+          @if (form.controls.password.hasError('required')) {
+            <mat-error>Ingresa tu contraseña.</mat-error>
+          }
+        </mat-form-field>
+
+        @if (errorMessage) {
+          <p class="error" role="alert">{{ errorMessage }}</p>
+        }
+
+        <button type="submit" matButton="filled" class="ingresar" [disabled]="submitting">
+          {{ submitting ? 'Ingresando…' : 'Ingresar' }}
+        </button>
+
+        <p class="nota">
+          ¿Aún no tienes cuenta? Solicítala en cualquier centro de acopio de EcoRecicla.
+        </p>
+      </form>
+    </div>
+
+    <a class="volver" routerLink="/home">
+      <mat-icon aria-hidden="true">arrow_back</mat-icon>
+      Volver a la página de inicio
+    </a>
+  </section>
+</div>
