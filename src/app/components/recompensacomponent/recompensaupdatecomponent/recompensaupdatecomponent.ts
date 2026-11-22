@@ -46,9 +46,9 @@ export class Recompensaupdatecomponent implements OnInit {
       codigo: [this.idRecompensa],
       nombre: ['', Validators.required],
       tipo: ['', Validators.required],
-      costoPuntos: [null, [Validators.required, Validators.min(1)]],
+      costoPuntos: [null, [Validators.required, Validators.min(0)]],
       estado: ['', Validators.required],
-      imagenUrl: ['', Validators.required],
+      imagenUrl: ['', [Validators.required, Validators.pattern('^https?://.+')]],
     });
 
     if (!this.idRecompensa || isNaN(this.idRecompensa)) {

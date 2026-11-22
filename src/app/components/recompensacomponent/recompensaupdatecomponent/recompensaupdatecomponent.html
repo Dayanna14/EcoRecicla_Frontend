@@ -48,7 +48,7 @@
           @if (formRecompensa.get('costoPuntos')?.hasError('required')) {
             <mat-error>Campo obligatorio, ingrese el costo</mat-error>
           } @else if (formRecompensa.get('costoPuntos')?.hasError('min')) {
-            <mat-error>El costo debe ser mayor a 0</mat-error>
+            <mat-error>No se aceptan valores negativos</mat-error>
           }
         </mat-form-field>
 
@@ -71,6 +71,8 @@
           <input matInput id="imagenUrl" formControlName="imagenUrl" placeholder="https://..." maxlength="500" />
           @if (formRecompensa.get('imagenUrl')?.hasError('required')) {
             <mat-error>Campo obligatorio, ingrese la URL de la imagen</mat-error>
+          } @else if (formRecompensa.get('imagenUrl')?.hasError('pattern')) {
+            <mat-error>Ingrese una URL válida que empiece con http:// o https://</mat-error>
           }
         </mat-form-field>
 

@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { RecompensaDTOList } from '../models/RecompensaDTOList';
 import { RecompensaDTOInsert } from '../models/RecompensaDTOInsert';
+import { RecompensaBusquedaDTO } from '../models/RecompensaBusquedaDTO';
 
 
 @Injectable({
@@ -32,5 +33,11 @@ export class RecompensaService {
 
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiURL}/${id}`);
+  }
+
+  // Buscar por estado: el backend lo tiene en /api/tiporecompensas/recompensas/estado
+  buscarPorEstado(estado: boolean): Observable<RecompensaBusquedaDTO[]> {
+    const params = new HttpParams().set('estado', estado);
+    return this.http.get<RecompensaBusquedaDTO[]>(`${environment.base}/api/tiporecompensas/recompensas/estado`, { params });
   }
 }
