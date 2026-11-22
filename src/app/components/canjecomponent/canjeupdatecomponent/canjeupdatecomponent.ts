@@ -9,6 +9,8 @@ import { ActivatedRoute } from '@angular/router';
 import { CanjeDTOInsert } from '../../../models/CanjeDTOInsert';
 import { CanjeDTOList } from '../../../models/CanjeDTOList';
 import { Canjeservice } from '../../../services/canjeservice';
+import { RecompensaService } from '../../../services/recompensaservice';
+import { UsuariosService } from '../../../services/usuarioservice';
 
 @Component({
   selector: 'app-canjeupdatecomponent',
@@ -38,7 +40,7 @@ export class Canjeupdatecomponent implements OnInit {
     private canjeService: Canjeservice,
     private fb: FormBuilder,
     private rS: RecompensaService,
-    private uS: UsuarioService,
+    private uS: UsuariosService,
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef
   ) {}
@@ -107,13 +109,13 @@ export class Canjeupdatecomponent implements OnInit {
       return;
     }
 
-    const dto: CanjeDTOInsert = {
+    const dto: CanjeDTOList = {
       idCanje: this.formCanje.value.idCanje,
       fecha: this.formCanje.value.fecha,
       puntosUsados: this.formCanje.value.puntosUsados,
       estado: this.formCanje.value.estado,
-      idRecompensa: this.formCanje.value.idRecompensa,
-      Id_usuario: this.formCanje.value.Id_usuario,
+      recompensaIdRecompensa: this.formCanje.value.idRecompensa,
+      usuarioId_usuario: this.formCanje.value.Id_usuario,
     };
 
     this.canjeService.update(dto).subscribe({
