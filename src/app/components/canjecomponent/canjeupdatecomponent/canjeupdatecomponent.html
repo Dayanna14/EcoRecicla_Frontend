@@ -1,1 +1,74 @@
-<p>canjeupdatecomponent works!</p>
+<div class="container">
+  <div>
+    <h2>Actualización de Canje</h2>
+  </div>
+  <div>
+    <form [formGroup]="formCanje" (ngSubmit)="actualizar()">
+      
+      <!-- ID Canje (Solo lectura) -->
+      <mat-form-field class="example-full-width">
+        <mat-label>Código de Canje</mat-label>
+        <input matInput formControlName="idCanje" readonly />
+      </mat-form-field>
+      <br />
+
+      <!-- Fecha -->
+      <mat-form-field>
+        <mat-label>Fecha</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="fecha" />
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+      <br />
+
+      <!-- Puntos Usados -->
+      <mat-form-field class="example-full-width">
+        <mat-label>Puntos Usados</mat-label>
+        <input matInput type="number" placeholder="Ej. 500" formControlName="puntosUsados" />
+      </mat-form-field>
+      <br />
+
+      <!-- Estado -->
+      <mat-form-field>
+        <mat-label>Estado</mat-label>
+        <mat-select formControlName="estado">
+          @for (item of estados; track item) {
+            <mat-option [value]="item.value">{{ item.viewValue }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <br />
+
+      <!-- Recompensa (Combo desplegable) -->
+      <mat-form-field>
+        <mat-label>Recompensa</mat-label>
+        <mat-select formControlName="idRecompensa">
+          @for (rec of listaRecompensas; track rec) {
+            <!-- Ajusta rec.idRecompensa y rec.nombre según los atributos de tu DTO de Recompensa -->
+            <mat-option [value]="rec.idRecompensa">{{ rec.nombre }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <br />
+
+      <!-- Usuario (Combo desplegable) -->
+      <mat-form-field>
+        <mat-label>Usuario</mat-label>
+        <mat-select formControlName="Id_usuario">
+          @for (usr of listaUsuarios; track usr) {
+            <!-- Ajusta usr.idUsuario y usr.nombre según los atributos de tu DTO de Usuario -->
+            <mat-option [value]="usr.idUsuario">{{ usr.nombre }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <br />
+
+      <button mat-flat-button color="primary" type="submit">Guardar</button>
+    </form>
+
+    @if (mensaje) {
+      <p>{{ mensaje }}</p>
+    }
+  </div>
+</div>
