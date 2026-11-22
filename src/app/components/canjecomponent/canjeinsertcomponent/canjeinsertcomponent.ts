@@ -10,6 +10,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { CanjeDTOInsert } from '../../../models/CanjeDTOInsert';
 import { Canjeservice } from '../../../services/canjeservice';
+import { RecompensaService } from '../../../services/recompensaservice';
+import { UsuariosService } from '../../../services/usuarioservice';
 
 
 @Component({
@@ -40,12 +42,14 @@ form!: FormGroup;
   constructor(
     private fb: FormBuilder,
     private canjeService: Canjeservice,
+    // 2. INYECTA AMBOS SERVICIOS EN EL CONSTRUCTOR
+    private recompensaService: RecompensaService,
+    private usuarioService: UsuariosService,
     private router: Router,
     private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
-    // Formato YYYY-MM-DD para que <input type="date"> lo acepte desde el inicio
     const hoy = new Date().toISOString().split('T')[0];
 
     this.form = this.fb.group({
@@ -56,21 +60,29 @@ form!: FormGroup;
       estado: ['PENDIENTE', Validators.required]
     });
 
-    // Cargar listas para los mat-select
-    // this.recompensaService.list().subscribe(data => this.recompensas = data);
-    // this.usuarioService.list().subscribe(data => this.usuarios = data);
+    // 3. LLAMA A LOS MÉTODOS LIST() PARA LLENAR LOS SELECTS
+    this.recompensaService.list().subscribe({
+      next: (data) => {
+        this.recompensas = data;
+      },
+      error: (err) => console.error('Error al cargar recompensas:', err)
+    });
+
+    this.usuarioService.list().subscribe({
+      next: (data) => {
+        this.usuarios = data;
+      },
+      error: (err) => console.error('Error al cargar usuarios:', err)
+    });
   }
 
   registrar(formDir: FormGroupDirective): void {
-    // 1. Si el formulario es inválido, marca todos los campos en rojo y avisa
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      console.log('Formulario inválido. Errores:', this.form.value);
       this.snackBar.open('Completa todos los campos obligatorios', 'Cerrar', { duration: 3000 });
       return;
     }
 
-    // 2. Armar el DTO exactamente como lo espera el backend
     const dto: CanjeDTOInsert = {
       idCanje: 0,
       fecha: this.form.value.fecha,
@@ -80,14 +92,11 @@ form!: FormGroup;
       Id_usuario: Number(this.form.value.Id_usuario)
     };
 
-    console.log('Enviando DTO al backend:', dto);
-
-    // 3. Llamar al servicio
     this.canjeService.insert(dto as any).subscribe({
       next: () => {
         this.snackBar.open('Canje registrado correctamente', 'Cerrar', { duration: 3000 });
         formDir.resetForm();
-        this.router.navigate(['/canjes']); // Ajusta a tu ruta de listar canjes
+        this.router.navigate(['/canjes']);
       },
       error: (err) => {
         console.error('Error al registrar el canje:', err);
