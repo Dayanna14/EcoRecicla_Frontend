@@ -9,7 +9,6 @@ import { Mapacentroscomponent } from './components/centroacopiocomponent/mapacen
 import { Homecomponent } from './components/homecomponent/homecomponent';
 import { Canjelistcomponent } from './components/canjecomponent/canjelistcomponent/canjelistcomponent';
 import { Canjeinsertcomponent } from './components/canjecomponent/canjeinsertcomponent/canjeinsertcomponent';
-import { Canjebuscarcomponent } from './components/canjecomponent/canjebuscarcomponent/canjebuscarcomponent';
 import { Canjecomponent } from './components/canjecomponent/canjecomponent';
 
 export const routes: Routes = [
@@ -53,7 +52,6 @@ export const routes: Routes = [
         children: [
             { path: 'listar', component: Canjelistcomponent},
             { path: 'insertar', component: Canjeinsertcomponent}, 
-            { path: 'mapa', component: Canjebuscarcomponent },
             { path: '', redirectTo: 'listar', pathMatch: 'full' }
         ]
     }
