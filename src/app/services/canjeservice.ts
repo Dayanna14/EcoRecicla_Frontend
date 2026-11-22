@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { CanjeDTOList } from '../models/CanjeDTOList'; // Ajusta la ruta de tus modelos
 import { environment } from '../../environments/environment';
+import { CanjePorUsuarioDTO } from '../models/CanjePorUsuarioDTO';
+
 
 @Injectable({
   providedIn: 'root',
@@ -41,4 +43,8 @@ export class Canjeservice {
   getLista(data: CanjeDTOList[]): Observable<CanjeDTOList[]> {
     return this.listaCambio.asObservable();
   }
+
+  obtenerCantidadCanjesPorUsuario(): Observable<CanjePorUsuarioDTO[]> {
+  return this.http.get<CanjePorUsuarioDTO[]>(`${this.url}/reporte-usuario`);
+}
 }

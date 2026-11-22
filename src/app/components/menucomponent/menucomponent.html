@@ -29,4 +29,8 @@
     <button mat-menu-item routerLink="/canjes/listar">Listar</button>
     <button mat-menu-item routerLink="/canjes/insertar">Registrar</button>
   </mat-menu>
+  <button mat-button [matMenuTriggerFor]="menuReportes">Reportes</button>
+  <mat-menu #menuReportes="matMenu">
+    <button mat-menu-item routerLink="/reports/reports01">Reporte 01</button>
+  </mat-menu>
 </mat-toolbar>

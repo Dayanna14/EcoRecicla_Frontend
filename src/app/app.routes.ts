@@ -10,6 +10,8 @@ import { Homecomponent } from './components/homecomponent/homecomponent';
 import { Canjelistcomponent } from './components/canjecomponent/canjelistcomponent/canjelistcomponent';
 import { Canjeinsertcomponent } from './components/canjecomponent/canjeinsertcomponent/canjeinsertcomponent';
 import { Canjecomponent } from './components/canjecomponent/canjecomponent';
+import { Reportescomponent } from './components/reportescomponent/reportescomponent';
+import { Reporte01component } from './components/reportescomponent/reporte01component/reporte01component';
 
 export const routes: Routes = [
         // ---------- General ----------
@@ -54,6 +56,22 @@ export const routes: Routes = [
             { path: 'insertar', component: Canjeinsertcomponent}, 
             { path: '', redirectTo: 'listar', pathMatch: 'full' }
         ]
-    }
+    },
+    {
+    path: 'reports',
+    component: Reportescomponent,
+    children: [
+      {
+        path: 'reports01',
+        component: Reporte01component
+      },
+      {
+        path: '',
+        redirectTo: 'reports01',
+        pathMatch: 'full'
+      }
+    ]
+  }
+
 
 ];
