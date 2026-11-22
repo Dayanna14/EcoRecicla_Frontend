@@ -12,6 +12,7 @@ import { Canjeinsertcomponent } from './components/canjecomponent/canjeinsertcom
 import { Canjecomponent } from './components/canjecomponent/canjecomponent';
 import { Reportescomponent } from './components/reportescomponent/reportescomponent';
 import { Reporte01component } from './components/reportescomponent/reporte01component/reporte01component';
+import { Reporte02component } from './components/reportescomponent/reporte02component/reporte02component';
 
 export const routes: Routes = [
         // ---------- General ----------
@@ -64,6 +65,10 @@ export const routes: Routes = [
       {
         path: 'reports01',
         component: Reporte01component
+      },
+      {
+        path: 'reports02',
+        component: Reporte02component
       },
       {
         path: '',
