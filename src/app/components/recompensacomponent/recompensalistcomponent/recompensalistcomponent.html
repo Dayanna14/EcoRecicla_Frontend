@@ -43,8 +43,9 @@
 
             <img mat-card-image
                  class="foto"
-                 [src]="r.imagenUrl"
-                 [alt]="r.nombre" />
+                 [src]="r.imagenUrl || imagenDefecto"
+                 [alt]="r.nombre"
+                 (error)="imagenPorDefecto($event)" />
 
             <mat-card-content>
 
@@ -97,8 +98,8 @@
 
     }
 
-    <!-- VISTA TABLA -->
-    @if (vista === 'tabla') {
+    <!-- VISTA TABLA (se oculta, no se destruye, para que el paginador y las tarjetas sigan actualizándose) -->
+    <div [hidden]="vista !== 'tabla'">
 
       <div class="contenedor-tabla">
 
@@ -117,8 +118,9 @@
             <th mat-header-cell *matHeaderCellDef>Imagen</th>
             <td mat-cell *matCellDef="let element">
               <img class="miniatura"
-                   [src]="element.imagenUrl"
-                   [alt]="element.nombre" />
+                   [src]="element.imagenUrl || imagenDefecto"
+                   [alt]="element.nombre"
+                   (error)="imagenPorDefecto($event)" />
             </td>
           </ng-container>
 
@@ -197,7 +199,7 @@
 
       </div>
 
-    }
+    </div>
 
     <!-- PAGINACIÓN -->
     <mat-paginator

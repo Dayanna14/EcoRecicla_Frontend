@@ -40,7 +40,7 @@ export class Recompensainsertcomponent implements OnInit {
       tipo: ['', Validators.required],
       costoPuntos: [null, [Validators.required, Validators.min(1)]],
       estado: ['', Validators.required],
-      imagenUrl: ['', Validators.required],
+      imagenUrl: ['', [Validators.required, Validators.pattern('^https?://.+')]],
     });
   }
 

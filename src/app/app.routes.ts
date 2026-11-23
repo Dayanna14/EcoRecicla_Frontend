@@ -31,10 +31,12 @@ import { Usuarioscomponent } from './components/usuarioscomponent/usuarioscompon
 import { Usuarioslistcomponent } from './components/usuarioscomponent/usuarioslistcomponent/usuarioslistcomponent';
 import { Usuariosinsertcomponent } from './components/usuarioscomponent/usuariosinsertcomponent/usuariosinsertcomponent';
 import { Usuariosupdatecomponent } from './components/usuarioscomponent/usuariosupdatecomponent/usuariosupdatecomponent';
+import { Usuariosbuscarcomponent } from './components/usuarioscomponent/usuariosbuscarcomponent/usuariosbuscarcomponent';
 import { Recompensacomponent } from './components/recompensacomponent/recompensacomponent';
 import { Recompensalistcomponent } from './components/recompensacomponent/recompensalistcomponent/recompensalistcomponent';
 import { Recompensainsertcomponent } from './components/recompensacomponent/recompensainsertcomponent/recompensainsertcomponent';
 import { Recompensaupdatecomponent } from './components/recompensacomponent/recompensaupdatecomponent/recompensaupdatecomponent';
+import { Recompensabuscarcomponent } from './components/recompensacomponent/recompensabuscarcomponent/recompensabuscarcomponent';
 import { Reportscomponents } from './components/reportscomponents/reportscomponents';
 import { Dashboardcomponent } from './components/reportscomponents/dashboardcomponent/dashboardcomponent';
 
@@ -90,6 +92,7 @@ export const routes: Routes = [
             { path: 'listar', component: Usuarioslistcomponent },
             { path: 'insertar', component: Usuariosinsertcomponent },
             { path: 'editar/:id', component: Usuariosupdatecomponent },
+            { path: 'buscar', component: Usuariosbuscarcomponent },
             { path: '', redirectTo: 'listar', pathMatch: 'full' }
         ]
     },
@@ -100,6 +103,7 @@ export const routes: Routes = [
             { path: 'listar', component: Recompensalistcomponent },
             { path: 'insertar', component: Recompensainsertcomponent },
             { path: 'editar/:id', component: Recompensaupdatecomponent },
+            { path: 'buscar', component: Recompensabuscarcomponent },
             { path: '', redirectTo: 'listar', pathMatch: 'full' }
         ]
     },

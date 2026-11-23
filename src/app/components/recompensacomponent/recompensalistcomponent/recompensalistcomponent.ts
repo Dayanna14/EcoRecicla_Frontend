@@ -23,6 +23,7 @@ export class Recompensalistcomponent implements OnInit {
   dataSource = new MatTableDataSource<RecompensaDTOList>();
   tipos: TipoRecompensaDTOList[] = [];
   vista: 'tabla' | 'tarjetas' = 'tabla';
+  imagenDefecto: string = 'img/modulos/moneda-ecopunto.svg';
   pagina: RecompensaDTOList[] = []; // recompensas de la página actual (para las tarjetas)
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -64,6 +65,14 @@ export class Recompensalistcomponent implements OnInit {
         this.cdr.detectChanges();
       },
     });
+  }
+
+  // Si la imagen no carga, se muestra una imagen por defecto
+  imagenPorDefecto(evento: Event): void {
+    const img = evento.target as HTMLImageElement;
+    if (!img.src.includes(this.imagenDefecto)) {
+      img.src = this.imagenDefecto;
+    }
   }
 
   nombreTipo(idTipo: number): string {

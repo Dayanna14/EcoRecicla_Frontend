@@ -42,7 +42,7 @@
           @if (form.get('costoPuntos')?.hasError('required')) {
             <mat-error>Campo obligatorio, ingrese el costo</mat-error>
           } @else if (form.get('costoPuntos')?.hasError('min')) {
-            <mat-error>El costo debe ser mayor a 0</mat-error>
+            <mat-error>No se aceptan valores negativos</mat-error>
           }
         </mat-form-field>
 
@@ -65,12 +65,14 @@
           <input matInput id="imagenUrl" formControlName="imagenUrl" placeholder="https://..." maxlength="500" />
           @if (form.get('imagenUrl')?.hasError('required')) {
             <mat-error>Campo obligatorio, ingrese la URL de la imagen</mat-error>
+          } @else if (form.get('imagenUrl')?.hasError('pattern')) {
+            <mat-error>Ingrese una URL válida que empiece con http:// o https://</mat-error>
           }
         </mat-form-field>
 
         <div class="acciones">
           <a mat-stroked-button routerLink="/recompensas/listar">Cancelar</a>
-          <button mat-flat-button type="submit" [disabled]="form.invalid">Registrar recompensa</button>
+          <button mat-flat-button type="submit">Registrar recompensa</button>
         </div>
       </form>
     </div>

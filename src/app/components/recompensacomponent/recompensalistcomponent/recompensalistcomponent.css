@@ -72,7 +72,7 @@ tr.mat-mdc-row:nth-child(even) {
   height: 48px;
   margin: 24px 24px 0;
   border-radius: 50%;
-  background-color: #f6e3de;
+  background-color: var(--eco-linen);
   color: var(--eco-error);
 }
 
@@ -101,7 +101,7 @@ h2[mat-dialog-title] .mono {
 
 .btn-confirmar {
   --mat-button-filled-container-color: var(--eco-error);
-  --mat-button-filled-label-text-color: #ffffff;
+  --mat-button-filled-label-text-color: var(--eco-crema);
 }
 
 .miniatura {
@@ -184,6 +184,6 @@ h2[mat-dialog-title] .mono {
 }
 
 .estado.inactiva {
-  background-color: #f6e3de;
+  background-color: var(--eco-linen);
   color: var(--eco-error);
 }
