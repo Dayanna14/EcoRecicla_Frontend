@@ -40,6 +40,12 @@ import { Recompensabuscarcomponent } from './components/recompensacomponent/reco
 import { Reportscomponents } from './components/reportscomponents/reportscomponents';
 import { Dashboardcomponent } from './components/reportscomponents/dashboardcomponent/dashboardcomponent';
 
+import { Canjelistcomponent } from './components/canjecomponent/canjelistcomponent/canjelistcomponent';
+import { Canjeinsertcomponent } from './components/canjecomponent/canjeinsertcomponent/canjeinsertcomponent';
+import { Canjecomponent } from './components/canjecomponent/canjecomponent';
+import { Reportescomponent } from './components/reportescomponent/reportescomponent';
+import { Reporte01component } from './components/reportescomponent/reporte01component/reporte01component';
+import { Reporte02component } from './components/reportescomponent/reporte02component/reporte02component';
 
 export const routes: Routes = [
   // ---------- General ----------
@@ -145,6 +151,42 @@ export const routes: Routes = [
       { path: '', redirectTo: 'listar', pathMatch: 'full' },
     ],
   },
+    // ---------- Nayara: usuarios, recompensas ----------
+
+    // ---------- Axel: tiporecompensas, materiales ----------
+
+    // ---------- Jhon: entregas ----------
+
+    // ---------- Franco: canjes ----------
+    {
+        path: 'canjes',
+        component: Canjecomponent,
+        children: [
+            { path: 'listar', component: Canjelistcomponent},
+            { path: 'insertar', component: Canjeinsertcomponent}, 
+            { path: '', redirectTo: 'listar', pathMatch: 'full' }
+        ]
+    },
+    {
+    path: 'reports',
+    component: Reportescomponent,
+    children: [
+      {
+        path: 'reports01',
+        component: Reporte01component
+      },
+      {
+        path: 'reports02',
+        component: Reporte02component
+      },
+      {
+        path: '',
+        redirectTo: 'reports01',
+        pathMatch: 'full'
+      }
+    ]
+  }
+
 
   // ---------- Franco: canjes ----------
 ];

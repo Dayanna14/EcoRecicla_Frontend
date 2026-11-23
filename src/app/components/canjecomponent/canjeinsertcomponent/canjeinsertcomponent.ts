@@ -1,95 +1,107 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormGroupDirective } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, FormGroupDirective, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { CommonModule } from '@angular/common';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { CanjeDTOInsert } from '../../../models/CanjeDTOInsert';
+import { Canjeservice } from '../../../services/canjeservice';
+import { RecompensaService } from '../../../services/recompensaservice';
+import { UsuariosService } from '../../../services/usuarioservice';
 
 
 @Component({
   selector: 'app-canjeinsertcomponent',
-  imports: [
-CommonModule,
-  CommonModule,
-CommonModule,
+  imports: [CommonModule,
+    RouterModule,
     ReactiveFormsModule,
-    RouterLink,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
     MatButtonModule,
-    MatIconModule
-  ],
+    MatIconModule,
+    MatSnackBarModule],
   templateUrl: './canjeinsertcomponent.html',
   styleUrl: './canjeinsertcomponent.css',
 })
 export class Canjeinsertcomponent implements OnInit {
 form!: FormGroup;
-
-  // Listas para los dropdowns (puedes tiparlas con tus interfaces correspondientes)
-  usuarios: any[] = [];
   recompensas: any[] = [];
-  
+  usuarios: any[] = [];
+
   estados = [
     { value: 'PENDIENTE', viewValue: 'Pendiente' },
-    { value: 'COMPLETADO', viewValue: 'Completado' },
+    { value: 'ENTREGADO', viewValue: 'Entregado' },
     { value: 'CANCELADO', viewValue: 'Cancelado' }
   ];
 
   constructor(
-    private formBuilder: FormBuilder,
-    private router: Router
-    // private canjeService: CanjeService,
-    // private usuarioService: UsuarioService,
-    // private recompensaService: RecompensaService
+    private fb: FormBuilder,
+    private canjeService: Canjeservice,
+    // 2. INYECTA AMBOS SERVICIOS EN EL CONSTRUCTOR
+    private recompensaService: RecompensaService,
+    private usuarioService: UsuariosService,
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
-    this.initForm();
-    this.cargarListas();
-  }
+    const hoy = new Date().toISOString().split('T')[0];
 
-  initForm(): void {
-    // Obtenemos la fecha actual en formato YYYY-MM-DD para el input date
-    const fechaActual = new Date().toISOString().split('T')[0];
-
-    this.form = this.formBuilder.group({
-      fecha: [fechaActual, Validators.required],
-      puntosUsados: [0, [Validators.required, Validators.min(1)]],
+    this.form = this.fb.group({
+      fecha: [hoy, Validators.required],
+      puntosUsados: ['', [Validators.required, Validators.min(1)]],
       idRecompensa: ['', Validators.required],
       Id_usuario: ['', Validators.required],
       estado: ['PENDIENTE', Validators.required]
     });
-  }
 
-  cargarListas(): void {
-    // Datos de prueba temporales (reemplaza esto con tus llamadas reales al servicio)
-    this.usuarios = [
-      { id_usuario: 1, nombre: 'Ana Pérez', email: 'ana@mail.com' },
-      { id_usuario: 2, nombre: 'Carlos Gómez', email: 'carlos@mail.com' }
-    ];
+    // 3. LLAMA A LOS MÉTODOS LIST() PARA LLENAR LOS SELECTS
+    this.recompensaService.list().subscribe({
+      next: (data) => {
+        this.recompensas = data;
+      },
+      error: (err) => console.error('Error al cargar recompensas:', err)
+    });
 
-    this.recompensas = [
-      { idRecompensa: 1, nombre: 'Bono de S/ 20', puntosRequeridos: 100 },
-      { idRecompensa: 2, nombre: 'Eco-termos', puntosRequeridos: 250 }
-    ];
+    this.usuarioService.list().subscribe({
+      next: (data) => {
+        this.usuarios = data;
+      },
+      error: (err) => console.error('Error al cargar usuarios:', err)
+    });
   }
 
   registrar(formDir: FormGroupDirective): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+      this.snackBar.open('Completa todos los campos obligatorios', 'Cerrar', { duration: 3000 });
       return;
     }
 
-    const nuevoCanje: CanjeDTOInsert = this.form.value;
+    const dto: CanjeDTOInsert = {
+      idCanje: 0,
+      fecha: this.form.value.fecha,
+      puntosUsados: Number(this.form.value.puntosUsados),
+      estado: this.form.value.estado,
+      idRecompensa: Number(this.form.value.idRecompensa),
+      Id_usuario: Number(this.form.value.Id_usuario)
+    };
 
-
-    console.log('Datos a registrar:', nuevoCanje);
-    // Simulación de éxito temporal:
-    this.router.navigate(['/canjes/registrar']);
+    this.canjeService.insert(dto as any).subscribe({
+      next: () => {
+        this.snackBar.open('Canje registrado correctamente', 'Cerrar', { duration: 3000 });
+        formDir.resetForm();
+        this.router.navigate(['/canjes']);
+      },
+      error: (err) => {
+        console.error('Error al registrar el canje:', err);
+        this.snackBar.open('Error al registrar el canje', 'Cerrar', { duration: 3000 });
+      }
+    });
   }
 }
