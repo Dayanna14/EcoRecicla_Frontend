@@ -1,29 +1,46 @@
 /* Contenedor general de la vista */
 .container {
     padding: 32px 48px;
-    background-color: #fef6e7; /* Fondo crema de EcoRecicla */
+    background-color: var(--eco-crema);
     min-height: calc(100vh - 64px);
-    font-family: Roboto, "Helvetica Neue", sans-serif;
-    color: #2b3a2f;
+    font-family: 'Lato', sans-serif;
+    color: var(--eco-charcoal);
 }
 
-/* Rutas de navegación superior */
+/* Ruta de navegación superior (ej. Centros de acopio / Editar) */
 .header-path {
-    font-size: 13px;
-    color: #6b7c6e;
+    font-size: 14px;
+    color: var(--eco-charcoal);
     margin-bottom: 8px;
 }
 
-.titulo-principal {
-    font-size: 28px;
+.header-path a {
     font-weight: 700;
-    color: #1e4620; /* Verde bosque principal */
+    color: var(--eco-verde-hoja);
+    text-decoration: none;
+}
+
+.header-path a:hover {
+    text-decoration: underline;
+}
+
+.header-path a:focus-visible {
+    outline: 2px solid var(--eco-ambar);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+.titulo-principal {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--eco-verde-bosque);
     margin: 0 0 4px 0;
 }
 
 .subtitulo-principal {
-    font-size: 14px;
-    color: #5c6b5e;
+    font-size: 16px;
+    color: var(--eco-charcoal);
     margin-bottom: 24px;
 }
 
@@ -35,39 +52,67 @@
     align-items: start;
 }
 
-/* Tarjeta del Formulario */
+/* Tarjeta del formulario (usa el surface del tema, como el resto de tarjetas) */
 .card-formulario {
-    background-color: #ffffff;
-    border-radius: 12px;
-    padding: 32px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-    border: 1px solid #f0e4d0;
+    background-color: var(--mat-sys-surface, var(--eco-linen));
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--eco-onyx) 8%, transparent);
 }
 
 .seccion-titulo {
-    font-size: 18px;
-    font-weight: 600;
-    color: #1e4620;
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--eco-verde-bosque);
     margin-top: 0;
     margin-bottom: 20px;
 }
 
+/* Etiquetas encima de cada campo */
 .input-label {
     display: block;
-    font-size: 13px;
-    font-weight: 500;
-    color: #3b4a3d;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--eco-charcoal);
     margin-bottom: 6px;
+}
+
+/* Dos campos en una misma fila (hora apertura/cierre, latitud/longitud) */
+.fila-doble {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
 }
 
 .full-width {
     width: 100%;
     margin-bottom: 16px;
+    --mat-form-field-container-text-font: 'Lato', sans-serif;
+    --mat-form-field-outlined-container-shape: 8px;
+    --mat-form-field-outlined-outline-color: var(--eco-salvia);
+    --mat-form-field-outlined-hover-outline-color: var(--eco-verde-hoja);
+    --mat-form-field-outlined-focus-outline-color: var(--eco-verde-bosque);
+    --mat-form-field-outlined-error-outline-color: var(--eco-error);
+    --mat-form-field-outlined-error-hover-outline-color: var(--eco-error);
+    --mat-form-field-outlined-error-focus-outline-color: var(--eco-error);
+    --mat-form-field-outlined-input-text-color: var(--eco-onyx);
+    --mat-form-field-outlined-label-text-color: var(--eco-charcoal);
+    --mat-form-field-outlined-focus-label-text-color: var(--eco-verde-bosque);
+    --mat-form-field-outlined-caret-color: var(--eco-verde-bosque);
+    --mat-form-field-error-text-color: var(--eco-error);
+    --mat-form-field-leading-icon-color: var(--eco-salvia);
+    --mat-form-field-trailing-icon-color: var(--eco-charcoal);
+    --mat-select-enabled-trigger-text-color: var(--eco-onyx);
+    --mat-select-placeholder-text-color: var(--eco-charcoal);
+    --mat-select-enabled-arrow-color: var(--eco-charcoal);
+    --mat-select-focused-arrow-color: var(--eco-verde-bosque);
 }
 
-::ng-deep .mat-mdc-text-field-wrapper {
-    background-color: #faf8f5 !important;
-    border-radius: 8px !important;
+.full-width:focus-within {
+    outline: 2px solid var(--eco-ambar);
+    outline-offset: 2px;
+    border-radius: 8px;
 }
 
 /* Botones inferiores */
@@ -79,25 +124,33 @@
 }
 
 .btn-cancelar {
-    border-color: #1e4620 !important;
-    color: #1e4620 !important;
-    border-radius: 8px !important;
-    padding: 0 24px !important;
+    padding: 0 28px;
+    --mat-button-outlined-container-shape: 999px;
+    --mat-button-outlined-outline-color: var(--eco-verde-bosque);
+    --mat-button-outlined-label-text-color: var(--eco-verde-bosque);
 }
 
 .btn-registrar {
-    background-color: #1e4620 !important;
-    color: #ffffff !important;
-    border-radius: 8px !important;
-    padding: 0 24px !important;
+    padding: 0 28px;
     font-weight: 500;
+    --mat-button-filled-container-shape: 999px;
+    --mat-button-filled-container-color: var(--eco-verde-bosque);
+    --mat-button-filled-label-text-color: var(--eco-crema);
+    --mat-button-filled-disabled-container-color: var(--eco-oliva);
+    --mat-button-filled-disabled-label-text-color: var(--eco-crema);
 }
 
-.btn-registrar:hover {
-    background-color: #143216 !important;
+.btn-registrar:hover:not(:disabled) {
+    --mat-button-filled-container-color: var(--eco-verde-hoja);
 }
 
-/* Columna Lateral Derecha */
+.btn-cancelar:focus-visible,
+.btn-registrar:focus-visible {
+    outline: 2px solid var(--eco-ambar);
+    outline-offset: 2px;
+}
+
+/* Columna lateral derecha */
 .columna-lateral {
     display: flex;
     flex-direction: column;
@@ -105,43 +158,56 @@
 }
 
 .card-info {
-    background-color: #ffffff;
-    border-radius: 12px;
+    background-color: var(--mat-sys-surface, var(--eco-linen));
+    border-radius: 16px;
     padding: 24px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-    border: 1px solid #f0e4d0;
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--eco-onyx) 8%, transparent);
 }
 
-.card-info h3, .card-consejo h3 {
-    font-size: 16px;
-    color: #1e4620;
+.card-info h3,
+.card-consejo h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--eco-verde-bosque);
     margin-top: 0;
     margin-bottom: 12px;
 }
 
-.card-info p, .card-consejo p {
-    font-size: 13px;
-    color: #5c6b5e;
+.card-info p,
+.card-consejo p {
+    font-size: 14px;
+    color: var(--eco-charcoal);
     line-height: 1.5;
     margin-bottom: 0;
 }
 
 .card-consejo {
-    background-color: #eaf1e7;
-    border-radius: 12px;
+    background-color: var(--eco-verde-te);
+    border-radius: 16px;
     padding: 24px;
-    border: 1px solid #d5e3d0;
 }
 
 .mensaje-alerta {
     margin-top: 16px;
-    font-size: 13px;
-    color: #d9534f;
-    font-weight: 500;
+    font-size: 14px;
+    color: var(--eco-error);
+    font-weight: 700;
 }
 
+/* Diseño responsivo para pantallas pequeñas */
 @media (max-width: 900px) {
+    .container {
+        padding: 24px 16px;
+    }
+
     .grid-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 520px) {
+    .fila-doble {
         grid-template-columns: 1fr;
     }
 }

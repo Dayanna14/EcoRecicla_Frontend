@@ -1,17 +1,33 @@
 /* Contenedor general de la vista */
 .container {
     padding: 32px 48px;
-    background-color: #fef6e7; /* Fondo crema de EcoRecicla */
+    background-color: var(--eco-crema);
     min-height: calc(100vh - 64px);
-    font-family: Roboto, "Helvetica Neue", sans-serif;
-    color: #2b3a2f;
+    font-family: 'Lato', sans-serif;
+    color: var(--eco-charcoal);
 }
 
-/* Rutas de navegación superior */
+/* Ruta de navegación superior */
 .header-path {
-    font-size: 13px;
-    color: #6b7c6e;
+    font-size: 14px;
+    color: var(--eco-charcoal);
     margin-bottom: 8px;
+}
+
+.header-path a {
+    font-weight: 700;
+    color: var(--eco-verde-hoja);
+    text-decoration: none;
+}
+
+.header-path a:hover {
+    text-decoration: underline;
+}
+
+.header-path a:focus-visible {
+    outline: 2px solid var(--eco-ambar);
+    outline-offset: 2px;
+    border-radius: 4px;
 }
 
 /* Cabecera superior */
@@ -19,85 +35,128 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 16px;
     margin-bottom: 24px;
 }
 
 .titulo-principal {
-    font-size: 28px;
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
     font-weight: 700;
-    color: #1e4620; /* Verde bosque */
+    color: var(--eco-verde-bosque);
     margin: 0 0 4px 0;
 }
 
 .subtitulo-principal {
-    font-size: 14px;
-    color: #5c6b5e;
+    font-size: 16px;
+    color: var(--eco-charcoal);
     margin: 0;
 }
 
-/* Botón superior */
+/* Botón superior (píldora) */
 .btn-registrar {
-    background-color: #1e4620 !important;
-    color: #ffffff !important;
-    border-radius: 8px !important;
-    padding: 0 20px !important;
+    padding: 0 30px;
+    height: 50px;
+    font-size: 16px;
     font-weight: 500;
-    height: 40px;
+    --mat-button-filled-container-shape: 999px;
+    --mat-button-filled-container-color: var(--eco-verde-bosque);
+    --mat-button-filled-label-text-color: var(--eco-crema);
 }
 
-.btn-registrar:hover {
-    background-color: #143216 !important;
+.btn-registrar:hover:not(:disabled) {
+    --mat-button-filled-container-color: var(--eco-verde-hoja);
 }
 
-/* Tarjeta de la tabla */
+.btn-registrar:focus-visible {
+    outline: 2px solid var(--eco-ambar);
+    outline-offset: 2px;
+}
+
+/* Tarjeta de la tabla (usa el surface del tema, como el resto de tarjetas) */
 .card-table {
-    background-color: #ffffff;
-    border-radius: 12px;
-    padding: 16px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-    border: 1px solid #f0e4d0;
+    background-color: var(--mat-sys-surface, var(--eco-linen));
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--eco-onyx) 8%, transparent);
     overflow-x: auto;
 }
 
-/* Estilos de la tabla de Angular Material */
 table {
     width: 100%;
-    background: transparent !important;
+    --mat-table-background-color: transparent;
+    --mat-table-header-container-color: var(--eco-verde-te);
+    --mat-table-header-headline-color: var(--eco-verde-bosque);
+    --mat-table-header-headline-font: 'Lato', sans-serif;
+    --mat-table-header-headline-size: 13px;
+    --mat-table-header-headline-weight: 700;
+    --mat-table-row-item-label-text-color: var(--eco-onyx);
+    --mat-table-row-item-label-text-font: 'Lato', sans-serif;
+    --mat-table-row-item-label-text-size: 15px;
+    --mat-table-row-item-outline-color: color-mix(in srgb, var(--eco-charcoal) 40%, transparent);
 }
 
-th.mat-header-cell {
-    background-color: #eaf1e7 !important;
-    color: #1e4620 !important;
-    font-weight: 600 !important;
-    font-size: 13px;
-    padding: 12px 16px !important;
-    border-bottom: 1px solid #d5e3d0 !important;
+th[mat-header-cell] {
+    padding: 14px 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-bottom: 1px solid color-mix(in srgb, var(--eco-charcoal) 40%, transparent);
 }
 
-td.mat-cell {
-    color: #3b4a3d !important;
-    font-size: 14px;
-    padding: 12px 16px !important;
-    border-bottom: 1px solid #f7f3ec !important;
+td[mat-cell] {
+    padding: 16px;
 }
 
-/* Badge estilizado para los puntos */
+/* Filas alternadas */
+tr[mat-row]:nth-child(even) {
+    background-color: var(--eco-vanilla);
+}
+
+/* Puntos como pastilla con punto */
 .badge-puntos {
-    background-color: #eaf1e7;
-    color: #1e4620;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-weight: 600;
-    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: var(--eco-verde-te);
+    color: var(--eco-verde-bosque);
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+.badge-puntos::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: currentColor;
 }
 
 /* Botones de acciones */
 .btn-eliminar {
-    color: #d9534f !important; /* Rojo sutil para eliminar */
+    color: var(--eco-error);
+    --mat-icon-button-icon-color: var(--eco-error);
 }
 
 .btn-editar {
-    color: #1e4620 !important; /* Verde bosque para editar */
+    color: var(--eco-verde-bosque);
+    --mat-icon-button-icon-color: var(--eco-verde-bosque);
+}
+
+.btn-eliminar:focus-visible,
+.btn-editar:focus-visible {
+    outline: 2px solid var(--eco-ambar);
+    outline-offset: 2px;
+}
+
+/* Paginador */
+mat-paginator {
+    --mat-paginator-container-background-color: transparent;
+    --mat-paginator-container-text-color: var(--eco-charcoal);
+    --mat-paginator-container-text-font: 'Lato', sans-serif;
+    --mat-paginator-enabled-icon-color: var(--eco-charcoal);
+    --mat-paginator-disabled-icon-color: var(--eco-salvia);
 }
 
 .text-center {
@@ -107,6 +166,73 @@ td.mat-cell {
 .no-data {
     text-align: center;
     padding: 40px;
-    color: #6b7c6e;
+    color: var(--eco-charcoal);
     font-size: 14px;
+}
+
+/* ---------- Diálogo de eliminar ---------- */
+.icono-eliminar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    margin: 24px 24px 0;
+    border-radius: 50%;
+    background-color: color-mix(in srgb, var(--eco-error) 15%, transparent);
+    color: var(--eco-error);
+}
+
+h2[mat-dialog-title] {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: var(--eco-verde-bosque);
+}
+
+/* ID de la entrega en Roboto Mono (es un código) */
+h2[mat-dialog-title] .codigo {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.85em;
+}
+
+.texto-dialogo {
+    margin: 0;
+    font-family: 'Lato', sans-serif;
+    color: var(--eco-charcoal);
+    line-height: 1.5;
+}
+
+.acciones-dialogo {
+    gap: 8px;
+    padding: 8px 24px 24px;
+    --mat-button-filled-container-shape: 8px;
+    --mat-button-outlined-container-shape: 8px;
+}
+
+.btn-cancelar {
+    --mat-button-outlined-outline-color: var(--eco-verde-bosque);
+    --mat-button-outlined-label-text-color: var(--eco-verde-bosque);
+}
+
+.btn-confirmar {
+    --mat-button-filled-container-color: var(--eco-error);
+    --mat-button-filled-label-text-color: var(--eco-crema);
+}
+
+.btn-cancelar:focus-visible,
+.btn-confirmar:focus-visible {
+    outline: 2px solid var(--eco-ambar);
+    outline-offset: 2px;
+}
+
+/* Diseño responsivo */
+@media (max-width: 700px) {
+    .container {
+        padding: 24px 16px;
+    }
+
+    .header-section {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 }

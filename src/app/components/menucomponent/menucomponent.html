@@ -3,64 +3,84 @@
     <img src="ecorecicla-texto-crema.svg" alt="EcoRecicla" />
   </a>
 
-  <!-- Reportes (dashboard) -->
-  <button mat-button routerLink="/reportes/dashboard">Reportes</button>
+  <!-- Reportes: ADMINISTRADOR y OPERADOR_CENTRO -->
+  @if (esAdministrador || esOperador) {
+    <button mat-button routerLink="/reportes/dashboard">Reportes</button>
+  }
 
-  <!-- Dayana: Roles -->
-  <button mat-button [matMenuTriggerFor]="menuRoles">Roles</button>
-  <mat-menu #menuRoles="matMenu">
-    <button mat-menu-item routerLink="/roles/listar">Listar</button>
-    <button mat-menu-item routerLink="/roles/insertar">Registrar</button>
-    <button mat-menu-item routerLink="/roles/buscar">Buscar</button>
-  </mat-menu>
+  <!-- Dayana: Roles (solo ADMINISTRADOR) -->
+  @if (esAdministrador) {
+    <button mat-button [matMenuTriggerFor]="menuRoles">Roles</button>
+    <mat-menu #menuRoles="matMenu">
+      <button mat-menu-item routerLink="/roles/listar">Listar</button>
+      <button mat-menu-item routerLink="/roles/insertar">Registrar</button>
+      <button mat-menu-item routerLink="/roles/buscar">Buscar</button>
+    </mat-menu>
+  }
 
-  <!-- Dayana: Centros de acopio -->
-  <button mat-button [matMenuTriggerFor]="menuCentros">Centros</button>
-  <mat-menu #menuCentros="matMenu">
-    <button mat-menu-item routerLink="/centrosacopio/listar">Listar</button>
-    <button mat-menu-item routerLink="/centrosacopio/insertar">Registrar</button>
-    <button mat-menu-item routerLink="/centrosacopio/buscar">Buscar</button>
-    <button mat-menu-item routerLink="/centrosacopio/mapa">Mapa</button>
-  </mat-menu>
+  <!-- Dayana: Centros de acopio (los tres roles) -->
+  @if (esAdministrador || esOperador || esReciclador) {
+    <button mat-button [matMenuTriggerFor]="menuCentros">Centros</button>
+    <mat-menu #menuCentros="matMenu">
+      <button mat-menu-item routerLink="/centrosacopio/listar">Listar</button>
+      <button mat-menu-item routerLink="/centrosacopio/insertar">Registrar</button>
+      <button mat-menu-item routerLink="/centrosacopio/buscar">Buscar</button>
+      <button mat-menu-item routerLink="/centrosacopio/mapa">Mapa</button>
+    </mat-menu>
+  }
 
-  <!-- Nayara: Usuarios y Recompensas -->
-  <button mat-button [matMenuTriggerFor]="menuUsuarios">Usuarios</button>
-  <mat-menu #menuUsuarios="matMenu">
-    <button mat-menu-item routerLink="/usuarios/listar">Listar</button>
-    <button mat-menu-item routerLink="/usuarios/insertar">Registrar</button>
-    <button mat-menu-item routerLink="/usuarios/buscar">Buscar</button>
-  </mat-menu>
+  <!-- Nayara: Usuarios (solo ADMINISTRADOR) -->
+  @if (esAdministrador) {
+    <button mat-button [matMenuTriggerFor]="menuUsuarios">Usuarios</button>
+    <mat-menu #menuUsuarios="matMenu">
+      <button mat-menu-item routerLink="/usuarios/listar">Listar</button>
+      <button mat-menu-item routerLink="/usuarios/insertar">Registrar</button>
+      <button mat-menu-item routerLink="/usuarios/buscar">Buscar</button>
+    </mat-menu>
+  }
 
-  <button mat-button [matMenuTriggerFor]="menuRecompensas">Recompensas</button>
-  <mat-menu #menuRecompensas="matMenu">
-    <button mat-menu-item routerLink="/recompensas/listar">Listar</button>
-    <button mat-menu-item routerLink="/recompensas/insertar">Registrar</button>
-    <button mat-menu-item routerLink="/recompensas/buscar">Buscar</button>
-  </mat-menu>
+  <!-- Nayara: Recompensas (ADMINISTRADOR y RECICLADOR) -->
+  @if (esAdministrador || esReciclador) {
+    <button mat-button [matMenuTriggerFor]="menuRecompensas">Recompensas</button>
+    <mat-menu #menuRecompensas="matMenu">
+      <button mat-menu-item routerLink="/recompensas/listar">Listar</button>
+      @if (esAdministrador) {
+        <button mat-menu-item routerLink="/recompensas/insertar">Registrar</button>
+      }
+      <button mat-menu-item routerLink="/recompensas/buscar">Buscar</button>
+    </mat-menu>
+  }
 
-  <!-- Axel: Tipos de recompensa y Materiales -->
-  <button mat-button [matMenuTriggerFor]="menuTipos">Tipos de recompensa</button>
-  <mat-menu #menuTipos="matMenu">
-    <button mat-menu-item routerLink="/tiporecompensas/listar">Listar</button>
-    <button mat-menu-item routerLink="/tiporecompensas/insertar">Registrar</button>
-    <button mat-menu-item routerLink="/tiporecompensas/buscar">Buscar</button>
-  </mat-menu>
+  <!-- Axel: Tipos de recompensa (solo ADMINISTRADOR) -->
+  @if (esAdministrador) {
+    <button mat-button [matMenuTriggerFor]="menuTipos">Tipos de recompensa</button>
+    <mat-menu #menuTipos="matMenu">
+      <button mat-menu-item routerLink="/tiporecompensas/listar">Listar</button>
+      <button mat-menu-item routerLink="/tiporecompensas/insertar">Registrar</button>
+      <button mat-menu-item routerLink="/tiporecompensas/buscar">Buscar</button>
+    </mat-menu>
+  }
 
-  <button mat-button [matMenuTriggerFor]="menuMateriales">Materiales</button>
-  <mat-menu #menuMateriales="matMenu">
-    <button mat-menu-item routerLink="/materiales/listar">Listar</button>
-    <button mat-menu-item routerLink="/materiales/insertar">Registrar</button>
-    <button mat-menu-item routerLink="/materiales/buscar">Buscar</button>
-    <button mat-menu-item routerLink="/materiales/clasificar">Clasificar con IA</button>
-  </mat-menu>
+  <!-- Axel: Materiales (ADMINISTRADOR y OPERADOR_CENTRO) -->
+  @if (esAdministrador || esOperador) {
+    <button mat-button [matMenuTriggerFor]="menuMateriales">Materiales</button>
+    <mat-menu #menuMateriales="matMenu">
+      <button mat-menu-item routerLink="/materiales/listar">Listar</button>
+      <button mat-menu-item routerLink="/materiales/insertar">Registrar</button>
+      <button mat-menu-item routerLink="/materiales/buscar">Buscar</button>
+      <button mat-menu-item routerLink="/materiales/clasificar">Clasificar con IA</button>
+    </mat-menu>
+  }
 
-  <!-- Jhon: Entregas -->
-  <button mat-button [matMenuTriggerFor]="menuEntregas">Entregas</button>
-  <mat-menu #menuEntregas="matMenu">
-    <button mat-menu-item routerLink="/entregas/listar">Listar</button>
-    <button mat-menu-item routerLink="/entregas/insertar">Registrar</button>
-    <button mat-menu-item routerLink="/entregas/buscar">Buscar</button>
-  </mat-menu>
+  <!-- Jhon: Entregas (los tres roles) -->
+  @if (esAdministrador || esOperador || esReciclador) {
+    <button mat-button [matMenuTriggerFor]="menuEntregas">Entregas</button>
+    <mat-menu #menuEntregas="matMenu">
+      <button mat-menu-item routerLink="/entregas/listar">Listar</button>
+      <button mat-menu-item routerLink="/entregas/insertar">Registrar</button>
+      <button mat-menu-item routerLink="/entregas/buscar">Buscar</button>
+    </mat-menu>
+  }
 
   <!-- Franco: Canjes -->
   <button mat-button [matMenuTriggerFor]="menuCanjes">Canjes</button>
@@ -74,4 +94,23 @@
     <button mat-menu-item routerLink="/reports/reports01">Reporte 01</button>
     <button mat-menu-item routerLink="/reports/reports02">Reporte 02</button>
   </mat-menu>
+
+  <span class="spacer"></span>
+
+  <!-- Jhon: usuario conectado y cerrar sesión -->
+  @if (username) {
+    <div class="user-container">
+      <div class="user-profile">
+        <img [src]="avatarRol" alt="Avatar" class="user-avatar" />
+        <div class="user-text-group">
+          <span class="user-name">{{ nombreUsuario || username.split('@')[0] }}</span>
+          <span class="user-email" title="{{ username }}">{{ username }}</span>
+        </div>
+      </div>
+      <button mat-button type="button" class="logout-button" aria-label="Cerrar sesión" (click)="cerrarSesion()">
+        <mat-icon aria-hidden="true" style="color: aliceblue;">logout</mat-icon>
+        <span style="color: aliceblue;">Cerrar sesión</span>
+      </button>
+    </div>
+  }
 </mat-toolbar>

@@ -56,4 +56,29 @@
     <!-- Axel: Tipos de recompensa más canjeados -->
     <app-reporttiporecompensacomponent></app-reporttiporecompensacomponent>
   </section>
+
+  <!-- Más reportes: Entregas -->
+  <section class="mas-reportes">
+    <h2>Más reportes</h2>
+    <div class="mas-reportes-lista">
+      <a class="enlace-reporte" routerLink="/reportes/entregas/detalle">
+        <mat-icon>bar_chart</mat-icon>
+        <div>
+          <p>Entregas por usuario y material</p>
+          <span>Kg reciclados y puntos por usuario o material</span>
+        </div>
+        <mat-icon class="flecha">arrow_forward</mat-icon>
+      </a>
+
+      <a class="enlace-reporte" routerLink="/reportes/entregas/puntos">
+        <mat-icon>emoji_events</mat-icon>
+        <div>
+          <p>Entregas con más de 100 puntos</p>
+          <span>Proporción frente al total de entregas</span>
+        </div>
+        <mat-icon class="flecha">arrow_forward</mat-icon>
+      </a>
+    </div>
+  </section>
+
 </div>

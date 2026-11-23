@@ -1,8 +1,8 @@
 export class EntregaDTOInsert {
-  idEntrega: number = 0;
+  idEntrega?: number;
   cantidadKg: number = 0;
-  puntosGenerados: number = 0;
-  fecha: Date = new Date(); 
+  puntosGeneredos?: number;
+  fecha?: string; 
   idMaterial: number = 0;
   idCentroAcopio: number = 0;
   idUsuario: number = 0;

@@ -6,9 +6,12 @@
       <p class="subtitulo">Gestiona el catálogo de beneficios de la plataforma.</p>
     </div>
 
+  <!-- Registra solo el administrador -->
+    @if (esAdministrador) {
     <a mat-flat-button routerLink="/recompensas/insertar">
       Registrar recompensa
     </a>
+  }
   </div>
 
   <!-- Cambiar de vista -->
@@ -161,12 +164,16 @@
             <th mat-header-cell *matHeaderCellDef>Acciones</th>
             <td mat-cell *matCellDef="let element">
 
+          <!-- Solo ve el administrador -->
+            @if (esAdministrador) {
               <a mat-icon-button
                  class="btn-editar"
                  aria-label="Editar recompensa"
                  [routerLink]="['/recompensas/editar', element.idRecompensa]">
                 <mat-icon>edit</mat-icon>
               </a>
+            }
+
 
               <button mat-icon-button
                       class="btn-eliminar"

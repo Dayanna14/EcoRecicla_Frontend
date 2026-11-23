@@ -1,39 +1,57 @@
 /* Contenedor general */
 .container {
     padding: 32px 48px;
-    background-color: #fef6e7; /* Fondo crema característico */
+    background-color: var(--eco-crema);
     min-height: calc(100vh - 64px);
-    font-family: Roboto, "Helvetica Neue", sans-serif;
-    color: #2b3a2f;
+    font-family: 'Lato', sans-serif;
+    color: var(--eco-charcoal);
 }
 
 .header-path {
     font-size: 13px;
-    color: #6b7c6e;
+    color: var(--eco-charcoal);
     margin-bottom: 8px;
 }
 
-.titulo-principal {
-    font-size: 28px;
+.header-path a {
     font-weight: 700;
-    color: #1e4620; /* Verde bosque */
+    color: var(--eco-verde-hoja);
+    text-decoration: none;
+}
+
+.header-path a:hover {
+    text-decoration: underline;
+}
+
+.titulo-principal {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--eco-verde-bosque);
     margin: 0 0 4px 0;
 }
 
 .subtitulo-principal {
-    font-size: 14px;
-    color: #5c6b5e;
+    font-size: 16px;
+    color: var(--eco-charcoal);
     margin-bottom: 24px;
 }
 
-/* Tarjeta contenedora del buscador */
+/* Tarjeta contenedora del buscador (usa el surface del tema, como el resto de tarjetas) */
 .card-formulario-busqueda {
-    background-color: #ffffff;
-    border-radius: 12px;
-    padding: 24px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-    border: 1px solid #f0e4d0;
+    background-color: var(--mat-sys-surface, var(--eco-linen));
+    border-radius: 16px;
+    padding: 24px 30px;
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--eco-onyx) 8%, transparent);
     margin-bottom: 24px;
+}
+
+.input-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--eco-charcoal);
+    margin-bottom: 6px;
 }
 
 .form-busqueda-inline {
@@ -45,73 +63,93 @@
 .input-fecha {
     flex: 1;
     max-width: 400px;
-}
-
-::ng-deep .mat-mdc-text-field-wrapper {
-    background-color: #faf8f5 !important;
-    border-radius: 8px !important;
+    --mat-form-field-container-text-font: 'Lato', sans-serif;
+    --mat-form-field-outlined-container-shape: 8px;
+    --mat-form-field-outlined-outline-color: var(--eco-salvia);
+    --mat-form-field-outlined-hover-outline-color: var(--eco-verde-hoja);
+    --mat-form-field-outlined-focus-outline-color: var(--eco-verde-bosque);
+    --mat-form-field-outlined-input-text-color: var(--eco-charcoal);
+    --mat-form-field-outlined-label-text-color: var(--eco-charcoal);
+    --mat-form-field-outlined-focus-label-text-color: var(--eco-verde-bosque);
+    --mat-form-field-leading-icon-color: var(--eco-salvia);
+    --mat-form-field-trailing-icon-color: var(--eco-charcoal);
 }
 
 /* Botón de buscar */
 .btn-buscar {
-    background-color: #1e4620 !important;
-    color: #ffffff !important;
-    border-radius: 8px !important;
-    padding: 0 24px !important;
+    padding: 0 28px;
     height: 56px;
     font-weight: 500;
     display: flex;
     align-items: center;
     gap: 8px;
+    --mat-button-filled-container-shape: 8px;
+    --mat-button-filled-container-color: var(--eco-verde-bosque);
+    --mat-button-filled-label-text-color: var(--eco-crema);
 }
 
-.btn-buscar:hover {
-    background-color: #143216 !important;
+.btn-buscar:hover:not(:disabled) {
+    --mat-button-filled-container-color: var(--eco-verde-hoja);
+}
+
+.btn-buscar:focus-visible {
+    outline: 2px solid var(--eco-ambar);
+    outline-offset: 2px;
 }
 
 /* Tarjeta de la tabla de resultados */
 .card-table {
-    background-color: #ffffff;
-    border-radius: 12px;
-    padding: 16px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-    border: 1px solid #f0e4d0;
+    background-color: var(--mat-sys-surface, var(--eco-linen));
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--eco-onyx) 8%, transparent);
     overflow-x: auto;
 }
 
 table {
     width: 100%;
-    background: transparent !important;
+    --mat-table-background-color: transparent;
+    --mat-table-header-container-color: var(--eco-verde-te);
+    --mat-table-header-headline-color: var(--eco-verde-bosque);
+    --mat-table-header-headline-font: 'Lato', sans-serif;
+    --mat-table-header-headline-size: 13px;
+    --mat-table-header-headline-weight: 700;
+    --mat-table-row-item-label-text-color: var(--eco-onyx);
+    --mat-table-row-item-label-text-font: 'Lato', sans-serif;
+    --mat-table-row-item-label-text-size: 15px;
+    --mat-table-row-item-outline-color: color-mix(in srgb, var(--eco-charcoal) 40%, transparent);
 }
 
-th.mat-header-cell {
-    background-color: #eaf1e7 !important;
-    color: #1e4620 !important;
-    font-weight: 600 !important;
-    font-size: 13px;
-    padding: 12px 16px !important;
-    border-bottom: 1px solid #d5e3d0 !important;
+th[mat-header-cell] {
+    padding: 14px 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-bottom: 1px solid color-mix(in srgb, var(--eco-charcoal) 40%, transparent);
 }
 
-td.mat-cell {
-    color: #3b4a3d !important;
-    font-size: 14px;
-    padding: 14px 16px !important;
-    border-bottom: 1px solid #f7f3ec !important;
+td[mat-cell] {
+    padding: 16px;
 }
 
+/* Filas alternadas */
+tr[mat-row]:nth-child(even) {
+    background-color: var(--eco-vanilla);
+}
+
+/* Estado / puntos como pastilla */
 .badge-puntos {
-    background-color: #eaf1e7;
-    color: #1e4620;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-weight: 600;
-    font-size: 12px;
+    display: inline-block;
+    background-color: var(--eco-verde-te);
+    color: var(--eco-verde-bosque);
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 13px;
 }
 
 .no-data {
     text-align: center;
-    padding: 40px;
-    color: #6b7c6e;
+    padding: 30px;
+    color: var(--eco-charcoal);
     font-size: 14px;
 }

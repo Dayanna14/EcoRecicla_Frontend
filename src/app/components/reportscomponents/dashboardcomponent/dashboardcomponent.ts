@@ -10,10 +10,12 @@ import { Materialservice } from '../../../services/materialservice';
 import { Canjeservice } from '../../../services/canjeservice';
 import { Entregaservice } from '../../../services/entregaservice';
 import { MatButtonModule } from '@angular/material/button';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-dashboardcomponent',
-  imports: [MatIconModule, MatButtonModule, DecimalPipe, DatePipe, Reportrolcomponent, Reportcentrocomponent, Reportmaterialcomponent, Reporttiporecompensacomponent],
+  imports: [MatIconModule, MatButtonModule, DecimalPipe, DatePipe, RouterLink,
+    Reportrolcomponent, Reportcentrocomponent, Reportmaterialcomponent, Reporttiporecompensacomponent],
   templateUrl: './dashboardcomponent.html',
   styleUrl: './dashboardcomponent.css',
 })

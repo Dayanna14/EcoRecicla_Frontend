@@ -1,0 +1,51 @@
+<div class="contenedor">
+
+  <header class="banda">
+    <div class="banda-texto">
+      <a routerLink="/reportes/dashboard" class="volver">
+        <mat-icon>arrow_back</mat-icon> Dashboard
+      </a>
+      <h1>Entregas con más de 100 puntos</h1>
+      <p class="subtitulo">Cuántas entregas destacan frente al total registrado</p>
+    </div>
+    <div class="insignia"><mat-icon>emoji_events</mat-icon></div>
+  </header>
+
+  <section class="cuerpo">
+
+    <article class="tarjeta">
+      <div class="tarjeta-cabecera">
+        <span class="icono"><mat-icon>donut_large</mat-icon></span>
+        <h2>Proporción de entregas</h2>
+      </div>
+
+      <div class="grafico">
+        <canvas baseChart [data]="chartData" [options]="chartOptions" [type]="chartType"></canvas>
+        <div class="centro">
+          <span class="porcentaje mono">{{ porcentaje }}%</span>
+          <span class="centro-nota">destacadas</span>
+        </div>
+      </div>
+    </article>
+
+    <aside class="resumen">
+      <div class="kpi kpi-naranja">
+        <div class="kpi-cabecera"><span>Más de 100 puntos</span><mat-icon>emoji_events</mat-icon></div>
+        <p class="kpi-valor mono">{{ masDe100 }}</p>
+        <p class="kpi-nota">Entregas destacadas</p>
+      </div>
+
+      <div class="kpi">
+        <div class="kpi-cabecera"><span>100 puntos o menos</span><mat-icon>recycling</mat-icon></div>
+        <p class="kpi-valor mono">{{ resto }}</p>
+        <p class="kpi-nota">Resto de las entregas</p>
+      </div>
+
+      <p class="frase">
+        <strong>{{ masDe100 }}</strong> de <strong>{{ total }}</strong> entregas superaron los 100 puntos.
+      </p>
+    </aside>
+
+  </section>
+
+</div>
