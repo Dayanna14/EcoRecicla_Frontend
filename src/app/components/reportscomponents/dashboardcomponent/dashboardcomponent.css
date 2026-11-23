@@ -169,3 +169,57 @@ h1 {
 @media (prefers-reduced-motion: reduce) {
   .kpi, .pendiente { animation: none; transition: none; }
 }
+
+.mas-reportes {
+  margin-top: 32px;
+}
+
+.mas-reportes h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  color: #2d5c3f;
+  margin: 0 0 16px;
+}
+
+.mas-reportes-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.enlace-reporte {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  background: #fff0e5;
+  border: 1px solid #eddccc;
+  border-left: 4px solid #c98a3e;
+  border-radius: 16px;
+  text-decoration: none;
+  color: #2d5c3f;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.enlace-reporte:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(45, 92, 63, 0.15);
+}
+
+.enlace-reporte div {
+  flex: 1;
+}
+
+.enlace-reporte p {
+  margin: 0;
+  font-weight: 600;
+}
+
+.enlace-reporte span {
+  font-size: 0.85rem;
+  color: #6b8f4e;
+}
+
+.enlace-reporte .flecha {
+  color: #c98a3e;
+}

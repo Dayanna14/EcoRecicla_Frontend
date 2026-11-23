@@ -9,10 +9,14 @@ import { Materialservice } from '../../../services/materialservice';
 import { Canjeservice } from '../../../services/canjeservice';
 import { Entregaservice } from '../../../services/entregaservice';
 import { MatButtonModule } from '@angular/material/button';
+import { Reportentrega01 } from '../reportsentrega/reportentrega01/reportentrega01';
+import { Reportentrega02 } from '../reportsentrega/reportentrega02/reportentrega02';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-dashboardcomponent',
-  imports: [MatIconModule, MatButtonModule, DecimalPipe, DatePipe, Reportrolcomponent, Reportcentrocomponent, Reportmaterialcomponent],
+  imports: [MatIconModule, MatButtonModule, DecimalPipe, DatePipe,
+     Reportrolcomponent, Reportcentrocomponent, Reportmaterialcomponent,RouterLink],
   templateUrl: './dashboardcomponent.html',
   styleUrl: './dashboardcomponent.css',
 })

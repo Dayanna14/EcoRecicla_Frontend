@@ -1,0 +1,84 @@
+<div class="contenedor">
+
+  <header class="banda">
+    <div class="banda-texto">
+      <a routerLink="/reportes/dashboard" class="volver">
+        <mat-icon>arrow_back</mat-icon> Dashboard
+      </a>
+      <h1>Entregas por usuario y material</h1>
+      <p class="subtitulo">Kg reciclados y puntos generados</p>
+    </div>
+
+    <div class="filtros">
+      <label class="campo">
+        <span>Usuario</span>
+        <select [value]="usuarioSel" (change)="cambiarUsuario($any($event.target).value)">
+          <option value="">Todos</option>
+          @for (u of usuarios; track u) {
+            <option [value]="u">{{ u }}</option>
+          }
+        </select>
+      </label>
+
+      <label class="campo">
+        <span>Material</span>
+        <select [value]="materialSel" (change)="cambiarMaterial($any($event.target).value)">
+          <option value="">Todos</option>
+          @for (m of materiales; track m) {
+            <option [value]="m">{{ m }}</option>
+          }
+        </select>
+      </label>
+
+      @if (usuarioSel || materialSel) {
+        <button type="button" class="btn-limpiar" (click)="limpiar()" aria-label="Limpiar filtros" title="Limpiar filtros">
+          <mat-icon>filter_alt_off</mat-icon>
+        </button>
+      }
+    </div>
+  </header>
+
+  <section class="kpis">
+    <div class="kpi">
+      <div class="kpi-cabecera"><span>Kg reciclados</span><mat-icon>scale</mat-icon></div>
+      <p class="kpi-valor mono">{{ totalKg | number: '1.0-1' }} kg</p>
+      <p class="kpi-nota">Suma de las entregas filtradas</p>
+    </div>
+    <div class="kpi kpi-naranja">
+      <div class="kpi-cabecera"><span>Puntos generados</span><mat-icon>stars</mat-icon></div>
+      <p class="kpi-valor mono">{{ totalPuntos }}</p>
+      <p class="kpi-nota">Según el material de cada entrega</p>
+    </div>
+    <div class="kpi kpi-oliva">
+      <div class="kpi-cabecera"><span>Entregas</span><mat-icon>recycling</mat-icon></div>
+      <p class="kpi-valor mono">{{ totalEntregas }}</p>
+      <p class="kpi-nota">Registros incluidos</p>
+    </div>
+  </section>
+
+  <article class="tarjeta">
+    <div class="tarjeta-cabecera">
+      <span class="icono"><mat-icon>bar_chart</mat-icon></span>
+      <h2>Kg y puntos por {{ agrupadoPor }}</h2>
+    </div>
+
+    <div class="grafico">
+      @if (cargando) {
+        <div class="vacio"><mat-icon>hourglass_empty</mat-icon><p>Cargando entregas…</p></div>
+      } @else if (totalEntregas === 0) {
+        <div class="vacio"><mat-icon>eco</mat-icon><p>No hay entregas para esta combinación.</p></div>
+      } @else {
+        <canvas baseChart [data]="chartData" [options]="chartOptions" [type]="chartType"></canvas>
+      }
+    </div>
+
+    @if (liderNombre) {
+      <p class="lider">
+        <mat-icon>emoji_events</mat-icon>
+        Líder: <strong>{{ liderNombre }}</strong>
+        <span class="mono">· {{ liderKg | number: '1.0-1' }} kg · {{ liderPorcentaje }}% del total</span>
+      </p>
+    }
+  </article>
+
+</div>

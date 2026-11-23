@@ -42,6 +42,8 @@ import { Logincomponent } from './components/logincomponent/logincomponent';
 import { authGuard } from './core/guards/auth-guard';
 import { roleGuard } from './core/guards/role-guard';
 import { Menucomponent } from './components/menucomponent/menucomponent';
+import { Reportentrega01 } from './components/reportscomponents/reportsentrega/reportentrega01/reportentrega01';
+import { Reportentrega02 } from './components/reportscomponents/reportsentrega/reportentrega02/reportentrega02';
 
 
 export const routes: Routes = [
@@ -64,6 +66,8 @@ export const routes: Routes = [
     data: { roles: ['ADMINISTRADOR', 'OPERADOR_CENTRO'] },
     children: [
       { path: 'dashboard', component: Dashboardcomponent, title: 'EcoRecicla | Reportes' },
+      { path: 'entregas/detalle', component: Reportentrega01, title: 'EcoRecicla | Entregas por usuario y material' },
+      { path: 'entregas/puntos', component: Reportentrega02, title: 'EcoRecicla | Entregas con más de 100 puntos' },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],
   },

@@ -3,8 +3,9 @@ import { environment } from '../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { EntregaDTOList } from '../models/EntregaDTOList';
 import { EntregaDTOInsert } from '../models/EntregaDTOInsert';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { EntregaPorFechaDTO } from '../models/EntregaPorFechaDTO';
+import { EntregaDetalladaUsuarioyMaterialDTO } from '../models/EntregaDetalladaUsuarioyMaterialD';
 
 @Injectable({
   providedIn: 'root',
@@ -41,14 +42,19 @@ export class Entregaservice {
     return this.http.get<EntregaPorFechaDTO[]>(`${this.apiURL}/buscar/fecha`, { params });
   }
 
-  obtenerReporteDetallado(idUsuario?: number, idMaterial?: number): Observable<any[]> {
-    let params = new HttpParams();
-    if (idUsuario) params = params.set('idUsuario', idUsuario);
-    if (idMaterial) params = params.set('idMaterial', idMaterial);
-    return this.http.get<any[]>(`${this.apiURL}/reportedetallado/UsuarioMaterial`, { params });
-  }
+ obtenerReporteDetallado(idUsuario?: number, idMaterial?: number): Observable<EntregaDetalladaUsuarioyMaterialDTO[]> {
+  let params = new HttpParams();
+  if (idUsuario) params = params.set('idUsuario', idUsuario);
+  if (idMaterial) params = params.set('idMaterial', idMaterial);
+  return this.http.get<EntregaDetalladaUsuarioyMaterialDTO[]>(`${this.apiURL}/reportedetallado/UsuarioMaterial`, { params });
+}
 
   contarMasDe100Puntos(): Observable<number> {
     return this.http.get<number>(`${this.apiURL}/contar/masde100puntos`);
   }
+
+  getTotalEntregas(): Observable<number> {
+  return this.list().pipe(map(lista => lista.length));
+}
+
 }
