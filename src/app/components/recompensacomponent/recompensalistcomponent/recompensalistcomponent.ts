@@ -23,7 +23,7 @@ export class Recompensalistcomponent implements OnInit {
   displayedColumns: string[] = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7'];
   dataSource = new MatTableDataSource<RecompensaDTOList>();
   tipos: TipoRecompensaDTOList[] = [];
-  vista: 'tabla' | 'tarjetas' = 'tabla';
+  vista: 'tabla' | 'tarjetas' = 'tarjetas'; // solo tarjetas
   imagenDefecto: string = 'img/modulos/moneda-ecopunto.svg';
   pagina: RecompensaDTOList[] = []; // recompensas de la página actual (para las tarjetas)
 

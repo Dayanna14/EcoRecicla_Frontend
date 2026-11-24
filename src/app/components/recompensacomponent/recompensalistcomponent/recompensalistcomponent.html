@@ -14,28 +14,9 @@
   }
   </div>
 
-  <!-- Cambiar de vista -->
-  <div class="selector-vista">
-
-    <button mat-stroked-button
-            [class.activa]="vista === 'tabla'"
-            (click)="vista = 'tabla'">
-      <mat-icon>table_rows</mat-icon>
-      Tabla
-    </button>
-
-    <button mat-stroked-button
-            [class.activa]="vista === 'tarjetas'"
-            (click)="vista = 'tarjetas'">
-      <mat-icon>grid_view</mat-icon>
-      Tarjetas
-    </button>
-
-  </div>
-
   <div class="tarjeta">
 
-    <!-- VISTA TARJETAS -->
+    <!-- Catálogo en tarjetas (pedido de la profesora: la imagen en tabla no se lee) -->
     @if (vista === 'tarjetas') {
 
       <div class="grid-tarjetas">
@@ -107,116 +88,9 @@
 
     }
 
-    <!-- VISTA TABLA (se oculta, no se destruye, para que el paginador y las tarjetas sigan actualizándose) -->
-    <div [hidden]="vista !== 'tabla'">
-
-      <div class="contenedor-tabla">
-
-        <table mat-table [dataSource]="dataSource">
-
-          <!-- ID -->
-          <ng-container matColumnDef="c1">
-            <th mat-header-cell *matHeaderCellDef>ID</th>
-            <td mat-cell *matCellDef="let element" class="mono">
-              {{ element.idRecompensa }}
-            </td>
-          </ng-container>
-
-          <!-- Imagen -->
-          <ng-container matColumnDef="c2">
-            <th mat-header-cell *matHeaderCellDef>Imagen</th>
-            <td mat-cell *matCellDef="let element">
-              <img class="miniatura"
-                   [src]="element.imagenUrl || imagenDefecto"
-                   [alt]="element.nombre"
-                   (error)="imagenPorDefecto($event)" />
-            </td>
-          </ng-container>
-
-          <!-- Nombre -->
-          <ng-container matColumnDef="c3">
-            <th mat-header-cell *matHeaderCellDef>Nombre</th>
-            <td mat-cell *matCellDef="let element" class="nombre">
-              {{ element.nombre }}
-            </td>
-          </ng-container>
-
-          <!-- Tipo -->
-          <ng-container matColumnDef="c4">
-            <th mat-header-cell *matHeaderCellDef>Tipo</th>
-            <td mat-cell *matCellDef="let element">
-              {{ nombreTipo(element.idTipoRecompensa) }}
-            </td>
-          </ng-container>
-
-          <!-- Costo -->
-          <ng-container matColumnDef="c5">
-            <th mat-header-cell *matHeaderCellDef>Costo (puntos)</th>
-            <td mat-cell *matCellDef="let element" class="mono">
-              {{ element.costoPuntos }}
-            </td>
-          </ng-container>
-
-          <!-- Estado -->
-          <ng-container matColumnDef="c6">
-            <th mat-header-cell *matHeaderCellDef>Estado</th>
-            <td mat-cell *matCellDef="let element">
-              {{ element.estado ? 'Activa' : 'Inactiva' }}
-            </td>
-          </ng-container>
-
-          <!-- Acciones -->
-          <ng-container matColumnDef="c7">
-            <th mat-header-cell *matHeaderCellDef>Acciones</th>
-            <td mat-cell *matCellDef="let element">
-
-          <!-- Solo ve el administrador -->
-            @if (esAdministrador) {
-              <a mat-icon-button
-                 class="btn-editar"
-                 aria-label="Editar recompensa"
-                 [routerLink]="['/recompensas/editar', element.idRecompensa]">
-                <mat-icon>edit</mat-icon>
-              </a>
-            }
-
-
-              <button mat-icon-button
-                      class="btn-eliminar"
-                      aria-label="Eliminar recompensa"
-                      (click)="eliminar(element)">
-                <mat-icon>delete</mat-icon>
-              </button>
-
-            </td>
-          </ng-container>
-
-          <!-- Encabezados y filas -->
-          <tr mat-header-row
-              *matHeaderRowDef="displayedColumns">
-          </tr>
-
-          <tr mat-row
-              *matRowDef="let row; columns: displayedColumns">
-          </tr>
-
-          <!-- Sin datos -->
-          <tr class="mat-row" *matNoDataRow>
-            <td class="sin-datos"
-                [attr.colspan]="displayedColumns.length">
-              No hay recompensas disponibles.
-            </td>
-          </tr>
-
-        </table>
-
-      </div>
-
-    </div>
-
     <!-- PAGINACIÓN -->
     <mat-paginator
-      [pageSizeOptions]="[5, 10]"
+      [pageSizeOptions]="[6, 12, 24]"
       showFirstLastButtons>
     </mat-paginator>
 

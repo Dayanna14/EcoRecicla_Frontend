@@ -197,13 +197,16 @@ registrarEntrega() {
 
     this.entregaService.insert(entrega as any).subscribe({
       next: (response: any) => {
-        const puntos = response?.puntosGeneredos || 0;
-        
-        this.snackBar.open(`¡Entrega registrada con éxito! Puntos generados: ${puntos}`, 'Cerrar', {
-          duration: 4000,
-          horizontalPosition: 'end',
-          verticalPosition: 'top'
-        });
+        // Criterio de aceptación: al registrar se muestran los puntos que ganó el reciclador
+        const puntos = response?.puntosGeneredos ?? 0;
+        const material = this.listaMateriales.find(m => m.idMaterial === entrega.idMaterial)?.nombre ?? 'material';
+        const quien = this.elegido?.nombre ?? this.conocidoManual?.nombre ?? `reciclador #${entrega.idUsuario}`;
+
+        this.snackBar.open(
+          `✅ Entrega registrada: ${entrega.cantidadKg} kg de ${material} para ${quien}. ¡Ganó ${puntos} puntos!`,
+          'Cerrar',
+          { duration: 6000, horizontalPosition: 'end', verticalPosition: 'top', panelClass: ['noti-exito'] }
+        );
 
         this.formEntrega.reset();
         this.elegido = null;
