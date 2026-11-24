@@ -20,6 +20,21 @@ export class Canjeservice {
     return this.http.get<CanjeDTOList[]>(this.url);
   }
 
+  // Solo los canjes del usuario que inició sesión
+  misCanjes(): Observable<CanjeDTOList[]> {
+    return this.http.get<CanjeDTOList[]>(`${this.url}/mis-canjes`);
+  }
+
+  // Reciclador: cancela su canje pendiente y recupera los puntos
+  cancelar(id: number): Observable<CanjeDTOList> {
+    return this.http.put<CanjeDTOList>(`${this.url}/${id}/cancelar`, {});
+  }
+
+  // Operador/admin: entrega la recompensa y marca el canje como completado
+  completar(id: number): Observable<CanjeDTOList> {
+    return this.http.put<CanjeDTOList>(`${this.url}/${id}/completar`, {});
+  }
+
   insert(canje: CanjeDTOList): Observable<any> {
     return this.http.post(this.url, canje);
   }

@@ -15,14 +15,42 @@
     <button mat-button (click)="obtenerReporte()"><mat-icon>refresh</mat-icon> Reintentar</button>
   </div>
 } @else if (!cargando && misEntregas.length === 0) {
-  <div class="vacio-grande">
-    <mat-icon>recycling</mat-icon>
-    <p><b>Aún no tienes entregas registradas</b></p>
-    <p>Lleva tus residuos a un centro de acopio y empieza a sumar puntos.</p>
-    <p class="nota-codigo">Para tu primera entrega, pide tu <b>código de reciclador</b> al administrador.</p>
-    <a mat-flat-button class="btn-principal" routerLink="/centrosacopio/mapa">Ver centros en el mapa</a>
-  </div>
+  <!-- Primer ingreso: todavía no recicla nada, se le guía en 3 pasos -->
+  @if (miCodigo !== null) {
+    <section class="codigo-card">
+      <div class="codigo-icono"><mat-icon>badge</mat-icon></div>
+      <div class="codigo-texto">
+        <span>Tu código de reciclador</span>
+        <b class="mono">#{{ miCodigo }}</b>
+        <small>{{ nombre }} · Muéstralo en el centro de acopio para que te registren tus entregas.</small>
+      </div>
+    </section>
+  }
+  <section class="bienvenida">
+    <h2>¡Bienvenido, {{ nombre }}! 🌱 Empieza en 3 pasos</h2>
+    <div class="pasos">
+      <a class="paso" routerLink="/materiales/clasificar">
+        <span class="numero">1</span><mat-icon>photo_camera</mat-icon>
+        <b>Aprende a separar</b><small>Apunta la cámara a tu residuo y la IA te dice qué material es.</small>
+      </a>
+      <a class="paso" routerLink="/centrosacopio/mapa">
+        <span class="numero">2</span><mat-icon>place</mat-icon>
+        <b>Encuentra tu centro</b><small>Mira el centro de acopio más cercano y su horario.</small>
+      </a>
+      <a class="paso" routerLink="/recompensas/listar">
+        <span class="numero">3</span><mat-icon>redeem</mat-icon>
+        <b>Mira lo que puedes ganar</b><small>Cada kg suma puntos para canjear recompensas.</small>
+      </a>
+    </div>
+  </section>
 } @else {
+  @if (nuevasEntregas > 0) {
+    <div class="nueva">
+      <mat-icon>celebration</mat-icon>
+      <span>¡{{ nuevasEntregas === 1 ? 'Nueva entrega registrada' : nuevasEntregas + ' entregas nuevas' }}! <b>+{{ puntosNuevos }} puntos</b></span>
+      <button mat-icon-button aria-label="Cerrar aviso" (click)="nuevasEntregas = 0"><mat-icon>close</mat-icon></button>
+    </div>
+  }
   @if (miCodigo !== null) {
     <section class="codigo-card">
       <div class="codigo-icono"><mat-icon>badge</mat-icon></div>
@@ -38,6 +66,24 @@
     <div class="kpi"><span>Puntos ganados</span><b class="mono">{{ totalPuntos }}</b><small>Por tus entregas</small></div>
     <div class="kpi ambar"><span>Puntos disponibles</span><b class="mono">{{ disponibles }}</b><small>Para canjear</small></div>
     <div class="kpi"><span>CO₂ evitado</span><b class="mono">{{ co2 }} kg</b><small>Según tus materiales</small></div>
+  </section>
+
+  <section class="nivel-card">
+    <div class="nivel-icono">{{ nivel.icono }}</div>
+    <div class="nivel-texto">
+      <span>Tu nivel ecológico</span>
+      <b>{{ nivel.nombre }}</b>
+      @if (siguiente) {
+        <div class="nivel-barra"><span [style.width.%]="avanceNivel"></span></div>
+        <small>Te faltan {{ faltaNivel }} kg para llegar a {{ siguiente.icono }} {{ siguiente.nombre }}</small>
+      } @else {
+        <small>¡Llegaste al nivel máximo! Eres un ejemplo para tu comunidad.</small>
+      }
+    </div>
+    <div class="equivalencias">
+      <div><span>🌳</span><b>{{ arboles }}</b><small>árboles absorbiendo CO₂ un año</small></div>
+      <div><span>🚗</span><b>{{ kmAuto }} km</b><small>sin manejar un auto</small></div>
+    </div>
   </section>
 
   <section class="mosaico">

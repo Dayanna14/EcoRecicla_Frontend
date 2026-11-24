@@ -1,4 +1,5 @@
-import { Component, inject, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, signal } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -25,6 +26,7 @@ export class Logincomponent {
   private readonly auth = inject(Loginservice);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   readonly form = this.fb.nonNullable.group({
     username: ['', Validators.required],
@@ -32,8 +34,14 @@ export class Logincomponent {
   });
 
   readonly ocultarClave = signal(true);
+  // Llegó aquí porque su sesión venció (lo manda el interceptor)
+  readonly sesionExpirada = this.route.snapshot.queryParamMap.has('expirada');
   errorMessage = '';
   submitting = false;
+  // Render duerme el backend gratis: si tarda, avisamos que está despertando
+  despertando = false;
+  verOlvide = false;
+  private aviso: ReturnType<typeof setTimeout> | null = null;
 
   alternarClave(): void {
     this.ocultarClave.update((valor) => !valor);
@@ -47,10 +55,18 @@ export class Logincomponent {
 
     this.errorMessage = '';
     this.submitting = true;
+    this.despertando = false;
+    this.aviso = setTimeout(() => { this.despertando = true; this.cdr.detectChanges(); }, 5000);
 
     this.auth.login(this.form.getRawValue()).subscribe({
       next: () => {
-        this.submitting = false;
+        this.terminarEspera();
+
+        // Entró con una contraseña temporal: primero la cambia
+        if (this.auth.debeCambiarContrasenia()) {
+          void this.router.navigateByUrl('/cambiar-contrasenia');
+          return;
+        }
 
         const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
         const destination =
@@ -60,12 +76,28 @@ export class Logincomponent {
 
         void this.router.navigateByUrl(destination);
       },
-      error: () => {
-        this.submitting = false;
-        this.errorMessage =
-          'No se pudo iniciar sesión. Verifica tus credenciales e inténtalo nuevamente.';
+      error: (err: HttpErrorResponse) => {
+        this.terminarEspera();
+        if (err.status === 0) {
+          this.errorMessage = 'No hay conexión con el servidor. Revisa tu internet e inténtalo de nuevo.';
+        } else if (err.status === 403) {
+          // Cuenta inhabilitada: el backend explica el motivo
+          this.errorMessage = err.error?.message ?? 'Tu cuenta está desactivada. Acércate a un centro de acopio.';
+        } else if (this.form.controls.username.value.includes('@')) {
+          this.errorMessage = 'Usuario o contraseña incorrectos. Recuerda usar tu nombre de usuario, no tu correo.';
+        } else {
+          this.errorMessage = 'Usuario o contraseña incorrectos.';
+        }
+        this.cdr.detectChanges();
       },
     });
+  }
+
+  private terminarEspera(): void {
+    this.submitting = false;
+    this.despertando = false;
+    if (this.aviso) clearTimeout(this.aviso);
+    this.cdr.detectChanges();
   }
 
   // Página de inicio de cada rol después del login

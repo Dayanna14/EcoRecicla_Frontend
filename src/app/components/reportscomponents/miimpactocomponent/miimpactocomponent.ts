@@ -51,6 +51,25 @@ export class Miimpactocomponent implements OnInit {
   // Dónde reciclar
   centros: string[] = [];
 
+  // Nivel ecológico según los kg reciclados (motiva a seguir)
+  readonly niveles = [
+    { nombre: 'Semilla', icono: '🌱', desde: 0 },
+    { nombre: 'Brote', icono: '🌿', desde: 10 },
+    { nombre: 'Árbol', icono: '🌳', desde: 50 },
+    { nombre: 'Bosque', icono: '🌲', desde: 150 },
+  ];
+  nivel = this.niveles[0];
+  siguiente: { nombre: string; icono: string; desde: number } | null = this.niveles[1];
+  avanceNivel = 0;
+
+  // Equivalencias del CO2 evitado (aprox.: un árbol absorbe ~21 kg de CO2 al año; un auto emite ~0.12 kg por km)
+  arboles = 0;
+  kmAuto = 0;
+
+  // Aviso cuando el operador le registró una entrega nueva desde la última visita
+  nuevasEntregas = 0;
+  puntosNuevos = 0;
+
   @ViewChild('dialogDetalle') dialogDetalle!: TemplateRef<any>;
 
   private readonly colores: string[] = ['#c9893e', '#2d5d3e', '#709645', '#88a987', '#5c6b2c', '#b8c7a4', '#95652e'];
@@ -84,6 +103,8 @@ export class Miimpactocomponent implements OnInit {
 
   ngOnInit(): void {
     this.nombre = this.loginS.getNombre();
+    // El código de reciclador viene del login: lo tiene desde el primer día
+    this.miCodigo = this.loginS.getIdUsuario();
     this.obtenerReporte();
   }
 
@@ -96,25 +117,24 @@ export class Miimpactocomponent implements OnInit {
     this.hayError = false;
     forkJoin({
       detalle: this.eS.obtenerReporteDetallado(),
-      entregas: this.eS.list(),
-      canjes: this.caS.list(),
+      entregas: this.eS.misEntregas(),   // solo las mías (el backend usa el token)
+      canjes: this.caS.misCanjes(),
       materiales: this.mS.list(),
       recompensas: this.rS.list(),
       centros: this.cS.centrosMasPuntos(),
     }).subscribe({
       next: ({ detalle, entregas, canjes, materiales, recompensas, centros }) => {
-        // Mis entregas (el reporte viene con el nombre del usuario)
+        // Mis entregas: las que el backend dice que son mías, con nombre de material y fecha del reporte
+        const misIds = new Set(entregas.map(e => e.idEntrega));
         this.misEntregas = detalle
-          .filter(d => this.mismo(d.nombreUsuario, this.nombre))
+          .filter(d => misIds.has(d.idEntrega))
           .sort((a, b) => (b.fecha ?? '').localeCompare(a.fecha ?? ''));
         this.totalKg = Math.round(this.misEntregas.reduce((s, d) => s + Number(d.cantidadKg), 0) * 10) / 10;
         this.totalPuntos = this.misEntregas.reduce((s, d) => s + Number(d.puntosGenerados), 0);
 
-        // Mi id: se obtiene cruzando mis entregas con la lista de entregas
-        const miId = entregas.find(e => this.misEntregas.some(d => d.idEntrega === e.idEntrega))?.usuarioIdUsuario;
-        this.miCodigo = miId ?? null;
-        this.puntosCanjeados = miId === undefined ? 0 : canjes
-          .filter(c => c.usuarioId_usuario === miId && !(c.estado ?? '').toLowerCase().startsWith('cancel'))
+        // Canjeados: mis canjes que no fueron cancelados (los cancelados devuelven los puntos)
+        this.puntosCanjeados = canjes
+          .filter(c => !(c.estado ?? '').toLowerCase().startsWith('cancel'))
           .reduce((s, c) => s + Number(c.puntosUsados), 0);
         this.disponibles = Math.max(0, this.totalPuntos - this.puntosCanjeados);
 
@@ -176,6 +196,11 @@ export class Miimpactocomponent implements OnInit {
 
         this.centros = centros.slice(0, 3).map(c => c.nombreCentro);
 
+        this.calcularNivel();
+        this.arboles = Math.round((this.co2 / 21) * 10) / 10;
+        this.kmAuto = Math.round(this.co2 / 0.12);
+        this.revisarNuevas();
+
         this.cargando = false;
         this.cdr.detectChanges();
       },
@@ -186,6 +211,36 @@ export class Miimpactocomponent implements OnInit {
         this.cdr.detectChanges();
       },
     });
+  }
+
+  private calcularNivel(): void {
+    const i = [...this.niveles].reverse().findIndex(n => this.totalKg >= n.desde);
+    const idx = this.niveles.length - 1 - i;
+    this.nivel = this.niveles[idx];
+    this.siguiente = this.niveles[idx + 1] ?? null;
+    this.avanceNivel = this.siguiente
+      ? Math.round(((this.totalKg - this.nivel.desde) / (this.siguiente.desde - this.nivel.desde)) * 100)
+      : 100;
+  }
+
+  get faltaNivel(): number {
+    return this.siguiente ? Math.round((this.siguiente.desde - this.totalKg) * 10) / 10 : 0;
+  }
+
+  // Compara con lo que vio la última vez (se guarda en este navegador)
+  private revisarNuevas(): void {
+    const clave = `eco-vistas-${this.miCodigo ?? this.nombre}`;
+    try {
+      const vistas = Number(localStorage.getItem(clave) ?? '-1');
+      if (vistas >= 0 && this.misEntregas.length > vistas) {
+        const nuevas = this.misEntregas.slice(0, this.misEntregas.length - vistas);
+        this.nuevasEntregas = nuevas.length;
+        this.puntosNuevos = nuevas.reduce((s, d) => s + Number(d.puntosGenerados), 0);
+      }
+      localStorage.setItem(clave, String(this.misEntregas.length));
+    } catch {
+      // Sin almacenamiento disponible: simplemente no se muestra el aviso
+    }
   }
 
   abrirDetalle(): void {

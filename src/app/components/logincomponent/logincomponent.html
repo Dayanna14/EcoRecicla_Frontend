@@ -8,14 +8,18 @@
     <div class="tarjeta">
       <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
         <h1>Iniciar sesión</h1>
-        <p class="intro">Ingresa con el usuario que te asignó EcoRecicla.</p>
+        <p class="intro">Ingresa con tu nombre de usuario y contraseña.</p>
+        @if (sesionExpirada) {
+          <p class="ayuda" role="status"><mat-icon aria-hidden="true">schedule</mat-icon> Tu sesión expiró. Vuelve a ingresar para continuar donde estabas.</p>
+        }
 
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
-          <mat-label>Usuario</mat-label>
+          <mat-label>Nombre de usuario</mat-label>
           <mat-icon matPrefix aria-hidden="true">person</mat-icon>
           <input matInput type="text" formControlName="username" autocomplete="username" />
+          <mat-hint>Es tu nombre de usuario, no tu correo.</mat-hint>
           @if (form.controls.username.hasError('required')) {
-            <mat-error>Ingresa tu usuario.</mat-error>
+            <mat-error>Ingresa tu nombre de usuario.</mat-error>
           }
         </mat-form-field>
 
@@ -44,6 +48,15 @@
           }
         </mat-form-field>
 
+        <button type="button" class="enlace olvide" (click)="verOlvide = !verOlvide">¿Olvidaste tu contraseña?</button>
+        @if (verOlvide) {
+          <p class="ayuda" role="note">
+            <mat-icon aria-hidden="true">support_agent</mat-icon>
+            Acércate a cualquier centro de acopio o escribe a <b>soporte&#64;ecorecicla.pe</b> con tu nombre de usuario.
+            Te daremos una contraseña temporal y al ingresar crearás una nueva.
+          </p>
+        }
+
         @if (errorMessage) {
           <p class="error" role="alert">{{ errorMessage }}</p>
         }
@@ -51,9 +64,15 @@
         <button type="submit" matButton="filled" class="ingresar" [disabled]="submitting">
           {{ submitting ? 'Ingresando…' : 'Ingresar' }}
         </button>
+        @if (despertando) {
+          <p class="ayuda" role="status">
+            <mat-icon aria-hidden="true">hourglass_top</mat-icon>
+            Despertando el servidor, la primera vez del día puede tardar hasta un minuto…
+          </p>
+        }
 
         <p class="nota">
-          ¿Aún no tienes cuenta? Solicítala en cualquier centro de acopio de EcoRecicla.
+          ¿Aún no tienes cuenta? <a routerLink="/registro">Crea tu cuenta gratis</a>
         </p>
       </form>
     </div>

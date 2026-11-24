@@ -247,3 +247,6 @@ mat-progress-bar {
 .centro.principal mat-icon { color: var(--eco-ambar); }
 .nota { font-size: 0.8rem; color: var(--eco-verde-hoja); }
 @media (max-width: 700px) { .opciones-entrada { grid-template-columns: 1fr; } }
+
+/* Versión del modelo IA (pedido de la profesora) */
+.version-modelo { display: block; margin-top: 4px; font-size: .72rem; color: #7a7a7a; letter-spacing: .02em; }

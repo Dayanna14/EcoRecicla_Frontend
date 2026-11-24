@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
+import { ContraseniaTemporalDTO } from '../models/ContraseniaTemporalDTO';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UsuariosDTOList } from '../models/UsuariosDTOList';
@@ -36,5 +37,10 @@ export class UsuariosService {
 
   porEstado(): Observable<UsuarioPorEstadoDTO[]> {
     return this.http.get<UsuarioPorEstadoDTO[]>(`${this.apiURL}/usuarios-por-estado`);
+  }
+
+  // Opción B de "olvidé mi contraseña": el admin genera una contraseña temporal
+  restablecerContrasenia(id: number): Observable<ContraseniaTemporalDTO> {
+    return this.http.put<ContraseniaTemporalDTO>(`${this.apiURL}/${id}/restablecer`, {});
   }
 }

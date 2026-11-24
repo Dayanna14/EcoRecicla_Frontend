@@ -22,6 +22,10 @@ export interface Prediccion {
   providedIn: 'root',
 })
 export class Clasificadorservice {
+  // Versión del modelo que se muestra en pantalla (v1 = Teachable Machine original,
+  // v2 = reentrenado el 13/11/2026 con TrashNet + fotos propias + clase "Nada")
+  readonly VERSION_MODELO = 'v2 · MobileNet (Teachable Machine)';
+
   private readonly RUTA_MODELO = 'modelo/model.json';
   private readonly RUTA_METADATA = 'modelo/metadata.json';
   private readonly TAMANO = 224; // Teachable Machine entrena con imágenes de 224x224

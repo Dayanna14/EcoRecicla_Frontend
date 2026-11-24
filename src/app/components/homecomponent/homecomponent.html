@@ -34,7 +34,8 @@
       <div class="acciones">
         <button type="button" class="btn btn-ambar btn-chico canjear-barra"
           (click)="beneficios.scrollIntoView({ behavior: 'smooth' })">Canjear</button>
-        <a class="btn btn-primario btn-chico" routerLink="/login">Iniciar sesión</a>
+        <a class="btn btn-contorno btn-chico" routerLink="/login">Iniciar sesión</a>
+        <a class="btn btn-primario btn-chico" routerLink="/registro">Crear cuenta</a>
       </div>
     </div>
   </header>
@@ -58,13 +59,11 @@
             convierte tus kilos en puntos que puedes canjear por beneficios.
           </p>
           <div class="botones entrar" style="--e: 3">
-            <a class="btn btn-primario" routerLink="/login">Iniciar sesión</a>
-            <button type="button" class="btn btn-contorno" (click)="comoFunciona.scrollIntoView({ behavior: 'smooth' })">
-              Ver cómo funciona
-            </button>
+            <a class="btn btn-primario" routerLink="/registro">Crear mi cuenta gratis</a>
+            <a class="btn btn-contorno" routerLink="/login">Iniciar sesión</a>
           </div>
           <p class="nota-cuenta entrar" style="--e: 4">
-            ¿Aún no tienes cuenta? <strong>Solicítala en cualquier centro de acopio de EcoRecicla.</strong>
+            Crear tu cuenta toma un minuto. <strong>Luego lleva tu material a un centro y empieza a sumar puntos.</strong>
           </p>
         </div>
 
@@ -107,6 +106,21 @@
         </div>
       </div>
     </section>
+
+    <!-- Impacto real de la comunidad (GET /api/publico/impacto, sin iniciar sesión) -->
+    @if (impactoComunidad; as i) {
+      <section class="comunidad" aria-label="Impacto de la comunidad EcoRecicla">
+        <div class="contenedor">
+          <p class="comunidad-titulo">Entre todos en EcoRecicla ya hemos logrado</p>
+          <div class="comunidad-cifras">
+            <div><b class="mono">{{ i.kgReciclados }}</b><span>kg reciclados</span></div>
+            <div><b class="mono">{{ i.co2Evitado }}</b><span>kg de CO₂ evitado</span></div>
+            <div><b class="mono">{{ i.recicladores }}</b><span>recicladores</span></div>
+            <div><b class="mono">{{ i.centrosActivos }}</b><span>centros activos</span></div>
+          </div>
+        </div>
+      </section>
+    }
 
     <!-- ===================== 5. CÓMO FUNCIONA ===================== -->
     <section class="seccion" #comoFunciona>
@@ -181,8 +195,22 @@
             <li><mat-icon aria-hidden="true">check_circle</mat-icon>Horario y estado de cada centro</li>
             <li><mat-icon aria-hidden="true">check_circle</mat-icon>Ruta en OpenStreetMap con un clic</li>
           </ul>
+          <!-- Centros reales y activos (GET /api/publico/centros) -->
+          @if (centrosActivos.length) {
+            <ul class="centros-reales">
+              @for (c of centrosActivos.slice(0, 5); track c.idCentro) {
+                <li>
+                  <mat-icon aria-hidden="true">location_on</mat-icon>
+                  <span>{{ c.nombre }}</span>
+                  <small>{{ c.horario }}</small>
+                  <a [href]="'https://www.openstreetmap.org/?mlat=' + c.latitud + '&mlon=' + c.longitud + '#map=17/' + c.latitud + '/' + c.longitud"
+                     target="_blank" rel="noopener" aria-label="Ver en el mapa">Ver</a>
+                </li>
+              }
+            </ul>
+          }
           <a class="btn btn-contorno ver-mapa" routerLink="/centrosacopio/mapa">
-            Ver el mapa <mat-icon aria-hidden="true">arrow_forward</mat-icon>
+            Ver el mapa completo <mat-icon aria-hidden="true">arrow_forward</mat-icon>
           </a>
         </div>
 
@@ -400,7 +428,7 @@
                 <span class="tipo">Descuento</span>
                 <h3>20 % de descuento en tienda ecológica</h3>
                 <div class="pie-r"><span class="puntos-r">250 pts</span><button type="button" class="btn btn-ambar btn-chico canjear">Canjear</button></div>
-                <p class="aviso">¡Buena elección! <a routerLink="/login">Inicia sesión</a> para canjear.</p>
+                <p class="aviso">¡Buena elección! <a routerLink="/registro">Crea tu cuenta</a> para canjear.</p>
               </div>
             </li>
             <li class="tarjeta-r">
@@ -409,7 +437,7 @@
                 <span class="tipo">Producto</span>
                 <h3>Botella reutilizable de acero</h3>
                 <div class="pie-r"><span class="puntos-r">400 pts</span><button type="button" class="btn btn-ambar btn-chico canjear">Canjear</button></div>
-                <p class="aviso">¡Buena elección! <a routerLink="/login">Inicia sesión</a> para canjear.</p>
+                <p class="aviso">¡Buena elección! <a routerLink="/registro">Crea tu cuenta</a> para canjear.</p>
               </div>
             </li>
             <li class="tarjeta-r">
@@ -418,7 +446,7 @@
                 <span class="tipo">Experiencia</span>
                 <h3>Taller de compostaje en casa</h3>
                 <div class="pie-r"><span class="puntos-r">600 pts</span><button type="button" class="btn btn-ambar btn-chico canjear">Canjear</button></div>
-                <p class="aviso">¡Buena elección! <a routerLink="/login">Inicia sesión</a> para canjear.</p>
+                <p class="aviso">¡Buena elección! <a routerLink="/registro">Crea tu cuenta</a> para canjear.</p>
               </div>
             </li>
             <li class="tarjeta-r">
@@ -427,7 +455,7 @@
                 <span class="tipo">Producto</span>
                 <h3>Kit de bolsas reutilizables</h3>
                 <div class="pie-r"><span class="puntos-r">300 pts</span><button type="button" class="btn btn-ambar btn-chico canjear">Canjear</button></div>
-                <p class="aviso">¡Buena elección! <a routerLink="/login">Inicia sesión</a> para canjear.</p>
+                <p class="aviso">¡Buena elección! <a routerLink="/registro">Crea tu cuenta</a> para canjear.</p>
               </div>
             </li>
             <li class="tarjeta-r">
@@ -436,7 +464,7 @@
                 <span class="tipo">Descuento</span>
                 <h3>10 % de descuento en mercado orgánico</h3>
                 <div class="pie-r"><span class="puntos-r">200 pts</span><button type="button" class="btn btn-ambar btn-chico canjear">Canjear</button></div>
-                <p class="aviso">¡Buena elección! <a routerLink="/login">Inicia sesión</a> para canjear.</p>
+                <p class="aviso">¡Buena elección! <a routerLink="/registro">Crea tu cuenta</a> para canjear.</p>
               </div>
             </li>
             <li class="tarjeta-r">
@@ -445,7 +473,7 @@
                 <span class="tipo">Experiencia</span>
                 <h3>Visita guiada a una planta de reciclaje</h3>
                 <div class="pie-r"><span class="puntos-r">500 pts</span><button type="button" class="btn btn-ambar btn-chico canjear">Canjear</button></div>
-                <p class="aviso">¡Buena elección! <a routerLink="/login">Inicia sesión</a> para canjear.</p>
+                <p class="aviso">¡Buena elección! <a routerLink="/registro">Crea tu cuenta</a> para canjear.</p>
               </div>
             </li>
           </ul>
@@ -565,7 +593,7 @@
         <mat-accordion class="faq revelar" displayMode="flat">
           <mat-expansion-panel class="pregunta" expanded hideToggle>
             <mat-expansion-panel-header><mat-panel-title>¿Cómo obtengo mi cuenta?</mat-panel-title><span class="signo" aria-hidden="true">+</span></mat-expansion-panel-header>
-            <p>Acércate a cualquier centro de acopio de EcoRecicla y solicítala. El administrador crea tu cuenta y te entrega tu usuario para ingresar.</p>
+            <p>Desde esta página, con el botón <b>Crear mi cuenta</b>: eliges tu nombre de usuario, tu correo y una contraseña. Es gratis y entras al instante.</p>
           </mat-expansion-panel>
           <mat-expansion-panel class="pregunta" hideToggle>
             <mat-expansion-panel-header><mat-panel-title>¿Qué materiales puedo llevar?</mat-panel-title><span class="signo" aria-hidden="true">+</span></mat-expansion-panel-header>
@@ -596,11 +624,10 @@
           <div class="cta-texto">
             <h2>Empieza a reciclar hoy</h2>
             <p>
-              Ingresa con tu cuenta, ubica tu centro de acopio más cercano y suma tus primeros puntos. ¿Aún no tienes
-              cuenta? Solicítala en cualquier centro de acopio.
+              Crea tu cuenta gratis, ubica tu centro de acopio más cercano y suma tus primeros puntos.
             </p>
           </div>
-          <a class="btn btn-ambar cta-boton" routerLink="/login">Iniciar sesión</a>
+          <a class="btn btn-ambar cta-boton" routerLink="/registro">Crear mi cuenta</a>
         </div>
       </div>
     </section>

@@ -37,6 +37,11 @@ const CONSEJOS: { [clase: string]: { icono: string; texto: string }[] } = {
   styleUrl: './materialclasificarcomponent.css',
 })
 export class Materialclasificarcomponent implements OnInit, OnDestroy {
+  // Etiqueta con la versión del modelo (se muestra junto al % de confianza)
+  get versionModelo(): string {
+    return this.cS.VERSION_MODELO;
+  }
+
   @ViewChild('foto') foto!: ElementRef<HTMLImageElement>;
   @ViewChild('video') video?: ElementRef<HTMLVideoElement>;
 

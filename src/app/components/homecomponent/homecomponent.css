@@ -1463,3 +1463,22 @@
     display: none;
   }
 }
+
+/* ---------- Impacto real de la comunidad ---------- */
+.comunidad { padding: 28px 0; background-color: var(--eco-verde-bosque); color: var(--eco-crema); }
+.comunidad-titulo { margin: 0 0 14px; text-align: center; font-family: 'Playfair Display', serif; font-size: 1.25rem; }
+.comunidad-cifras { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; text-align: center; }
+.comunidad-cifras div { display: flex; flex-direction: column; gap: 2px; padding: 10px; border-radius: 14px; background: color-mix(in srgb, white 8%, transparent); }
+.comunidad-cifras b { font-size: 1.9rem; color: var(--eco-ambar); }
+.comunidad-cifras span { font-size: .9rem; opacity: .9; }
+
+/* ---------- Centros reales (públicos) ---------- */
+.centros-reales { list-style: none; margin: 0 0 18px; padding: 0; display: grid; gap: 8px; }
+.centros-reales li {
+  display: grid; grid-template-columns: auto 1fr auto; grid-template-rows: auto auto; column-gap: 8px; align-items: center;
+  padding: 8px 12px; border-radius: 12px; background: var(--papel); border: 1px solid var(--borde-suave);
+}
+.centros-reales mat-icon { grid-row: 1 / 3; color: var(--eco-verde-bosque); }
+.centros-reales span { font-weight: 700; }
+.centros-reales small { grid-column: 2; color: var(--eco-charcoal, #555); }
+.centros-reales a { grid-row: 1 / 3; grid-column: 3; color: var(--eco-verde-bosque); font-weight: 700; font-size: .85rem; }

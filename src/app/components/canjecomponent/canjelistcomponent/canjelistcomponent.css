@@ -242,3 +242,12 @@ h2[mat-dialog-title] .codigo {
 .chip-completado { background: var(--eco-verde-te); color: var(--eco-verde-bosque); }
 .chip-pendiente { background: #f7e7cf; color: var(--eco-corcho); }
 .chip-cancelado { background: #f6e3de; color: var(--eco-error); }
+
+/* ---------- Acción: cancelar (reciclador) / entregar (operador) ---------- */
+.btn-accion { border-radius: 99px; font-size: .8rem; }
+.btn-accion.cancelar { color: #b3412e; border-color: #e3b5aa; }
+.btn-accion.entregar { background: var(--eco-verde-bosque, #2d5b3c); color: #fff; }
+.sin-accion { color: #b0a890; }
+.icono-accion { width: 52px; height: 52px; margin: 20px auto 0; border-radius: 50%; display: grid; place-items: center; background: #fbe9e5; color: #b3412e; }
+.icono-accion.entregar { background: #eef4ea; color: #2d5b3c; }
+.nota-dialogo { font-size: .8rem; color: #7a7a7a; margin-top: 6px; }

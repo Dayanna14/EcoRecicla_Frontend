@@ -98,17 +98,13 @@ export class Entregalistcomponent implements OnInit {
   }
 
   listarEntregas(): void {
+    // El reciclador pide solo las suyas: el backend las filtra con su token (no recibe las de otros)
     forkJoin({
-      entregas: this.entregaService.list(),
+      entregas: this.soloReciclador ? this.entregaService.misEntregas() : this.entregaService.list(),
       detalle: this.entregaService.obtenerReporteDetallado(),
     }).subscribe({
       next: ({ entregas, detalle }) => {
         this.nombrePorEntrega = new Map(detalle.map(d => [d.idEntrega, d.nombreUsuario]));
-        // El reciclador solo ve sus propias entregas
-        if (this.soloReciclador) {
-          const yo = this.loginService.getNombre().trim().toLowerCase();
-          entregas = entregas.filter(e => (this.nombrePorEntrega.get(e.idEntrega) ?? '').trim().toLowerCase() === yo);
-        }
         this.dataSource.data = entregas;
         this.dataSource.paginator = this.paginator;
         this.cdr.detectChanges();

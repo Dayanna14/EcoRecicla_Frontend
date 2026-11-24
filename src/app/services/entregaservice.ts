@@ -19,6 +19,11 @@ export class Entregaservice {
     return this.http.get<EntregaDTOList[]>(this.apiURL);
   }
 
+  // Solo las entregas del usuario que inició sesión
+  misEntregas(): Observable<EntregaDTOList[]> {
+    return this.http.get<EntregaDTOList[]>(`${this.apiURL}/mis-entregas`);
+  }
+
   insert(entrega: EntregaDTOInsert): Observable<EntregaDTOInsert> {
     return this.http.post<EntregaDTOInsert>(this.apiURL, entrega);
   }

@@ -49,17 +49,20 @@
 
   <!-- Reciclaje: Materiales (Axel) y Entregas (Jhon) -->
   <mat-menu #menuReciclaje="matMenu">
-    @if (esAdministrador || esOperador) {
+    @if (esReciclador && !esAdministrador && !esOperador) {
+      <!-- El reciclador va directo a lo suyo -->
+      <button mat-menu-item routerLink="/materiales/clasificar"><mat-icon>photo_camera</mat-icon> Clasificar con IA</button>
+      <button mat-menu-item routerLink="/materiales/listar"><mat-icon>category</mat-icon> Materiales</button>
+      <button mat-menu-item routerLink="/entregas/listar"><mat-icon>local_shipping</mat-icon> Mis entregas</button>
+    } @else {
       <button mat-menu-item [matMenuTriggerFor]="menuMateriales">Materiales</button>
+      <button mat-menu-item [matMenuTriggerFor]="menuEntregas">Entregas</button>
     }
-    <button mat-menu-item [matMenuTriggerFor]="menuEntregas">Entregas</button>
   </mat-menu>
 
   <!-- Recompensas: Recompensas (Nayara), Tipos (Axel) y Canjes (Franco) -->
   <mat-menu #menuRecompensasGrupo="matMenu">
-    @if (esAdministrador || esReciclador) {
-      <button mat-menu-item [matMenuTriggerFor]="menuRecompensas">Recompensas</button>
-    }
+    <button mat-menu-item [matMenuTriggerFor]="menuRecompensas">Recompensas</button>
     @if (esAdministrador) {
       <button mat-menu-item [matMenuTriggerFor]="menuTipos">Tipos de recompensa</button>
     }
@@ -158,6 +161,7 @@
       @if (esReciclador && !esAdministrador) {
         <button mat-menu-item routerLink="/reportes/dashboard"><mat-icon>eco</mat-icon> Mi impacto</button>
       }
+      <button mat-menu-item routerLink="/perfil"><mat-icon>account_circle</mat-icon> Mi perfil</button>
       <button mat-menu-item (click)="cerrarSesion()"><mat-icon>logout</mat-icon> Cerrar sesión</button>
     </mat-menu>
   }

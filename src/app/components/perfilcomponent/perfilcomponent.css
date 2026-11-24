@@ -1,0 +1,19 @@
+.contenedor { max-width: 640px; margin: 0 auto; padding: 24px 16px 48px; }
+.subtitulo { margin: 4px 0 20px; color: var(--eco-charcoal, #444); }
+.tarjeta { background: #fffdf6; border-radius: 16px; padding: 24px; box-shadow: 0 4px 16px rgba(0,0,0,.06); }
+.cabecera { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+.inicial {
+  width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--eco-verde-bosque, #2d5b3c); color: #fff; font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700;
+}
+.cabecera h2 { margin: 0 0 6px; }
+.chip { padding: 3px 10px; border-radius: 99px; background: #eef4ea; color: #2d5b3c; font-size: .8rem; font-weight: 600; }
+.datos { margin: 0; display: grid; gap: 12px; }
+.datos div { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px dashed #e3dccb; }
+.datos dt { display: flex; align-items: center; gap: 6px; color: #6b6b6b; }
+.datos dt mat-icon { font-size: 18px; width: 18px; height: 18px; }
+.datos dd { margin: 0; font-weight: 600; text-align: right; word-break: break-all; }
+.codigo { font-family: 'Roboto Mono', monospace; font-size: 1.2rem; color: var(--eco-verde-bosque, #2d5b3c); }
+.nota, .aviso { display: flex; gap: 6px; align-items: center; font-size: .85rem; color: #6b6b6b; margin: 16px 0 0; }
+.nota mat-icon, .aviso mat-icon { font-size: 18px; width: 18px; height: 18px; }
+.acciones { margin-top: 20px; display: flex; justify-content: flex-end; }

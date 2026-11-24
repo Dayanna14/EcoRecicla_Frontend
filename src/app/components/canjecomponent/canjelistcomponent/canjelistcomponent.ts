@@ -26,7 +26,8 @@ import { Loginservice } from '../../../services/loginservice';
 export class Canjelistcomponent implements OnInit {
   dataSource = new MatTableDataSource<CanjeDTOList>();
   // c1 id, c2 fecha, c3 puntos, c4 estado, c5 recompensa, c6 usuario, c7 eliminar, c8 editar
-  displayedColumns: string[] = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8'];
+  // c9: acción del día a día (reciclador cancela, operador entrega)
+  displayedColumns: string[] = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c9', 'c7', 'c8'];
 
   listaRecompensas: RecompensaDTOList[] = [];
   listaUsuarios: UsuariosDTOList[] = [];
@@ -34,6 +35,7 @@ export class Canjelistcomponent implements OnInit {
   nombresPorId = new Map<number, string>();
 
   @ViewChild('dialogEliminar') dialogEliminar!: TemplateRef<any>;
+  @ViewChild('dialogAccion') dialogAccion!: TemplateRef<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
@@ -53,6 +55,9 @@ export class Canjelistcomponent implements OnInit {
   }
   get puedeRegistrar(): boolean {
     return this.loginService.hasAnyRole(['ADMINISTRADOR', 'RECICLADOR']);
+  }
+  get esOperador(): boolean {
+    return this.loginService.hasAnyRole(['OPERADOR_CENTRO']);
   }
   get soloReciclador(): boolean {
     return this.loginService.hasAnyRole(['RECICLADOR']) && !this.loginService.hasAnyRole(['ADMINISTRADOR', 'OPERADOR_CENTRO']);
@@ -93,18 +98,9 @@ export class Canjelistcomponent implements OnInit {
 
   listar(): void {
     if (this.soloReciclador) {
-      // Para saber cuáles son sus canjes se busca su id con sus entregas
-      forkJoin({
-        canjes: this.canjeService.list(),
-        entregas: this.entregaService.list(),
-        detalle: this.entregaService.obtenerReporteDetallado(),
-      }).subscribe({
-        next: ({ canjes, entregas, detalle }) => {
-          const yo = this.loginService.getNombre().trim().toLowerCase();
-          const misIds = new Set(detalle.filter(d => (d.nombreUsuario ?? '').trim().toLowerCase() === yo).map(d => d.idEntrega));
-          const miId = entregas.find(e => misIds.has(e.idEntrega))?.usuarioIdUsuario;
-          this.mostrar(miId === undefined ? [] : canjes.filter(c => c.usuarioId_usuario === miId));
-        },
+      // El backend devuelve solo sus canjes (los identifica con el token)
+      this.canjeService.misCanjes().subscribe({
+        next: data => this.mostrar(data),
         error: () => this.notificar('No se pudo cargar la lista de canjes', 'error'),
       });
     } else {
@@ -154,5 +150,31 @@ export class Canjelistcomponent implements OnInit {
           });
         }
       });
+  }
+
+  esPendiente(c: CanjeDTOList): boolean {
+    return (c.estado ?? '').toUpperCase().startsWith('PEND');
+  }
+
+  // Reciclador: cancela su canje pendiente y recupera los puntos
+  cancelar(canje: CanjeDTOList): void {
+    this.confirmar(canje, 'cancelar', () => this.canjeService.cancelar(canje.idCanje).subscribe({
+      next: () => { this.notificar(`Canje cancelado. Recuperaste ${canje.puntosUsados} puntos`, 'exito'); this.listar(); },
+      error: err => this.notificar(err?.error?.message ?? 'No se pudo cancelar el canje', 'error'),
+    }));
+  }
+
+  // Operador/admin: entregó la recompensa en el centro
+  completar(canje: CanjeDTOList): void {
+    this.confirmar(canje, 'entregar', () => this.canjeService.completar(canje.idCanje).subscribe({
+      next: () => { this.notificar('Recompensa entregada: el canje quedó completado', 'exito'); this.listar(); },
+      error: err => this.notificar(err?.error?.message ?? 'No se pudo completar el canje', 'error'),
+    }));
+  }
+
+  private confirmar(canje: CanjeDTOList, accion: 'cancelar' | 'entregar', hacer: () => void): void {
+    this.dialog.open(this.dialogAccion, { data: { canje, accion, recompensa: this.nombreRecompensa(canje), usuario: this.nombreUsuario(canje) }, width: '440px' })
+      .afterClosed()
+      .subscribe(ok => { if (ok) hacer(); });
   }
 }

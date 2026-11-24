@@ -5,6 +5,7 @@ import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { LoginRequestDTO } from '../models/LoginRequestDTO';
 import { LoginResponseDTO } from '../models/LoginResponseDTO';
+import { RegistroDTO } from '../models/RegistroDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -17,20 +18,51 @@ export class Loginservice {
 
   login(credentials: LoginRequestDTO): Observable<LoginResponseDTO> {
     return this.http.post<LoginResponseDTO>(this.apiURL, credentials).pipe(
-      tap((response) => {
-        if (!response?.token) {
-          throw new Error('La respuesta de login no contiene un token.');
-        }
-
-        if (this.isBrowser) {
-          sessionStorage.setItem('token', response.token);
-          sessionStorage.setItem('username', response.username ?? '');
-          // ⚠️ NO ENSEÑADO EN CLASE: el nombre con el que entró (los reportes vienen por nombre)
-          sessionStorage.setItem('nombre', credentials.username ?? '');
-          sessionStorage.setItem('roles', JSON.stringify(response.roles ?? []));
-        }
-      })
+      tap((response) => this.guardarSesion(response, credentials.username))
     );
+  }
+
+  // Registro público: el backend crea al reciclador y devuelve la sesión ya iniciada
+  registrar(datos: RegistroDTO): Observable<LoginResponseDTO> {
+    return this.http.post<LoginResponseDTO>(`${environment.base}/registro`, datos).pipe(
+      tap((response) => this.guardarSesion(response, datos.nombre))
+    );
+  }
+
+  private guardarSesion(response: LoginResponseDTO, nombreIngresado: string): void {
+    if (!response?.token) {
+      throw new Error('La respuesta de login no contiene un token.');
+    }
+
+    if (this.isBrowser) {
+      sessionStorage.setItem('token', response.token);
+      sessionStorage.setItem('username', response.username ?? '');
+      // ⚠️ NO ENSEÑADO EN CLASE: el nombre del usuario (los reportes vienen por nombre)
+      sessionStorage.setItem('nombre', response.nombre || nombreIngresado || '');
+      sessionStorage.setItem('roles', JSON.stringify(response.roles ?? []));
+      sessionStorage.setItem('idUsuario', response.idUsuario != null ? String(response.idUsuario) : '');
+      sessionStorage.setItem('debeCambiarContrasenia', response.debeCambiarContrasenia ? 'true' : 'false');
+    }
+  }
+
+  /** id del usuario que inició sesión (viene del login; null si no hay sesión) */
+  getIdUsuario(): number | null {
+    if (!this.isBrowser || !this.isAuthenticated()) {
+      return null;
+    }
+    const id = Number(sessionStorage.getItem('idUsuario'));
+    return id > 0 ? id : null;
+  }
+
+  /** Si entró con una contraseña temporal, debe cambiarla antes de usar la app */
+  debeCambiarContrasenia(): boolean {
+    return this.isBrowser && sessionStorage.getItem('debeCambiarContrasenia') === 'true';
+  }
+
+  contraseniaCambiada(): void {
+    if (this.isBrowser) {
+      sessionStorage.setItem('debeCambiarContrasenia', 'false');
+    }
   }
 
   getToken(): string | null {
@@ -110,6 +142,8 @@ export class Loginservice {
       sessionStorage.removeItem('username');
       sessionStorage.removeItem('roles');
       sessionStorage.removeItem('nombre');
+      sessionStorage.removeItem('idUsuario');
+      sessionStorage.removeItem('debeCambiarContrasenia');
     }
   }
 

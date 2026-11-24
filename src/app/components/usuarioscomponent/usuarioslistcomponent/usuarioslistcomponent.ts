@@ -24,6 +24,7 @@ export class Usuarioslistcomponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild('dialogEliminar') dialogEliminar!: TemplateRef<any>;
+  @ViewChild('dialogRestablecer') dialogRestablecer!: TemplateRef<any>;
 
   constructor(
     private uS: UsuariosService,
@@ -87,5 +88,22 @@ export class Usuarioslistcomponent implements OnInit {
         this.cdr.detectChanges();
       },
     });
+  }
+
+  // Opción B de "olvidé mi contraseña": el admin genera una temporal y se la entrega al usuario
+  restablecer(usuario: UsuariosDTOList): void {
+    this.dialog.open(this.dialogRestablecer, { data: { usuario, temporal: '' }, width: '440px' })
+      .afterClosed()
+      .subscribe(confirmado => {
+        if (!confirmado) return;
+        this.uS.restablecerContrasenia(usuario.id_usuario).subscribe({
+          next: res => {
+            this.dialog.open(this.dialogRestablecer, { data: { usuario, temporal: res.contraseniaTemporal }, width: '440px', disableClose: true });
+          },
+          error: err => this.snackBar.open(err.error?.message ?? 'No se pudo restablecer la contraseña', 'Cerrar', {
+            duration: 4000, panelClass: ['noti-error'],
+          }),
+        });
+      });
   }
 }

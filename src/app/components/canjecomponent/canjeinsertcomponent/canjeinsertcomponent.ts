@@ -96,24 +96,23 @@ export class Canjeinsertcomponent implements OnInit {
     } else {
       // El reciclador canjea para sí mismo y el canje queda pendiente
       this.form.get('estado')?.disable();
+      // El id viene del login; los puntos = mis entregas - mis canjes no cancelados (igual que el backend)
+      this.miId = this.loginService.getIdUsuario();
       forkJoin({
-        entregas: this.entregaService.list(),
-        detalle: this.entregaService.obtenerReporteDetallado(),
-        canjes: this.canjeService.list(),
+        entregas: this.entregaService.misEntregas(),
+        canjes: this.canjeService.misCanjes(),
       }).subscribe({
-        next: ({ entregas, detalle, canjes }) => {
-          const yo = this.loginService.getNombre().trim().toLowerCase();
-          const misIds = new Set(detalle.filter(d => (d.nombreUsuario ?? '').trim().toLowerCase() === yo).map(d => d.idEntrega));
-          this.miId = entregas.find(e => misIds.has(e.idEntrega))?.usuarioIdUsuario ?? null;
+        next: ({ entregas, canjes }) => {
           if (this.miId !== null) {
             this.form.get('idUsuario')?.setValue(this.miId);
-            const ganados = entregas.filter(e => e.usuarioIdUsuario === this.miId)
-              .reduce((t, e) => t + (e.puntosGeneredos ?? 0), 0);
-            const gastados = canjes.filter(c => c.usuarioId_usuario === this.miId)
-              .reduce((t, c) => t + (c.puntosUsados ?? 0), 0);
-            this.misPuntos = ganados - gastados;
-          } else {
-            this.avisoReciclador = 'Aún no tienes entregas registradas, así que todavía no puedes canjear.';
+          }
+          const ganados = entregas.reduce((t, e) => t + (e.puntosGeneredos ?? 0), 0);
+          const gastados = canjes
+            .filter(c => !(c.estado ?? '').toUpperCase().startsWith('CANCEL'))
+            .reduce((t, c) => t + (c.puntosUsados ?? 0), 0);
+          this.misPuntos = ganados - gastados;
+          if (entregas.length === 0) {
+            this.avisoReciclador = 'Aún no tienes entregas registradas. Lleva tu material a un centro de acopio para sumar tus primeros puntos.';
           }
           this.cargando = false;
           this.cdr.detectChanges();

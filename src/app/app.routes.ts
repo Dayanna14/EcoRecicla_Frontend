@@ -51,11 +51,20 @@ import { Canjeupdatecomponent } from './components/canjecomponent/canjeupdatecom
 import { Canjeinsertcomponent } from './components/canjecomponent/canjeinsertcomponent/canjeinsertcomponent';
 import { Canjecomponent } from './components/canjecomponent/canjecomponent';
 
+import { Registrocomponent } from './components/registrocomponent/registrocomponent';
+import { Cambiarcontraseniacomponent } from './components/cambiarcontraseniacomponent/cambiarcontraseniacomponent';
+import { Perfilcomponent } from './components/perfilcomponent/perfilcomponent';
+
 export const routes: Routes = [
     // ---------- General ----------
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: Homecomponent, title: 'EcoRecicla | Inicio' },
   { path: 'login', component: Logincomponent, title: 'EcoRecicla | Iniciar sesión' },
+  // Registro público: cualquier persona crea su cuenta de reciclador
+  { path: 'registro', component: Registrocomponent, title: 'EcoRecicla | Crear cuenta' },
+  // Cambio de contraseña (obligatorio si entró con una temporal) y "Mi perfil"
+  { path: 'cambiar-contrasenia', component: Cambiarcontraseniacomponent, canActivate: [authGuard], title: 'EcoRecicla | Cambiar contraseña' },
+  { path: 'perfil', component: Perfilcomponent, canActivate: [authGuard], title: 'EcoRecicla | Mi perfil' },
 
   {
   path: 'menu',
@@ -130,7 +139,7 @@ export const routes: Routes = [
         path: 'recompensas',
         component: Recompensacomponent,
         canActivate: [authGuard, roleGuard],
-        data: { roles: ['ADMINISTRADOR', 'RECICLADOR'] },
+        data: { roles: ['ADMINISTRADOR', 'OPERADOR_CENTRO', 'RECICLADOR'] }, // el operador consulta el catálogo
         children: [
             { path: 'listar', component: Recompensalistcomponent },
             { path: 'insertar', component: Recompensainsertcomponent,
@@ -164,7 +173,8 @@ export const routes: Routes = [
     path: 'materiales',
     component: Materialcomponent,
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['ADMINISTRADOR', 'OPERADOR_CENTRO'] },
+    // El reciclador consulta los materiales y usa el clasificador IA (no edita)
+    data: { roles: ['ADMINISTRADOR', 'OPERADOR_CENTRO', 'RECICLADOR'] },
     children: [
       { path: 'listar', component: Materiallistcomponent },
       { path: 'insertar', component: Materialinsertcomponent,

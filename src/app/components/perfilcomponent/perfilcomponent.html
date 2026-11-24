@@ -1,0 +1,35 @@
+<app-menucomponent></app-menucomponent>
+<div class="contenedor">
+  <h1>Mi perfil</h1>
+  <p class="subtitulo">Tus datos en EcoRecicla.</p>
+
+  @if (hayError) {
+    <p class="aviso"><mat-icon>warning</mat-icon> No se pudo cargar tu perfil. Recarga la página.</p>
+  } @else if (perfil; as p) {
+    <section class="tarjeta">
+      <div class="cabecera">
+        <span class="inicial">{{ inicial }}</span>
+        <div>
+          <h2>{{ p.nombre }}</h2>
+          <span class="chip">{{ nombreRol(p.rol) }}</span>
+        </div>
+      </div>
+
+      <dl class="datos">
+        <div><dt><mat-icon>person</mat-icon> Nombre de usuario</dt><dd>{{ p.nombre }}</dd></div>
+        <div><dt><mat-icon>mail</mat-icon> Correo</dt><dd>{{ p.email }}</dd></div>
+        @if (esReciclador) {
+          <div><dt><mat-icon>badge</mat-icon> Código de reciclador</dt><dd class="codigo">#{{ p.idUsuario }}</dd></div>
+        }
+      </dl>
+
+      @if (esReciclador) {
+        <p class="nota"><mat-icon>info</mat-icon> Muestra tu código en el centro de acopio para que registren tus entregas.</p>
+      }
+
+      <div class="acciones">
+        <a mat-flat-button routerLink="/cambiar-contrasenia"><mat-icon>lock_reset</mat-icon> Cambiar contraseña</a>
+      </div>
+    </section>
+  }
+</div>

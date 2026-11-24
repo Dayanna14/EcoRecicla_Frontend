@@ -35,6 +35,9 @@
           <a mat-icon-button class="btn-editar" aria-label="Editar usuario" [routerLink]="['/usuarios/editar', element.id_usuario]">
             <mat-icon>edit</mat-icon>
           </a>
+          <button mat-icon-button class="btn-clave" aria-label="Restablecer contraseña" title="Restablecer contraseña" (click)="restablecer(element)">
+            <mat-icon>lock_reset</mat-icon>
+          </button>
           <button mat-icon-button class="btn-eliminar" aria-label="Eliminar usuario" (click)="eliminar(element)">
             <mat-icon>delete</mat-icon>
           </button>
@@ -72,4 +75,27 @@
     <button mat-stroked-button [mat-dialog-close]="false" cdkFocusInitial>Cancelar</button>
     <button mat-flat-button class="btn-confirmar" [mat-dialog-close]="true">Eliminar</button>
   </mat-dialog-actions>
+</ng-template>
+<!-- Opción B "olvidé mi contraseña": confirmar y luego mostrar la contraseña temporal -->
+<ng-template #dialogRestablecer let-d>
+  <div class="icono-clave"><mat-icon aria-hidden="true">lock_reset</mat-icon></div>
+  @if (!d.temporal) {
+    <h2 mat-dialog-title>¿Restablecer la contraseña de <span class="mono">{{ d.usuario.nombre }}</span>?</h2>
+    <mat-dialog-content>
+      <p class="texto-dialogo">Se generará una contraseña temporal. Al ingresar con ella, el usuario deberá crear una nueva.</p>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end" class="acciones-dialogo">
+      <button mat-stroked-button [mat-dialog-close]="false" cdkFocusInitial>Cancelar</button>
+      <button mat-flat-button class="btn-confirmar-clave" [mat-dialog-close]="true">Restablecer</button>
+    </mat-dialog-actions>
+  } @else {
+    <h2 mat-dialog-title>Contraseña temporal de <span class="mono">{{ d.usuario.nombre }}</span></h2>
+    <mat-dialog-content>
+      <p class="temporal mono">{{ d.temporal }}</p>
+      <p class="texto-dialogo">Entrégasela al usuario. Al iniciar sesión, el sistema le pedirá crear una contraseña nueva.</p>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end" class="acciones-dialogo">
+      <button mat-flat-button class="btn-confirmar-clave" mat-dialog-close>Listo</button>
+    </mat-dialog-actions>
+  }
 </ng-template>
