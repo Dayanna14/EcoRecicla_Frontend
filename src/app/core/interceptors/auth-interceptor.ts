@@ -1,6 +1,7 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { environment } from '../../../environments/environment';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const platformId = inject(PLATFORM_ID);
@@ -9,7 +10,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     return next(req);
   }
 
-  const backendUrl = 'http://localhost:8080/';
+  // Local: http://localhost:8080 · Desplegado: la URL de Render (sale del environment)
+  const backendUrl = environment.base;
   if (!req.url.startsWith(backendUrl)) {
     return next(req);
   }
