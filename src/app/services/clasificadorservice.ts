@@ -54,7 +54,7 @@ export class Clasificadorservice {
   }
 
   // Devuelve todas las clases ordenadas de mayor a menor confianza
-  async clasificar(imagen: HTMLImageElement): Promise<Prediccion[]> {
+  async clasificar(imagen: HTMLImageElement | HTMLVideoElement): Promise<Prediccion[]> {
     await this.cargarModelo();
 
     const probabilidades = tf.tidy(() => {
@@ -74,10 +74,13 @@ export class Clasificadorservice {
   }
 
   // Recorta el centro de la foto en un cuadrado de 224x224 (como Teachable Machine)
-  private recortarCuadrado(imagen: HTMLImageElement): HTMLCanvasElement {
-    const lado = Math.min(imagen.naturalWidth, imagen.naturalHeight);
-    const x = (imagen.naturalWidth - lado) / 2;
-    const y = (imagen.naturalHeight - lado) / 2;
+  private recortarCuadrado(imagen: HTMLImageElement | HTMLVideoElement): HTMLCanvasElement {
+    // ⚠️ NO ENSEÑADO EN CLASE: el video de la cámara usa videoWidth en vez de naturalWidth
+    const ancho = imagen instanceof HTMLVideoElement ? imagen.videoWidth : imagen.naturalWidth;
+    const alto = imagen instanceof HTMLVideoElement ? imagen.videoHeight : imagen.naturalHeight;
+    const lado = Math.min(ancho, alto);
+    const x = (ancho - lado) / 2;
+    const y = (alto - lado) / 2;
 
     const canvas = document.createElement('canvas');
     canvas.width = this.TAMANO;

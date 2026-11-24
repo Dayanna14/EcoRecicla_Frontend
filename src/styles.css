@@ -29,6 +29,19 @@ h3 {
   font-family: 'Playfair Display', serif;
   color: var(--eco-verde-bosque);
   margin: 0;
+  line-height: 1.2; /* sin esto el título se encima con el subtítulo */
+}
+
+/* Separación título / subtítulo en todas las páginas */
+h1 + p,
+.titulo-principal + .subtitulo-principal,
+h1 + .subtitulo {
+  margin-top: 8px !important;
+  line-height: 1.5;
+}
+.titulo-principal {
+  line-height: 1.2 !important;
+  margin-bottom: 8px !important;
 }
 
 /* Números, puntos, kg y códigos de canje en Roboto Mono */

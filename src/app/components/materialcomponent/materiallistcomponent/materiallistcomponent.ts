@@ -8,6 +8,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { RouterLink } from '@angular/router';
 import { MaterialDTOList } from '../../../models/MaterialDTOList';
 import { Materialservice } from '../../../services/materialservice';
+import { Loginservice } from '../../../services/loginservice';
 
 @Component({
   selector: 'app-materiallistcomponent',
@@ -35,9 +36,19 @@ export class Materiallistcomponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
+    private loginService: Loginservice,
   ) {}
 
+  // Solo el administrador registra, edita y elimina (igual que el backend)
+  get esAdmin(): boolean {
+    return this.loginService.hasAnyRole(['ADMINISTRADOR']);
+  }
+
+
   ngOnInit(): void {
+    if (!this.esAdmin) {
+      this.displayedColumns = this.displayedColumns.filter(c => c !== 'c7'); // c7 = acciones
+    }
     this.listar();
   }
 

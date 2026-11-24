@@ -15,6 +15,8 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Loginservice } from '../../../services/loginservice';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-entregalistcomponent',
@@ -39,6 +41,8 @@ export class Entregalistcomponent implements OnInit {
   listaUsuarios: UsuariosDTOList[] = [];
   listaMateriales: MaterialDTOList[] = [];
   listaCentros: CentroAcopioDTOList[] = [];
+  // Nombre del usuario de cada entrega (sale del reporte detallado, que pueden ver los 3 roles)
+  nombrePorEntrega = new Map<number, string>();
 
   @ViewChild('dialogEliminar') dialogEliminar!: TemplateRef<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -50,14 +54,37 @@ export class Entregalistcomponent implements OnInit {
     private centroAcopioService: Centroacopioservice,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private loginService: Loginservice
   ) {}
 
+  // Permisos (iguales al backend): registrar/editar ADMIN y OPERADOR; eliminar solo ADMIN
+  get esAdmin(): boolean {
+    return this.loginService.hasAnyRole(['ADMINISTRADOR']);
+  }
+  get puedeRegistrar(): boolean {
+    return this.loginService.hasAnyRole(['ADMINISTRADOR', 'OPERADOR_CENTRO']);
+  }
+  get soloReciclador(): boolean {
+    return !this.puedeRegistrar && this.loginService.hasAnyRole(['RECICLADOR']);
+  }
+
   ngOnInit(): void {
+    // c6 = eliminar, c7 = editar
+    this.displayedColumns = this.displayedColumns.filter(c =>
+      (c !== 'c6' || this.esAdmin) && (c !== 'c7' || this.puedeRegistrar));
     this.listarEntregas();
-    this.listarUsuarios();
+    if (this.esAdmin) {
+      this.listarUsuarios(); // GET /api/usuarios es solo para el administrador
+    }
     this.listarMateriales();
     this.listarCentros();
+  }
+
+  // Nombre del usuario de una entrega: de la lista de usuarios (admin) o del reporte detallado
+  nombreUsuario(entrega: EntregaDTOList): string {
+    return this.listaUsuarios.find(u => u.id_usuario === entrega.usuarioIdUsuario)?.nombre
+      ?? this.nombrePorEntrega.get(entrega.idEntrega) ?? '';
   }
 
   // Notificaciones con los estilos globales noti-exito / noti-advertencia / noti-error
@@ -71,10 +98,20 @@ export class Entregalistcomponent implements OnInit {
   }
 
   listarEntregas(): void {
-    this.entregaService.list().subscribe({
-      next: (data) => {
-        this.dataSource.data = data;
+    forkJoin({
+      entregas: this.entregaService.list(),
+      detalle: this.entregaService.obtenerReporteDetallado(),
+    }).subscribe({
+      next: ({ entregas, detalle }) => {
+        this.nombrePorEntrega = new Map(detalle.map(d => [d.idEntrega, d.nombreUsuario]));
+        // El reciclador solo ve sus propias entregas
+        if (this.soloReciclador) {
+          const yo = this.loginService.getNombre().trim().toLowerCase();
+          entregas = entregas.filter(e => (this.nombrePorEntrega.get(e.idEntrega) ?? '').trim().toLowerCase() === yo);
+        }
+        this.dataSource.data = entregas;
         this.dataSource.paginator = this.paginator;
+        this.cdr.detectChanges();
       },
       error: (error) => {
         console.error('Error al listar las entregas', error);
@@ -87,6 +124,7 @@ export class Entregalistcomponent implements OnInit {
     this.usuarioService.list().subscribe({
       next: (data) => {
         this.listaUsuarios = data;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -95,6 +133,7 @@ export class Entregalistcomponent implements OnInit {
     this.materialService.list().subscribe({
       next: (data) => {
         this.listaMateriales = data;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -103,6 +142,7 @@ export class Entregalistcomponent implements OnInit {
     this.centroAcopioService.list().subscribe({
       next: (data) => {
         this.listaCentros = data;
+        this.cdr.detectChanges();
       }
     });
   }

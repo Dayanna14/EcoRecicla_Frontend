@@ -1,7 +1,7 @@
 <div class="contenedor">
   <div class="encabezado">
     <h1>Clasificar material con IA</h1>
-    <p class="subtitulo">Sube una foto del residuo y te diremos qué tipo de material es.</p>
+    <p class="subtitulo">Apunta la cámara al residuo y te decimos qué es, cuánto vale y dónde llevarlo.</p>
   </div>
 
   @if (cargandoModelo) {
@@ -19,29 +19,48 @@
     </div>
   } @else {
     <div class="grid">
-      <!-- Columna izquierda: foto -->
+      <!-- Columna izquierda: cámara o foto -->
       <div class="tarjeta">
-        <h2>Tu foto</h2>
+        <h2>{{ camaraActiva ? 'Cámara en vivo' : 'Tu foto' }}
+          @if (camaraActiva) { <span class="en-vivo">● EN VIVO</span> }
+        </h2>
 
         <input #inputFoto type="file" accept="image/*" hidden (change)="seleccionarFoto($event)" />
 
-        @if (urlFoto) {
+        @if (camaraActiva) {
+          <div class="vista-previa camara">
+            <video #video autoplay muted playsinline></video>
+            <div class="guia"><span>Pon el residuo dentro del recuadro</span></div>
+            @if (mejor) {
+              <span class="etiqueta-vivo">{{ mejor.clase }} · {{ mejor.confianza }} %</span>
+            }
+          </div>
+          <div class="acciones">
+            <button mat-stroked-button (click)="detenerCamara()">Cerrar cámara</button>
+            <button mat-flat-button (click)="capturar()"><mat-icon>check</mat-icon> Usar este resultado</button>
+          </div>
+        } @else if (urlFoto) {
           <div class="vista-previa">
             <img #foto [src]="urlFoto" alt="Foto del material" (load)="clasificar()" />
           </div>
           <div class="acciones">
             <button mat-stroked-button (click)="limpiar(inputFoto)">Quitar</button>
-            <button mat-flat-button (click)="inputFoto.click()">
-              <mat-icon>photo_camera</mat-icon>
-              Otra foto
-            </button>
+            <button mat-stroked-button (click)="iniciarCamara()"><mat-icon>videocam</mat-icon> Cámara</button>
+            <button mat-flat-button (click)="inputFoto.click()"><mat-icon>photo_camera</mat-icon> Otra foto</button>
           </div>
         } @else {
-          <button class="zona-subida" (click)="inputFoto.click()">
-            <mat-icon>add_a_photo</mat-icon>
-            <strong>Selecciona una foto</strong>
-            <span>JPG o PNG, con el material bien iluminado y centrado.</span>
-          </button>
+          <div class="opciones-entrada">
+            <button class="zona-subida" (click)="iniciarCamara()">
+              <mat-icon>videocam</mat-icon>
+              <strong>Usar la cámara</strong>
+              <span>Apunta al residuo y la IA lo reconoce en vivo.</span>
+            </button>
+            <button class="zona-subida" (click)="inputFoto.click()">
+              <mat-icon>add_a_photo</mat-icon>
+              <strong>Subir una foto</strong>
+              <span>JPG o PNG, con el material bien iluminado y centrado.</span>
+            </button>
+          </div>
         }
       </div>
 
@@ -49,55 +68,126 @@
       <div class="tarjeta">
         <h2>Resultado</h2>
 
-        @if (clasificando) {
+        @if (clasificando && !mejor) {
           <p class="texto">Analizando la imagen...</p>
           <mat-progress-bar mode="indeterminate"></mat-progress-bar>
         } @else if (mejor) {
-          <div class="sugerencia">
-            <mat-icon>recycling</mat-icon>
-            <div>
-              <span class="etiqueta">Material sugerido</span>
-              <strong class="material">{{ mejor.clase }}</strong>
-              <span class="mono">{{ mejor.confianza }}% de confianza</span>
-            </div>
-          </div>
-
-          @if (mejor.confianza < CONFIANZA_MINIMA) {
+          @if (noDetectaMaterial) {
             <div class="aviso">
-              <mat-icon>help_outline</mat-icon>
-              <p>
-                La IA no está muy segura. Prueba con otra foto o confirma el material con el operador
-                del centro.
-              </p>
+              <mat-icon>search_off</mat-icon>
+              <p>No veo ningún material reciclable. Acerca el residuo a la cámara y que ocupe casi toda la imagen.</p>
+            </div>
+          } @else {
+            <div class="sugerencia">
+              <mat-icon>recycling</mat-icon>
+              <div>
+                <span class="etiqueta">{{ claseElegida ? 'Material elegido' : 'Material sugerido' }}</span>
+                <strong class="material">{{ claseFinal }}</strong>
+                @if (!claseElegida) { <span class="mono">{{ mejor.confianza }}% de confianza</span> }
+              </div>
             </div>
           }
 
-          @if (materialSugerido) {
-            <p class="puntos">
-              Este material otorga <strong class="mono">{{ materialSugerido.puntosPorKg }}</strong>
-              puntos por kg.
-            </p>
+          <!-- Cuando la IA no está segura, el usuario elige -->
+          @if (dudosa) {
+            <div class="aviso">
+              <mat-icon>help_outline</mat-icon>
+              <div>
+                <p>No estoy seguro. ¿Cuál es?</p>
+                <div class="opciones">
+                  @for (p of predicciones.slice(0, 3); track p.clase) {
+                    @if (p.clase !== 'Nada') {
+                      <button mat-stroked-button (click)="elegir(p.clase)">{{ p.clase }} · {{ p.confianza }} %</button>
+                    }
+                  }
+                </div>
+              </div>
+            </div>
           }
 
           <h3>Todas las clases</h3>
           <ul class="clases">
-            @for (p of predicciones; track p.clase) {
+            @for (p of predicciones.slice(0, 3); track p.clase) {
               <li>
-                <div class="fila-clase">
-                  <span>{{ p.clase }}</span>
-                  <span class="mono">{{ p.confianza }}%</span>
-                </div>
+                <div class="fila-clase"><span>{{ p.clase }}</span><span class="mono">{{ p.confianza }}%</span></div>
                 <mat-progress-bar mode="determinate" [value]="p.confianza"></mat-progress-bar>
               </li>
             }
           </ul>
+
+          @if (consejos.length > 0) {
+            <h3>Cómo prepararlo</h3>
+            <ul class="consejos">
+              @for (c of consejos; track c.texto) {
+                <li><mat-icon>{{ c.icono }}</mat-icon> {{ c.texto }}</li>
+              }
+            </ul>
+          }
         } @else {
           <div class="vacio">
             <mat-icon>image_search</mat-icon>
-            <p>Sube una foto para ver el resultado.</p>
+            <p>Usa la cámara o sube una foto para ver el resultado.</p>
           </div>
         }
       </div>
     </div>
+
+    @if (mejor && !noDetectaMaterial && !camaraActiva) {
+      <div class="grid">
+        <!-- Calculadora -->
+        <div class="tarjeta">
+          <h2>¿Cuánto vale?</h2>
+          @if (materialSugerido) {
+            <label class="fila-kg">¿Cuántos kg tienes?
+              <input type="number" min="0" step="0.5" [value]="kg" (input)="cambiarKg($any($event.target).value)" />
+              kg
+            </label>
+            <div class="numeros">
+              <div><span>Puntos que ganas</span><b class="mono">+{{ puntosEstimados }}</b></div>
+              <div><span>CO₂ que evitas</span><b class="mono">{{ co2Estimado }} kg</b></div>
+            </div>
+            @if (recompensaAlcanzable) {
+              <p class="alcance"><mat-icon>redeem</mat-icon> Con estos puntos alcanzas: <b>{{ recompensaAlcanzable.nombre }}</b> ({{ recompensaAlcanzable.costoPuntos }} pts)</p>
+            } @else if (siguienteRecompensa) {
+              <p class="alcance"><mat-icon>redeem</mat-icon> Te faltan <b>{{ siguienteRecompensa.costoPuntos - puntosEstimados }} pts</b> para {{ siguienteRecompensa.nombre }}</p>
+            }
+          } @else {
+            <p class="texto">Este material todavía no está registrado en EcoRecicla, así que no tiene puntos.</p>
+          }
+        </div>
+
+        <!-- ¿Dónde lo llevo? -->
+        <div class="tarjeta">
+          <h2>¿Dónde lo llevo?</h2>
+          @if (buscandoCentros) {
+            <p class="texto">Buscando el centro más cercano...</p>
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+          } @else if (centrosCercanos.length === 0) {
+            <p class="texto">No hay centros activos con ubicación registrada.</p>
+          } @else {
+            <div id="mapa-ia" class="mapa-ia"></div>
+            @for (c of centrosCercanos; track $index; let i = $index) {
+              <div class="centro" [class.principal]="i === 0">
+                <mat-icon>{{ i === 0 ? 'location_on' : 'place' }}</mat-icon>
+                <div>
+                  <strong>{{ c.nombre }}</strong>
+                  <span>
+                    @if (c.km !== null) { A {{ c.km }} km }
+                    @if (c.km !== null && c.horario) { · }
+                    {{ c.horario }}
+                  </span>
+                </div>
+                @if (i === 0) {
+                  <a mat-flat-button [href]="rutaMapa(c.lat, c.lng)" target="_blank" rel="noopener"><mat-icon>directions_walk</mat-icon> Cómo llegar</a>
+                }
+              </div>
+            }
+            @if (sinUbicacion) {
+              <p class="nota">Activa tu ubicación en el navegador para ver el centro más cercano.</p>
+            }
+          }
+        </div>
+      </div>
+    }
   }
 </div>

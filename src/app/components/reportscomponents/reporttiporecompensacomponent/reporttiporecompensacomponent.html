@@ -1,7 +1,7 @@
 <div class="tarjeta" (click)="abrirDetalle()">
   <div class="cabecera">
     <span class="icono"><mat-icon>redeem</mat-icon></span>
-    <h2>Tipos de recompensa más canjeados</h2>
+    <h2>Tipos más canjeados</h2>
   </div>
 
   @if (hayError) {
@@ -17,7 +17,7 @@
     <p class="vacio">Aún no hay canjes registrados.</p>
   } @else {
     <div class="grafico">
-      <canvas baseChart type="bar" [data]="chartData" [options]="chartOptions"></canvas>
+      <canvas baseChart type="pie" [data]="chartData" [options]="chartOptions"></canvas>
     </div>
 
     @if (lider) {

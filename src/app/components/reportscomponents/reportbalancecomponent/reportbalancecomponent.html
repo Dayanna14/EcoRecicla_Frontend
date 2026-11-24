@@ -1,0 +1,84 @@
+<div class="tarjeta destacada" (click)="abrirDetalle()">
+  <div class="cabecera">
+    <span class="icono"><mat-icon>account_balance_wallet</mat-icon></span>
+    <h2>Balance de puntos</h2>
+  </div>
+
+  @if (hayError) {
+    <div class="error">
+      <mat-icon>warning</mat-icon>
+      <p class="error-titulo">No se pudo cargar este reporte</p>
+      <p>Los demás reportes siguen disponibles.</p>
+      <button mat-button (click)="obtenerReporte(); $event.stopPropagation()"><mat-icon>refresh</mat-icon> Reintentar</button>
+    </div>
+  } @else if (cargado && generados === 0) {
+    <p class="vacio">Aún no hay puntos generados.</p>
+  } @else {
+    <div class="balance-barra">
+      <span class="canjeado" [style.width.%]="porcentajeCanjeado"></span>
+      <span class="pendiente-barra" [style.width.%]="100 - porcentajeCanjeado"></span>
+    </div>
+    <div class="balance-numeros">
+      <div><span>Generados</span><b class="mono">{{ generados }}</b></div>
+      <div><span><i class="punto verde"></i>Canjeados</span><b class="mono">{{ canjeados }}</b></div>
+      <div><span><i class="punto ambar"></i>Por canjear</span><b class="mono ambar-texto">{{ porCanjear }}</b></div>
+    </div>
+    @if (canjeados > generados) {
+      <p class="lider aviso-balance"><mat-icon>error_outline</mat-icon> Hay más puntos canjeados que generados</p>
+    } @else {
+      <p class="lider">{{ 100 - porcentajeCanjeado }} % de los puntos aún no se canjea</p>
+    }
+    <p class="ver-detalle">Ver detalle <mat-icon>arrow_forward</mat-icon></p>
+  }
+</div>
+
+<!-- Ventana de detalle (se abre con MatDialog) -->
+<ng-template #dialogDetalle>
+  <div class="detalle">
+    <div class="detalle-cabecera">
+      <span class="icono"><mat-icon>account_balance_wallet</mat-icon></span>
+      <div>
+        <h2 mat-dialog-title>Balance de puntos</h2>
+        <p class="detalle-sub">¿Cuántos puntos tienen los usuarios para canjear?</p>
+      </div>
+      <button mat-icon-button mat-dialog-close aria-label="Cerrar"><mat-icon>close</mat-icon></button>
+    </div>
+    <mat-dialog-content>
+      <p class="seccion">EN TOTAL</p>
+      <div class="totales">
+        <div><span>Generados</span><b class="mono">{{ generados }}</b></div>
+        <div><span>Canjeados</span><b class="mono">{{ canjeados }}</b></div>
+        <div><span>Por canjear</span><b class="mono">{{ porCanjear }}</b></div>
+      </div>
+      <p class="seccion">CADA USUARIO</p>
+      <table class="tabla">
+        <thead><tr><th>Usuario</th><th>Generados</th><th>Canjeados</th><th>Por canjear</th></tr></thead>
+        <tbody>
+          @for (f of filas; track f.nombre) {
+            <tr>
+              <td>{{ f.nombre }}</td>
+              <td class="mono">{{ f.generados }}</td>
+              <td class="mono">{{ f.canjeados }}</td>
+              <td class="mono"><b>{{ f.porCanjear }}</b></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      <p class="seccion">PARA TENER EN CUENTA</p>
+      @if (avisos.length === 0) {
+        <p class="aviso aviso-ok"><mat-icon>check_circle</mat-icon> Todo en orden.</p>
+      } @else {
+        @for (aviso of avisos; track aviso) {
+          <p class="aviso"><mat-icon>error_outline</mat-icon> {{ aviso }}</p>
+        }
+      }
+      <div class="calculo">
+        <mat-icon>info</mat-icon>
+        <p><b>¿Cómo se calcula?</b> Generados = suma de puntos de todas las entregas. Canjeados = suma de puntos usados en canjes (sin contar los cancelados). Por canjear = la diferencia.</p>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-flat-button class="btn-cerrar" mat-dialog-close>Cerrar</button>
+    </mat-dialog-actions>
+  </div>
+</ng-template>

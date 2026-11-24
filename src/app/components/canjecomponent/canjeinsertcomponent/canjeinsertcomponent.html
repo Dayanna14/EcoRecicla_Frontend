@@ -1,45 +1,33 @@
 <div class="contenedor">
   <nav class="migas">
-    <a routerLink="/canjes/registrar">Canjes</a>
+    <a routerLink="/canjes/listar">Canjes</a>
     <span>/</span>
     <span>Registrar</span>
   </nav>
 
-  <h1>Registrar nuevo canje</h1>
-  <p class="subtitulo">Completa los datos necesarios para registrar el canje de puntos del usuario.</p>
+  <h1>{{ esAdmin ? 'Registrar canje' : 'Canjear recompensa' }}</h1>
+  <p class="subtitulo">{{ esAdmin ? 'Registra el canje de puntos de un usuario por una recompensa.' : 'Elige la recompensa que quieres canjear con tus puntos.' }}</p>
 
-  <div class="grid-simple">
-    <!-- Formulario de registro de canje -->
+  <div class="grid">
     <form class="tarjeta formulario" [formGroup]="form" #formDir="ngForm" (ngSubmit)="registrar(formDir)">
       <h2>Datos del canje</h2>
 
-      <!-- Fecha del Canje -->
-      <label class="etiqueta" for="fecha">Fecha</label>
-      <mat-form-field appearance="outline">
-        <mat-icon matPrefix>calendar_today</mat-icon>
-        <input matInput id="fecha" type="date" formControlName="fecha" />
-        @if (form.get('fecha')?.hasError('required')) {
-          <mat-error>Campo obligatorio, seleccione la fecha</mat-error>
-        }
-      </mat-form-field>
+      @if (!esAdmin && misPuntos !== null) {
+        <p class="aviso"><mat-icon>stars</mat-icon> Tienes <strong>&nbsp;{{ misPuntos }} puntos&nbsp;</strong> disponibles.</p>
+      }
 
-      <!-- Puntos Usados -->
-      <label class="etiqueta" for="puntosUsados">Puntos usados</label>
-      <mat-form-field appearance="outline">
-        <mat-icon matPrefix>stars</mat-icon>
-        <input matInput id="puntosUsados" type="number" formControlName="puntosUsados" placeholder="150" min="1" />
-        @if (form.get('puntosUsados')?.hasError('required')) {
-          <mat-error>Campo obligatorio, ingrese los puntos</mat-error>
-        }
-      </mat-form-field>
+      @if (avisoReciclador) {
+        <p class="aviso"><mat-icon>info</mat-icon> {{ avisoReciclador }}</p>
+      }
 
-      <!-- Recompensa seleccionable -->
       <label class="etiqueta">Recompensa</label>
       <mat-form-field appearance="outline">
         <mat-icon matPrefix>card_giftcard</mat-icon>
         <mat-select formControlName="idRecompensa" placeholder="Seleccione una recompensa">
           @for (r of recompensas; track r.idRecompensa) {
-            <mat-option [value]="r.idRecompensa">{{ r.nombre }} · {{ r.puntosRequeridos }} pts</mat-option>
+            <mat-option [value]="r.idRecompensa" [disabled]="!alcanza(r.costoPuntos)">
+              {{ r.nombre }} · {{ r.costoPuntos }} pts{{ alcanza(r.costoPuntos) ? '' : ' (no te alcanza)' }}
+            </mat-option>
           }
         </mat-select>
         @if (form.get('idRecompensa')?.hasError('required')) {
@@ -47,39 +35,111 @@
         }
       </mat-form-field>
 
-      <!-- Usuario (Id_usuario) seleccionable -->
-      <label class="etiqueta">Usuario responsable</label>
-      <mat-form-field appearance="outline">
-        <mat-icon matPrefix>person</mat-icon>
-        <mat-select formControlName="Id_usuario" placeholder="Seleccione un usuario">
-          @for (u of usuarios; track u.id_usuario) {
-            <mat-option [value]="u.id_usuario">{{ u.nombre }} · {{ u.email }}</mat-option>
-          }
-        </mat-select>
-        @if (form.get('Id_usuario')?.hasError('required')) {
-          <mat-error>Campo obligatorio, seleccione el usuario</mat-error>
-        }
-      </mat-form-field>
+      <div class="fila">
+        <div>
+          <label class="etiqueta" for="puntosUsados">Puntos que se usan</label>
+          <mat-form-field appearance="outline">
+            <mat-icon matPrefix>stars</mat-icon>
+            <input matInput id="puntosUsados" type="number" formControlName="puntosUsados" placeholder="Según la recompensa" />
+          </mat-form-field>
+        </div>
+        <div>
+          <label class="etiqueta" for="fecha">Fecha</label>
+          <mat-form-field appearance="outline">
+            <mat-icon matPrefix>calendar_today</mat-icon>
+            <input matInput id="fecha" type="date" formControlName="fecha" />
+            @if (form.get('fecha')?.hasError('required')) {
+              <mat-error>Campo obligatorio, seleccione la fecha</mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
 
-      <!-- Estado -->
-      <label class="etiqueta">Estado</label>
-      <mat-form-field appearance="outline">
-        <mat-icon matPrefix>toggle_on</mat-icon>
-        <mat-select formControlName="estado">
-          @for (e of estados; track e.value) {
-            <mat-option [value]="e.value">{{ e.viewValue }}</mat-option>
+      @if (esAdmin) {
+        <label class="etiqueta">Usuario</label>
+        <mat-form-field appearance="outline">
+          <mat-icon matPrefix>person</mat-icon>
+          <mat-select formControlName="idUsuario" placeholder="Seleccione un usuario">
+            @for (u of usuarios; track u.id_usuario) {
+              <mat-option [value]="u.id_usuario">{{ u.nombre }} · {{ u.email }}</mat-option>
+            }
+          </mat-select>
+          @if (form.get('idUsuario')?.hasError('required')) {
+            <mat-error>Campo obligatorio, seleccione el usuario</mat-error>
           }
-        </mat-select>
-        @if (form.get('estado')?.hasError('required')) {
-          <mat-error>Campo obligatorio, seleccione el estado</mat-error>
-        }
-      </mat-form-field>
+        </mat-form-field>
 
-      <!-- Botones de Acción -->
+        <label class="etiqueta">Estado</label>
+        <mat-form-field appearance="outline">
+          <mat-icon matPrefix>toggle_on</mat-icon>
+          <mat-select formControlName="estado">
+            @for (e of estados; track e.value) {
+              <mat-option [value]="e.value">{{ e.viewValue }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      }
+
       <div class="acciones">
-        <a mat-stroked-button routerLink="/canjes/registrar">Cancelar</a>
-        <button mat-flat-button type="submit">Registrar canje</button>
+        <a mat-stroked-button routerLink="/canjes/listar">Cancelar</a>
+        <button mat-flat-button type="submit" [disabled]="!esAdmin && (cargando || miId === null)">{{ esAdmin ? 'Registrar canje' : 'Canjear' }}</button>
       </div>
     </form>
+
+    <aside class="tarjeta panel">
+      @if (seleccionada; as r) {
+        <h2>Tu recompensa</h2>
+        <div class="preview">
+          <div class="preview-img">
+            @if (r.imagenUrl) {
+              <img [src]="r.imagenUrl" [alt]="r.nombre" (error)="sinImagen($event)" />
+            }
+            <mat-icon class="preview-icono">redeem</mat-icon>
+          </div>
+          <div>
+            <h3>{{ r.nombre }}</h3>
+            <p class="costo">{{ r.costoPuntos }} puntos</p>
+          </div>
+        </div>
+
+        @if (!esAdmin && misPuntos !== null) {
+          <div class="balance">
+            <div class="linea"><span>Tus puntos</span><strong>{{ misPuntos }}</strong></div>
+            <div class="linea resta"><span>Este canje</span><strong>− {{ r.costoPuntos }}</strong></div>
+            <div class="linea total"><span>Te quedan</span><strong>{{ restantes }}</strong></div>
+            <div class="barra"><div class="relleno" [style.width.%]="porcentajeUso"></div></div>
+            <p class="nota">Este canje usa el {{ porcentajeUso }}% de tus puntos.</p>
+          </div>
+          <p class="nota"><mat-icon>schedule</mat-icon> Tu canje quedará <strong>&nbsp;pendiente&nbsp;</strong> hasta que el centro lo confirme.</p>
+        }
+        <button mat-stroked-button type="button" class="cambiar" (click)="form.get('idRecompensa')?.setValue('')">
+          <mat-icon>swap_horiz</mat-icon> Elegir otra
+        </button>
+      } @else {
+        <h2>{{ esAdmin ? 'Recompensas disponibles' : 'Puedes canjear' }}</h2>
+        @if (sugeridas.length) {
+          <div class="galeria">
+            @for (r of sugeridas; track r.idRecompensa) {
+              <button type="button" class="mini" (click)="elegir(r)">
+                <div class="mini-img">
+                  @if (r.imagenUrl) {
+                    <img [src]="r.imagenUrl" [alt]="r.nombre" (error)="sinImagen($event)" />
+                  }
+                  <mat-icon>redeem</mat-icon>
+                </div>
+                <span class="mini-nombre">{{ r.nombre }}</span>
+                <span class="mini-costo">{{ r.costoPuntos }} pts</span>
+              </button>
+            }
+          </div>
+        } @else if (!cargando || esAdmin) {
+          <div class="vacio">
+            <mat-icon>eco</mat-icon>
+            <p>Todavía no te alcanza para ninguna recompensa. ¡Sigue reciclando para sumar puntos!</p>
+            <a mat-stroked-button routerLink="/centrosacopio/mapa">Ver centros de acopio</a>
+          </div>
+        }
+      }
+    </aside>
   </div>
 </div>

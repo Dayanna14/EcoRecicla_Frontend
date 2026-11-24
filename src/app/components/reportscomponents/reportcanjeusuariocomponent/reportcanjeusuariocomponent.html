@@ -1,0 +1,78 @@
+<div class="tarjeta" (click)="abrirDetalle()">
+  <div class="cabecera">
+    <span class="icono"><mat-icon>person_pin</mat-icon></span>
+    <h2>Canjes por usuario</h2>
+  </div>
+  @if (hayError) {
+    <div class="error">
+      <mat-icon>warning</mat-icon>
+      <p class="error-titulo">No se pudo cargar este reporte</p>
+      <p>Los demás reportes siguen disponibles.</p>
+      <button mat-button (click)="obtenerReporte(); $event.stopPropagation()"><mat-icon>refresh</mat-icon> Reintentar</button>
+    </div>
+  } @else if (lista.length === 0) {
+    <p class="vacio">Aún no hay canjes registrados.</p>
+  } @else {
+    <div class="grafico">
+      <canvas baseChart type="bar" [data]="chartData" [options]="chartOptions"></canvas>
+    </div>
+    @if (lider) {
+      <p class="lider">
+        <mat-icon>emoji_events</mat-icon>
+        Más activo: <b>{{ lider.nombreUsuario }}</b> · <span class="mono">{{ lider.cantidadCanjes }} canjes</span> · {{ porcentajeLider }} % del total
+      </p>
+    }
+    <p class="ver-detalle">Ver detalle <mat-icon>arrow_forward</mat-icon></p>
+  }
+</div>
+
+<!-- Ventana de detalle (se abre con MatDialog) -->
+<ng-template #dialogDetalle>
+  <div class="detalle">
+    <div class="detalle-cabecera">
+      <span class="icono"><mat-icon>person_pin</mat-icon></span>
+      <div>
+        <h2 mat-dialog-title>Canjes por usuario</h2>
+        <p class="detalle-sub">¿Quiénes usan más sus puntos?</p>
+      </div>
+      <button mat-icon-button mat-dialog-close aria-label="Cerrar"><mat-icon>close</mat-icon></button>
+    </div>
+    <mat-dialog-content>
+      <p class="seccion">EN TOTAL</p>
+      <div class="totales">
+        <div><span>Canjes</span><b class="mono">{{ totalCanjes }}</b></div>
+        <div><span>Usuarios que canjearon</span><b class="mono">{{ todos.length }}</b></div>
+        <div><span>Promedio por usuario</span><b class="mono">{{ todos.length > 0 ? (totalCanjes / todos.length).toFixed(1) : 0 }}</b></div>
+      </div>
+      <p class="seccion">CADA USUARIO</p>
+      <table class="tabla">
+        <thead><tr><th>#</th><th>Usuario</th><th>Canjes</th><th>% del total</th></tr></thead>
+        <tbody>
+          @for (item of todos; track item.nombreUsuario; let i = $index) {
+            <tr>
+              <td>{{ i + 1 }} @if (i === 0) { <span class="estrella">★</span> }</td>
+              <td>{{ item.nombreUsuario }}</td>
+              <td class="mono">{{ item.cantidadCanjes }}</td>
+              <td><div class="barrita"><span [style.width.%]="porcentaje(item.cantidadCanjes)"></span></div><small>{{ porcentaje(item.cantidadCanjes) }} %</small></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      <p class="seccion">PARA TENER EN CUENTA</p>
+      @if (avisos.length === 0) {
+        <p class="aviso aviso-ok"><mat-icon>check_circle</mat-icon> Todo en orden.</p>
+      } @else {
+        @for (aviso of avisos; track aviso) {
+          <p class="aviso"><mat-icon>error_outline</mat-icon> {{ aviso }}</p>
+        }
+      }
+      <div class="calculo">
+        <mat-icon>info</mat-icon>
+        <p><b>¿Cómo se calcula?</b> Se cuentan los canjes registrados por cada usuario. Los usuarios sin canjes no aparecen.</p>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-flat-button class="btn-cerrar" mat-dialog-close>Cerrar</button>
+    </mat-dialog-actions>
+  </div>
+</ng-template>

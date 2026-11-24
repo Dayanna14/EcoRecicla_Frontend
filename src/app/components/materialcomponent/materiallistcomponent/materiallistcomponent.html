@@ -9,7 +9,9 @@
         <mat-icon>search</mat-icon>
         Buscar
       </a>
-      <a mat-flat-button routerLink="/materiales/insertar">Registrar material</a>
+      @if (esAdmin) {
+        <a mat-flat-button routerLink="/materiales/insertar">Registrar material</a>
+      }
     </div>
   </div>
 

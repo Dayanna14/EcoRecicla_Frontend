@@ -1,156 +1,244 @@
 /* Contenedor general de la vista */
 .container {
     padding: 32px 48px;
-    background-color: #fef6e7; /* Fondo crema característico de EcoRecicla */
+    background-color: var(--eco-crema);
     min-height: calc(100vh - 64px);
-    font-family: Roboto, "Helvetica Neue", sans-serif;
-    color: #2b3a2f;
+    font-family: 'Lato', sans-serif;
+    color: var(--eco-charcoal);
 }
 
-/* Rutas de navegación superior (ej. Entregas / Registrar) */
+/* Ruta de navegación superior */
 .header-path {
-    font-size: 13px;
-    color: #6b7c6e;
+    font-size: 14px;
+    color: var(--eco-charcoal);
     margin-bottom: 8px;
 }
 
-.titulo-principal {
-    font-size: 28px;
+.header-path a {
     font-weight: 700;
-    color: #1e4620; /* Verde bosque oscuro principal */
+    color: var(--eco-verde-hoja);
+    text-decoration: none;
+}
+
+.header-path a:hover {
+    text-decoration: underline;
+}
+
+.header-path a:focus-visible {
+    outline: 2px solid var(--eco-ambar);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* Cabecera superior */
+.header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.titulo-principal {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--eco-verde-bosque);
     margin: 0 0 4px 0;
 }
 
 .subtitulo-principal {
-    font-size: 14px;
-    color: #5c6b5e;
-    margin-bottom: 24px;
+    font-size: 16px;
+    color: var(--eco-charcoal);
+    margin: 0;
 }
 
-/* Layout en dos columnas estilo grid */
-.grid-layout {
-    display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    gap: 24px;
-    align-items: start;
-}
-
-/* Tarjeta del Formulario (Izquierda) */
-.card-formulario {
-    background-color: #ffffff;
-    border-radius: 12px;
-    padding: 32px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-    border: 1px solid #f0e4d0;
-}
-
-.seccion-titulo {
-    font-size: 18px;
-    font-weight: 600;
-    color: #1e4620;
-    margin-top: 0;
-    margin-bottom: 20px;
-}
-
-/* Etiquetas de los campos */
-.input-label {
-    display: block;
-    font-size: 13px;
+/* Botón superior (píldora) */
+.btn-registrar {
+    padding: 0 30px;
+    height: 50px;
+    font-size: 16px;
     font-weight: 500;
-    color: #3b4a3d;
-    margin-bottom: 6px;
+    --mat-button-filled-container-shape: 999px;
+    --mat-button-filled-container-color: var(--eco-verde-bosque);
+    --mat-button-filled-label-text-color: var(--eco-crema);
 }
 
-/* Ajustes de Angular Material Form Field para que luzcan modernos */
-.full-width {
+.btn-registrar:hover:not(:disabled) {
+    --mat-button-filled-container-color: var(--eco-verde-hoja);
+}
+
+.btn-registrar:focus-visible {
+    outline: 2px solid var(--eco-ambar);
+    outline-offset: 2px;
+}
+
+/* Tarjeta de la tabla (usa el surface del tema, como el resto de tarjetas) */
+.card-table {
+    background-color: var(--mat-sys-surface, var(--eco-linen));
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--eco-onyx) 8%, transparent);
+    overflow-x: auto;
+}
+
+table {
     width: 100%;
-    margin-bottom: 16px;
+    --mat-table-background-color: transparent;
+    --mat-table-header-container-color: var(--eco-verde-te);
+    --mat-table-header-headline-color: var(--eco-verde-bosque);
+    --mat-table-header-headline-font: 'Lato', sans-serif;
+    --mat-table-header-headline-size: 13px;
+    --mat-table-header-headline-weight: 700;
+    --mat-table-row-item-label-text-color: var(--eco-onyx);
+    --mat-table-row-item-label-text-font: 'Lato', sans-serif;
+    --mat-table-row-item-label-text-size: 15px;
+    --mat-table-row-item-outline-color: color-mix(in srgb, var(--eco-charcoal) 40%, transparent);
 }
 
-::ng-deep .mat-mdc-text-field-wrapper {
-    background-color: #faf8f5 !important;
-    border-radius: 8px !important;
+th[mat-header-cell] {
+    padding: 14px 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-bottom: 1px solid color-mix(in srgb, var(--eco-charcoal) 40%, transparent);
 }
 
-/* Botones inferiores */
-.contenedor-botones {
+td[mat-cell] {
+    padding: 16px;
+}
+
+/* Filas alternadas */
+tr[mat-row]:nth-child(even) {
+    background-color: var(--eco-vanilla);
+}
+
+/* Puntos como pastilla con punto */
+.badge-puntos {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: var(--eco-verde-te);
+    color: var(--eco-verde-bosque);
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+.badge-puntos::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: currentColor;
+}
+
+/* Botones de acciones */
+.btn-eliminar {
+    color: var(--eco-error);
+    --mat-icon-button-icon-color: var(--eco-error);
+}
+
+.btn-editar {
+    color: var(--eco-verde-bosque);
+    --mat-icon-button-icon-color: var(--eco-verde-bosque);
+}
+
+.btn-eliminar:focus-visible,
+.btn-editar:focus-visible {
+    outline: 2px solid var(--eco-ambar);
+    outline-offset: 2px;
+}
+
+/* Paginador */
+mat-paginator {
+    --mat-paginator-container-background-color: transparent;
+    --mat-paginator-container-text-color: var(--eco-charcoal);
+    --mat-paginator-container-text-font: 'Lato', sans-serif;
+    --mat-paginator-enabled-icon-color: var(--eco-charcoal);
+    --mat-paginator-disabled-icon-color: var(--eco-salvia);
+}
+
+.text-center {
+    text-align: center;
+}
+
+.no-data {
+    text-align: center;
+    padding: 40px;
+    color: var(--eco-charcoal);
+    font-size: 14px;
+}
+
+/* ---------- Diálogo de eliminar ---------- */
+.icono-eliminar {
     display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-    margin-top: 24px;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    margin: 24px 24px 0;
+    border-radius: 50%;
+    background-color: color-mix(in srgb, var(--eco-error) 15%, transparent);
+    color: var(--eco-error);
+}
+
+h2[mat-dialog-title] {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: var(--eco-verde-bosque);
+}
+
+/* ID de la entrega en Roboto Mono (es un código) */
+h2[mat-dialog-title] .codigo {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.85em;
+}
+
+.texto-dialogo {
+    margin: 0;
+    font-family: 'Lato', sans-serif;
+    color: var(--eco-charcoal);
+    line-height: 1.5;
+}
+
+.acciones-dialogo {
+    gap: 8px;
+    padding: 8px 24px 24px;
+    --mat-button-filled-container-shape: 8px;
+    --mat-button-outlined-container-shape: 8px;
 }
 
 .btn-cancelar {
-    border-color: #1e4620 !important;
-    color: #1e4620 !important;
-    border-radius: 8px !important;
-    padding: 0 24px !important;
+    --mat-button-outlined-outline-color: var(--eco-verde-bosque);
+    --mat-button-outlined-label-text-color: var(--eco-verde-bosque);
 }
 
-.btn-registrar {
-    background-color: #1e4620 !important;
-    color: #ffffff !important;
-    border-radius: 8px !important;
-    padding: 0 24px !important;
-    font-weight: 500;
+.btn-confirmar {
+    --mat-button-filled-container-color: var(--eco-error);
+    --mat-button-filled-label-text-color: var(--eco-crema);
 }
 
-.btn-registrar:hover {
-    background-color: #143216 !important;
+.btn-cancelar:focus-visible,
+.btn-confirmar:focus-visible {
+    outline: 2px solid var(--eco-ambar);
+    outline-offset: 2px;
 }
 
-/* Columna Lateral Derecha (Tarjetas informativas) */
-.columna-lateral {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
+/* Diseño responsivo */
+@media (max-width: 700px) {
+    .container {
+        padding: 24px 16px;
+    }
 
-.card-info {
-    background-color: #ffffff;
-    border-radius: 12px;
-    padding: 24px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-    border: 1px solid #f0e4d0;
-}
-
-.card-info h3, .card-consejo h3 {
-    font-size: 16px;
-    color: #1e4620;
-    margin-top: 0;
-    margin-bottom: 12px;
-}
-
-.card-info p, .card-consejo p {
-    font-size: 13px;
-    color: #5c6b5e;
-    line-height: 1.5;
-    margin-bottom: 16px;
-}
-
-.info-item {
-    font-size: 13px;
-    color: #3b4a3d;
-    margin-bottom: 8px;
-}
-
-.card-consejo {
-    background-color: #eaf1e7; /* Verde claro sutil idéntico al de tus compañeros */
-    border-radius: 12px;
-    padding: 24px;
-    border: 1px solid #d5e3d0;
-}
-
-.mensaje-alerta {
-    margin-top: 16px;
-    font-size: 13px;
-    color: #d9534f;
-    font-weight: 500;
-}
-
-/* Diseño Responsivo para pantallas pequeñas */
-@media (max-width: 900px) {
-    .grid-layout {
-        grid-template-columns: 1fr;
+    .header-section {
+        flex-direction: column;
+        align-items: flex-start;
     }
 }
+/* Canjes: los puntos se restan y el estado va en un chip */
+.badge-canje { background: #f6e3de; color: var(--eco-error); }
+.chip-estado { display: inline-block; padding: 4px 12px; border-radius: 99px; font-size: 0.8rem; font-weight: 700; }
+.chip-completado { background: var(--eco-verde-te); color: var(--eco-verde-bosque); }
+.chip-pendiente { background: #f7e7cf; color: var(--eco-corcho); }
+.chip-cancelado { background: #f6e3de; color: var(--eco-error); }

@@ -55,7 +55,7 @@ h1 {
 /* 4 tarjetas de números */
 .kpis {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 20px;
   margin-bottom: 24px;
 }
@@ -112,7 +112,8 @@ h1 {
 /* Grilla de reportes: 3 columnas como en Figma */
 .reportes {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-flow: dense; /* rellena los huecos cuando se ocultan tarjetas */
   gap: 20px;
   align-items: stretch;
 }
@@ -222,4 +223,18 @@ h1 {
 
 .enlace-reporte .flecha {
   color: #c98a3e;
+}
+/* Mosaico: una tarjeta grande (2x2) y tarjetas anchas (2 columnas) */
+.celda { min-width: 0; display: flex; flex-direction: column; }
+.celda > * { flex: 1; display: flex; flex-direction: column; }
+.celda.grande { grid-column: span 2; grid-row: span 2; }
+.celda.ancha { grid-column: span 2; }
+
+/* ⚠️ NO ENSEÑADO EN CLASE: en pantallas medianas pasa a 2 columnas y en celular a 1 */
+@media (max-width: 1200px) {
+  .reportes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 700px) {
+  .reportes { grid-template-columns: 1fr; }
+  .celda.grande, .celda.ancha { grid-column: span 1; grid-row: span 1; }
 }

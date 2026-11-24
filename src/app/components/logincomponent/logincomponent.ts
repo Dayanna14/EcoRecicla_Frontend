@@ -56,7 +56,7 @@ export class Logincomponent {
         const destination =
           returnUrl?.startsWith('/') && !returnUrl.startsWith('//') && returnUrl !== '/'
             ? returnUrl
-            : '/menu';
+            : this.inicioSegunRol();
 
         void this.router.navigateByUrl(destination);
       },
@@ -66,5 +66,19 @@ export class Logincomponent {
           'No se pudo iniciar sesión. Verifica tus credenciales e inténtalo nuevamente.';
       },
     });
+  }
+
+  // Página de inicio de cada rol después del login
+  private inicioSegunRol(): string {
+    if (this.auth.hasAnyRole(['ADMINISTRADOR'])) {
+      return '/reportes/dashboard';
+    }
+    if (this.auth.hasAnyRole(['OPERADOR_CENTRO'])) {
+      return '/entregas/listar';
+    }
+    if (this.auth.hasAnyRole(['RECICLADOR'])) {
+      return '/reportes/dashboard'; // ahí ve "Mi impacto"
+    }
+    return '/home';
   }
 }

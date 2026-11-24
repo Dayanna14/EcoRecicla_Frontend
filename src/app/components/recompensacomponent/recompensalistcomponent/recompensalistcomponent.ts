@@ -112,4 +112,8 @@ export class Recompensalistcomponent implements OnInit {
   get esAdministrador(): boolean {
     return this.loginService.hasAnyRole(['ADMINISTRADOR']);
   }
+
+  get esReciclador(): boolean {
+    return this.loginService.hasAnyRole(['RECICLADOR']);
+  }
 }

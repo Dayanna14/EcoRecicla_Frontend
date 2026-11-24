@@ -1,84 +1,70 @@
 <div class="contenedor">
-  <header class="banda">
-    <div>
-      <h1>Dashboard de reportes</h1>
-      <p class="actualizado">Actualizado hoy a las {{ horaActualizacion | date: 'HH:mm' }}</p>
-    </div>
-    <div class="acciones">
-      <button mat-stroked-button class="btn-actualizar" (click)="actualizar()">
-        <mat-icon>refresh</mat-icon> Actualizar
-      </button>
-      <button mat-flat-button class="btn-exportar" (click)="exportar()">
-        <mat-icon>download</mat-icon> Exportar
-      </button>
-    </div>
-  </header>
-
-  <!-- Tarjetas de números -->
-  <section class="kpis">
-    <div class="kpi">
-      <div class="kpi-cabecera"><span>Usuarios registrados</span><mat-icon>group</mat-icon></div>
-      <p class="kpi-valor mono">{{ totalUsuarios ?? '—' }}</p>
-      <p class="kpi-nota">Cuentas en la plataforma</p>
-    </div>
-    <div class="kpi">
-      <div class="kpi-cabecera"><span>Kg reciclados</span><mat-icon>scale</mat-icon></div>
-      <p class="kpi-valor mono">{{ totalKg !== null ? (totalKg | number: '1.0-1') + ' kg' : '—' }}</p>
-      <p class="kpi-nota">Suma de todas las entregas</p>
-    </div>
-    <div class="kpi">
-      <div class="kpi-cabecera"><span>Canjes realizados</span><mat-icon>redeem</mat-icon></div>
-      <p class="kpi-valor mono">{{ totalCanjes ?? '—' }}</p>
-      <p class="kpi-nota">Recompensas canjeadas</p>
-    </div>
-    <div class="kpi">
-      <div class="kpi-cabecera"><span>Entregas con más de 100 pts</span><mat-icon>emoji_events</mat-icon></div>
-      <p class="kpi-valor mono">{{ entregas100 ?? '—' }}</p>
-      <p class="kpi-nota">Entregas destacadas</p>
-    </div>
-  </section>
-
-  <!-- Reportes: cada integrante reemplaza su "en construcción" por su componente -->
-  <section class="reportes">
-    <!-- Axel: Materiales más entregados -->
-    <app-reportmaterialcomponent></app-reportmaterialcomponent>
-
-    <!-- Dayana -->
-    <app-reportrolcomponent></app-reportrolcomponent>
-    <app-reportcentrocomponent></app-reportcentrocomponent>
-
-    <!-- Nayara: Recompensas más canjeadas -->
-    <div class="pendiente"><mat-icon>construction</mat-icon><p>Recompensas más canjeadas</p><span>Reporte en construcción</span></div>
-
-    <!-- Franco: Canjes por usuario -->
-    <div class="pendiente"><mat-icon>construction</mat-icon><p>Canjes por usuario</p><span>Reporte en construcción</span></div>
-
-    <!-- Axel: Tipos de recompensa más canjeados -->
-    <app-reporttiporecompensacomponent></app-reporttiporecompensacomponent>
-  </section>
-
-  <!-- Más reportes: Entregas -->
-  <section class="mas-reportes">
-    <h2>Más reportes</h2>
-    <div class="mas-reportes-lista">
-      <a class="enlace-reporte" routerLink="/reportes/entregas/detalle">
-        <mat-icon>bar_chart</mat-icon>
-        <div>
-          <p>Entregas por usuario y material</p>
-          <span>Kg reciclados y puntos por usuario o material</span>
+  @if (soloReciclador) {
+    <!-- Reciclador: su propio dashboard -->
+    <app-miimpactocomponent></app-miimpactocomponent>
+  } @else {
+    <!-- Administrador (todo) y operador (sin tarjetas de usuarios) -->
+    <header class="banda">
+      <div>
+        <h1>Dashboard de reportes</h1>
+        <p class="actualizado">Actualizado hoy a las {{ horaActualizacion | date: 'HH:mm' }}</p>
+      </div>
+      <div class="acciones">
+        <button mat-stroked-button class="btn-actualizar" (click)="actualizar()">
+          <mat-icon>refresh</mat-icon> Actualizar
+        </button>
+        <button mat-flat-button class="btn-exportar" (click)="exportar()">
+          <mat-icon>download</mat-icon> Exportar
+        </button>
+      </div>
+    </header>
+  
+    <!-- Tarjetas de números -->
+    <section class="kpis">
+      @if (esAdmin) {
+        <div class="kpi">
+          <div class="kpi-cabecera"><span>Usuarios registrados</span><mat-icon>group</mat-icon></div>
+          <p class="kpi-valor mono">{{ totalUsuarios ?? '—' }}</p>
+          <p class="kpi-nota">Cuentas en la plataforma</p>
         </div>
-        <mat-icon class="flecha">arrow_forward</mat-icon>
-      </a>
-
-      <a class="enlace-reporte" routerLink="/reportes/entregas/puntos">
-        <mat-icon>emoji_events</mat-icon>
-        <div>
-          <p>Entregas con más de 100 puntos</p>
-          <span>Proporción frente al total de entregas</span>
-        </div>
-        <mat-icon class="flecha">arrow_forward</mat-icon>
-      </a>
-    </div>
-  </section>
-
+      }
+      <div class="kpi">
+        <div class="kpi-cabecera"><span>Kg reciclados</span><mat-icon>scale</mat-icon></div>
+        <p class="kpi-valor mono">{{ totalKg !== null ? (totalKg | number: '1.0-1') + ' kg' : '—' }}</p>
+        <p class="kpi-nota">Suma de todas las entregas</p>
+      </div>
+      <div class="kpi">
+        <div class="kpi-cabecera"><span>Canjes realizados</span><mat-icon>redeem</mat-icon></div>
+        <p class="kpi-valor mono">{{ totalCanjes ?? '—' }}</p>
+        <p class="kpi-nota">Recompensas canjeadas</p>
+      </div>
+      <div class="kpi">
+        <div class="kpi-cabecera"><span>Entregas con más de 100 pts</span><mat-icon>emoji_events</mat-icon></div>
+        <p class="kpi-valor mono">{{ entregas100 ?? '—' }}</p>
+        <p class="kpi-nota">Entregas destacadas</p>
+      </div>
+    </section>
+  
+    <!-- Reportes en mosaico: 4 columnas, uno grande (2x2) y el resto alrededor -->
+    <section class="reportes">
+      <div class="celda grande"><app-reportmaterialcomponent></app-reportmaterialcomponent></div>
+      <div class="celda"><app-reportcentrocomponent></app-reportcentrocomponent></div>
+      @if (esAdmin) {
+        <div class="celda"><app-reportrolcomponent></app-reportrolcomponent></div>
+      }
+      @if (esAdmin) {
+        <div class="celda"><app-reportusuarioestadocomponent></app-reportusuarioestadocomponent></div>
+      }
+      <div class="celda"><app-reportentregapuntoscomponent></app-reportentregapuntoscomponent></div>
+  
+      <div class="celda ancha"><app-reportrecompensacomponent></app-reportrecompensacomponent></div>
+      <div class="celda"><app-reportentregausuariocomponent></app-reportentregausuariocomponent></div>
+      <div class="celda"><app-reporttiporecompensacomponent></app-reporttiporecompensacomponent></div>
+  
+      <div class="celda ancha"><app-reportcanjeusuariocomponent></app-reportcanjeusuariocomponent></div>
+      @if (esAdmin) {
+        <div class="celda ancha"><app-reportbalancecomponent></app-reportbalancecomponent></div>
+      }
+    </section>
+  }
 </div>

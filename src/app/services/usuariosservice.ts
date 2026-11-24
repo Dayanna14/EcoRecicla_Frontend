@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UsuariosDTOList } from '../models/UsuariosDTOList';
 import { UsuariosDTOInsert } from '../models/UsuariosDTOInsert';
+import { UsuarioPorEstadoDTO } from '../models/UsuarioPorEstadoDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -31,5 +32,9 @@ export class UsuariosService {
 
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiURL}/${id}`);
+  }
+
+  porEstado(): Observable<UsuarioPorEstadoDTO[]> {
+    return this.http.get<UsuarioPorEstadoDTO[]>(`${this.apiURL}/usuarios-por-estado`);
   }
 }

@@ -13,19 +13,59 @@
 
             <form [formGroup]="formEntrega" (ngSubmit)="registrarEntrega()">
                 
-                <!-- Select de Usuario -->
-                <label class="input-label">Usuario (Reciclador)</label>
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Seleccione un usuario</mat-label>
-                    <mat-select formControlName="idUsuario">
-                        @for (u of listaUsuarios; track u.id_usuario) {
-                        <mat-option [value]="u.id_usuario">{{ u.nombre }}</mat-option>
-                        }
-                    </mat-select>
-                    <mat-error *ngIf="formEntrega.get('idUsuario')?.hasError('required')">
-                        Campo obligatorio, ingrese un usuario.
-                    </mat-error>
-                </mat-form-field>
+                <!-- Reciclador: buscador por nombre o código -->
+                <label class="input-label">Reciclador</label>
+                @if (elegido) {
+                    <div class="reciclador-elegido">
+                        <div class="avatar">{{ elegido.nombre.charAt(0).toUpperCase() }}</div>
+                        <div class="datos">
+                            <strong>{{ elegido.nombre }}</strong>
+                            <span>Código #{{ elegido.id }}{{ elegido.email ? ' · ' + elegido.email : '' }} · {{ elegido.entregas }} {{ elegido.entregas === 1 ? 'entrega' : 'entregas' }}</span>
+                        </div>
+                        <button mat-stroked-button type="button" (click)="cambiarReciclador()">Cambiar</button>
+                    </div>
+                } @else if (modoManual) {
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Código del reciclador</mat-label>
+                        <mat-icon matPrefix>tag</mat-icon>
+                        <input matInput type="number" min="1" [formControl]="codigoManual" (input)="aplicarCodigo()" placeholder="Ej. 7">
+                        <mat-hint>Es el código que el reciclador ve en "Mi impacto".</mat-hint>
+                    </mat-form-field>
+                    @if (codigoManual.value) {
+                        <p class="nota-reciclador">
+                            @if (conocidoManual; as r) {
+                                <mat-icon>check_circle</mat-icon> Corresponde a <strong>&nbsp;{{ r.nombre }}</strong>.
+                            } @else {
+                                <mat-icon>info</mat-icon> Reciclador sin entregas previas. Confirma el código con la persona.
+                            }
+                        </p>
+                    }
+                    <button mat-button type="button" class="link-manual" (click)="cambiarReciclador()">
+                        <mat-icon>search</mat-icon> Volver al buscador
+                    </button>
+                } @else {
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Buscar por nombre o código</mat-label>
+                        <mat-icon matPrefix>search</mat-icon>
+                        <input matInput [formControl]="busqueda" [matAutocomplete]="auto" placeholder="Ej. sofi o #7">
+                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="elegirReciclador($event)">
+                            @for (r of coincidencias; track r.id) {
+                                <mat-option [value]="r.id">
+                                    <span class="op-nombre">{{ r.nombre }}</span>
+                                    <span class="op-detalle"> · #{{ r.id }} · {{ r.entregas }} {{ r.entregas === 1 ? 'entrega' : 'entregas' }}</span>
+                                </mat-option>
+                            } @empty {
+                                <mat-option disabled>No se encontró. Usa "Ingresar código manualmente".</mat-option>
+                            }
+                        </mat-autocomplete>
+                    </mat-form-field>
+                    <button mat-button type="button" class="link-manual" (click)="activarManual()">
+                        <mat-icon>keyboard</mat-icon> ¿No aparece? Ingresar código manualmente
+                    </button>
+                }
+                @if (formEntrega.get('idUsuario')?.touched && formEntrega.get('idUsuario')?.invalid && !elegido) {
+                    <p class="error-reciclador">Campo obligatorio, elige o ingresa el reciclador.</p>
+                }
 
                 <!-- Select de Material -->
                 <label class="input-label">Material</label>
@@ -40,6 +80,27 @@
                         Campo obligatorio, ingrese un material.
                     </mat-error>
                 </mat-form-field>
+
+                <!-- Detectar el material con IA -->
+                @if (camaraIA) {
+                    <div class="ia-panel">
+                        <video #videoIA autoplay muted playsinline></video>
+                        @if (ultimaClaseIA) {
+                            <span class="ia-etiqueta">{{ ultimaClaseIA }} · {{ ultimaConfianzaIA }} %</span>
+                        }
+                        <div class="ia-acciones">
+                            <button mat-stroked-button type="button" (click)="cerrarCamaraIA()">Cancelar</button>
+                            <button mat-flat-button type="button" (click)="usarResultadoIA()"><mat-icon>check</mat-icon> Usar este material</button>
+                        </div>
+                    </div>
+                } @else {
+                    <button mat-stroked-button type="button" class="btn-ia" (click)="detectarConIA()">
+                        <mat-icon>photo_camera</mat-icon> Detectar con IA
+                    </button>
+                }
+                @if (resultadoIA) {
+                    <p class="ia-resultado"><mat-icon>auto_awesome</mat-icon> {{ resultadoIA }}</p>
+                }
 
                 <!-- Select de Centro de Acopio -->
                 <label class="input-label">Centro de acopio</label>
@@ -89,6 +150,9 @@
                 
                 <div class="info-item">
                     <strong><mat-icon inline="true">balance</mat-icon> Kilogramos:</strong> Debe ser un valor numérico superior a 0.
+                </div>
+                <div class="info-item">
+                    <strong><mat-icon inline="true">badge</mat-icon> Reciclador:</strong> Pídele su código; lo ve en "Mi impacto". Búscalo por nombre o código.
                 </div>
                 <div class="info-item">
                     <strong><mat-icon inline="true">location_on</mat-icon> Centro:</strong> Lugar físico donde se valida y recepciona el material.

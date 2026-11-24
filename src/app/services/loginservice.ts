@@ -25,6 +25,8 @@ export class Loginservice {
         if (this.isBrowser) {
           sessionStorage.setItem('token', response.token);
           sessionStorage.setItem('username', response.username ?? '');
+          // ⚠️ NO ENSEÑADO EN CLASE: el nombre con el que entró (los reportes vienen por nombre)
+          sessionStorage.setItem('nombre', credentials.username ?? '');
           sessionStorage.setItem('roles', JSON.stringify(response.roles ?? []));
         }
       })
@@ -61,6 +63,13 @@ export class Loginservice {
     return sessionStorage.getItem('username') ?? '';
   }
 
+  getNombre(): string {
+    if (!this.isBrowser || !this.isAuthenticated()) {
+      return '';
+    }
+    return sessionStorage.getItem('nombre') ?? '';
+  }
+
   getRoles(): string[] {
     if (!this.isBrowser || !this.isAuthenticated()) {
       return [];
@@ -79,6 +88,7 @@ export class Loginservice {
       }
     } catch {
       sessionStorage.removeItem('roles');
+      sessionStorage.removeItem('nombre');
       return [];
     }
 
@@ -99,6 +109,7 @@ export class Loginservice {
       sessionStorage.removeItem('token');
       sessionStorage.removeItem('username');
       sessionStorage.removeItem('roles');
+      sessionStorage.removeItem('nombre');
     }
   }
 

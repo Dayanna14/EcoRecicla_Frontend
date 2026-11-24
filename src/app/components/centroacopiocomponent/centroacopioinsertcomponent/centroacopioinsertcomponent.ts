@@ -11,6 +11,8 @@ import { UsuariosDTOList } from '../../../models/UsuariosDTOList';
 import * as L from 'leaflet';
 import { Centroacopioservice } from '../../../services/centroacopioservice';
 import { UsuariosService } from '../../../services/usuariosservice';
+import { Rolservice } from '../../../services/rolservice';
+import { forkJoin } from 'rxjs';
 import { Nominatimservice } from '../../../services/nominatimservice';
 import { CentroAcopioDTOInsert } from '../../../models/CentroAcopioDTOInsert';
 import { provideNativeDateAdapter } from '@angular/material/core';
@@ -36,6 +38,7 @@ import { MatTimepickerModule } from '@angular/material/timepicker';
 export class Centroacopioinsertcomponent implements OnInit, AfterViewInit, OnDestroy {
   form: FormGroup;
   usuarios: UsuariosDTOList[] = [];
+  cargado = false;
   direccion: string = '';
   private nombreAutomatico: string = ''; // último nombre que puso el mapa
 
@@ -57,6 +60,7 @@ export class Centroacopioinsertcomponent implements OnInit, AfterViewInit, OnDes
     private fb: FormBuilder,
     private cS: Centroacopioservice,
     private uS: UsuariosService,
+    private rolS: Rolservice,
     private nS: Nominatimservice,
     private cdr: ChangeDetectorRef,
     private snackBar: MatSnackBar,
@@ -73,10 +77,13 @@ export class Centroacopioinsertcomponent implements OnInit, AfterViewInit, OnDes
   }
 
   // Carga los usuarios para el mat-select (servicio de Nayara)
+  // Solo se muestran los usuarios con rol de operador de centro
   ngOnInit(): void {
-    this.uS.list().subscribe({
-      next: data => {
-        this.usuarios = data;
+    forkJoin({ usuarios: this.uS.list(), roles: this.rolS.list() }).subscribe({
+      next: ({ usuarios, roles }) => {
+        const idsOperador = new Set(roles.filter(r => r.nombre.toUpperCase().includes('OPERADOR')).map(r => r.idRol));
+        this.usuarios = usuarios.filter(u => idsOperador.has(u.idRol));
+        this.cargado = true;
         this.cdr.detectChanges();
       },
       error: () => this.notificar('No se pudieron cargar los usuarios', 'error'),

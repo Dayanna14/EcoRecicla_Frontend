@@ -70,7 +70,7 @@
             </mat-card-content>
 
             <mat-card-actions align="end">
-
+              @if (esAdministrador) {
               <a mat-icon-button
                  class="btn-editar"
                  aria-label="Editar recompensa"
@@ -84,7 +84,13 @@
                       (click)="eliminar(r)">
                 <mat-icon>delete</mat-icon>
               </button>
-
+              } @else if (esReciclador && r.estado) {
+              <a mat-flat-button
+                 [routerLink]="['/canjes/insertar']"
+                 [queryParams]="{ recompensa: r.idRecompensa }">
+                <mat-icon>redeem</mat-icon> Canjear
+              </a>
+              }
             </mat-card-actions>
 
           </mat-card>

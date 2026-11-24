@@ -4,14 +4,13 @@ import { Observable, Subject } from 'rxjs';
 import { CanjeDTOList } from '../models/CanjeDTOList'; // Ajusta la ruta de tus modelos
 import { environment } from '../../environments/environment';
 import { CanjePorUsuarioDTO } from '../models/CanjePorUsuarioDTO';
-import { CanjePorEstadoDTO } from '../models/CanjeporEstadoDTO';
 
 
 @Injectable({
   providedIn: 'root',
 })
 export class Canjeservice {
-  private url = `${environment.base}/canjes`; 
+  private url = `${environment.base}/api/canjes`; 
 
   private listaCambio = new Subject<CanjeDTOList[]>();
 
@@ -46,10 +45,7 @@ export class Canjeservice {
   }
 
   obtenerCantidadCanjesPorUsuario(): Observable<CanjePorUsuarioDTO[]> {
-  return this.http.get<CanjePorUsuarioDTO[]>(`${this.url}/reporte-usuario`);}
+  return this.http.get<CanjePorUsuarioDTO[]>(`${this.url}/canjes-por-usuario`);}
 
-  obtenerCantidadCanjesPorEstado(): Observable<CanjePorEstadoDTO[]> {
-    return this.http.get<CanjePorEstadoDTO[]>(`${this.url}/reporte-estado`);
-  }
 }
 

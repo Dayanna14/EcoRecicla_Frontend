@@ -11,6 +11,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UsuariosDTOList } from '../../../models/UsuariosDTOList';
 import { UsuariosService } from '../../../services/usuariosservice';
+import { Loginservice } from '../../../services/loginservice';
 
 @Component({
   selector: 'app-centroacopiolistcomponent',
@@ -39,11 +40,23 @@ export class Centroacopiolistcomponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
+    private loginService: Loginservice,
   ) {}
 
+  // Solo el administrador registra, edita y elimina (igual que el backend)
+  get esAdmin(): boolean {
+    return this.loginService.hasAnyRole(['ADMINISTRADOR']);
+  }
+
+
   ngOnInit(): void {
+    if (!this.esAdmin) {
+      this.displayedColumns = this.displayedColumns.filter(c => c !== 'c6'); // c6 = acciones
+    }
     this.listar();
-    this.listarUsuarios();
+    if (this.esAdmin) {
+      this.listarUsuarios(); // GET /api/usuarios es solo para el administrador
+    }
   }
 
   notificar(texto: string, tipo: 'exito' | 'advertencia' | 'error'): void {

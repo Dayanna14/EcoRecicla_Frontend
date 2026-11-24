@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
@@ -50,7 +50,8 @@ export class Entregaupdatecomponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -65,9 +66,9 @@ export class Entregaupdatecomponent implements OnInit {
   }
 
   cargarCombos(): void {
-    this.usuarioService.list().subscribe(data => this.listaUsuarios = data);
-    this.materialService.list().subscribe(data => this.listaMateriales = data);
-    this.centroAcopioService.list().subscribe(data => this.listaCentros = data);
+    this.usuarioService.list().subscribe(data => { this.listaUsuarios = data; this.cdr.detectChanges(); });
+    this.materialService.list().subscribe(data => { this.listaMateriales = data; this.cdr.detectChanges(); });
+    this.centroAcopioService.list().subscribe(data => { this.listaCentros = data; this.cdr.detectChanges(); });
   }
 
   initForm(): void {
@@ -91,6 +92,7 @@ export class Entregaupdatecomponent implements OnInit {
           cantidadKg: data.cantidadKg,
           puntosGenerados: data.puntosGenerados
         });
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error al cargar la entrega para actualizar', err);

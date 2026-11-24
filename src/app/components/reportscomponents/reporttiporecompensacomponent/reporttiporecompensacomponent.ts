@@ -35,24 +35,21 @@ export class Reporttiporecompensacomponent implements OnInit {
   cargandoDetalle: boolean = false;
   readonly maxFilas: number = 10;
 
-  public chartData: ChartData<'bar'> = {
+  public chartData: ChartData<'pie'> = {
     labels: [],
     datasets: [{ label: 'Canjes', data: [] }],
   };
 
-  public chartOptions: ChartOptions<'bar'> = {
+  public chartOptions: ChartOptions<'pie'> = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: { display: false },
+      legend: { display: true, position: 'bottom', labels: { boxWidth: 10 } },
       tooltip: {
         callbacks: {
-          label: ctx => ` ${ctx.parsed.y} canjes`,
+          label: ctx => ` ${ctx.parsed} canjes`,
         },
       },
-    },
-    scales: {
-      y: { beginAtZero: true, ticks: { precision: 0 } },
     },
   };
 
@@ -86,10 +83,10 @@ export class Reporttiporecompensacomponent implements OnInit {
             {
               label: 'Canjes',
               data: data.map(t => Number(t.cantidadCanjes)),
-              // El líder en ámbar y los demás en verde bosque
-              backgroundColor: data.map((t, i) => (i === 0 ? '#c9893e' : '#2d5d3e')),
-              borderRadius: 6,
-              borderWidth: 0,
+              // El líder en ámbar y los demás en verdes de la paleta
+              backgroundColor: ['#c9893e', '#2d5d3e', '#709645', '#88a987', '#5c6b2c', '#b8c7a4', '#95652e'],
+              borderColor: '#fff1e6',
+              borderWidth: 2,
             },
           ],
         };

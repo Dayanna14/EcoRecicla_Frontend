@@ -47,11 +47,9 @@ import { Reportentrega01 } from './components/reportscomponents/reportsentrega/r
 import { Reportentrega02 } from './components/reportscomponents/reportsentrega/reportentrega02/reportentrega02';
 
 import { Canjelistcomponent } from './components/canjecomponent/canjelistcomponent/canjelistcomponent';
+import { Canjeupdatecomponent } from './components/canjecomponent/canjeupdatecomponent/canjeupdatecomponent';
 import { Canjeinsertcomponent } from './components/canjecomponent/canjeinsertcomponent/canjeinsertcomponent';
 import { Canjecomponent } from './components/canjecomponent/canjecomponent';
-import { Reportescomponent } from './components/reportescomponent/reportescomponent';
-import { Reporte01component } from './components/reportescomponent/reporte01component/reporte01component';
-import { Reporte02component } from './components/reportescomponent/reporte02component/reporte02component';
 
 export const routes: Routes = [
     // ---------- General ----------
@@ -70,11 +68,13 @@ export const routes: Routes = [
     path: 'reportes',
     component: Reportscomponents,
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['ADMINISTRADOR', 'OPERADOR_CENTRO'] },
+    data: { roles: ['ADMINISTRADOR', 'OPERADOR_CENTRO', 'RECICLADOR'] }, // el reciclador ve "Mi impacto"
     children: [
       { path: 'dashboard', component: Dashboardcomponent, title: 'EcoRecicla | Reportes' },
-      { path: 'entregas/detalle', component: Reportentrega01, title: 'EcoRecicla | Entregas por usuario y material' },
-      { path: 'entregas/puntos', component: Reportentrega02, title: 'EcoRecicla | Entregas con más de 100 puntos' },
+      { path: 'entregas/detalle', component: Reportentrega01, title: 'EcoRecicla | Entregas por usuario y material',
+        canActivate: [roleGuard], data: { roles: ['ADMINISTRADOR', 'OPERADOR_CENTRO'] } },
+      { path: 'entregas/puntos', component: Reportentrega02, title: 'EcoRecicla | Entregas con más de 100 puntos',
+        canActivate: [roleGuard], data: { roles: ['ADMINISTRADOR', 'OPERADOR_CENTRO'] } },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],
   },
@@ -102,9 +102,11 @@ export const routes: Routes = [
     data: { roles: ['ADMINISTRADOR', 'OPERADOR_CENTRO', 'RECICLADOR'] },
     children: [
       { path: 'listar', component: Centroacopiolistcomponent },
-      { path: 'insertar', component: Centroacopioinsertcomponent },
+      { path: 'insertar', component: Centroacopioinsertcomponent,
+        canActivate: [roleGuard], data: { roles: ['ADMINISTRADOR'] } },
       { path: 'buscar', component: Centroacopiobuscarcomponent },
-      { path: 'editar/:id', component: Centroacopioupdatecomponent },
+      { path: 'editar/:id', component: Centroacopioupdatecomponent,
+        canActivate: [roleGuard], data: { roles: ['ADMINISTRADOR'] } },
       { path: 'mapa', component: Mapacentroscomponent },
       { path: '', redirectTo: 'listar', pathMatch: 'full' },
     ],
@@ -165,8 +167,10 @@ export const routes: Routes = [
     data: { roles: ['ADMINISTRADOR', 'OPERADOR_CENTRO'] },
     children: [
       { path: 'listar', component: Materiallistcomponent },
-      { path: 'insertar', component: Materialinsertcomponent },
-      { path: 'editar/:id', component: Materialupdatecomponent },
+      { path: 'insertar', component: Materialinsertcomponent,
+        canActivate: [roleGuard], data: { roles: ['ADMINISTRADOR'] } },
+      { path: 'editar/:id', component: Materialupdatecomponent,
+        canActivate: [roleGuard], data: { roles: ['ADMINISTRADOR'] } },
       { path: 'buscar', component: Materialbuscarcomponent },
       { path: 'clasificar', component: Materialclasificarcomponent },
       { path: '', redirectTo: 'listar', pathMatch: 'full' },
@@ -181,8 +185,10 @@ export const routes: Routes = [
     data: { roles: ['ADMINISTRADOR', 'OPERADOR_CENTRO', 'RECICLADOR'] },
     children: [
       { path: 'listar', component: Entregalistcomponent },
-      { path: 'insertar', component: Entregainsertcomponent },
-      { path: 'editar/:id', component: Entregaupdatecomponent },
+      { path: 'insertar', component: Entregainsertcomponent,
+        canActivate: [roleGuard], data: { roles: ['ADMINISTRADOR', 'OPERADOR_CENTRO'] } },
+      { path: 'editar/:id', component: Entregaupdatecomponent,
+        canActivate: [roleGuard], data: { roles: ['ADMINISTRADOR', 'OPERADOR_CENTRO'] } },
       { path: 'buscar', component: Entregabuscarcomponent },
       { path: '', redirectTo: 'listar', pathMatch: 'full' },
     ],
@@ -197,31 +203,17 @@ export const routes: Routes = [
     {
         path: 'canjes',
         component: Canjecomponent,
+        canActivate: [authGuard, roleGuard],
+        data: { roles: ['ADMINISTRADOR', 'OPERADOR_CENTRO', 'RECICLADOR'] },
         children: [
             { path: 'listar', component: Canjelistcomponent},
-            { path: 'insertar', component: Canjeinsertcomponent}, 
+            { path: 'insertar', component: Canjeinsertcomponent,
+              canActivate: [roleGuard], data: { roles: ['ADMINISTRADOR', 'RECICLADOR'] } },
+            { path: 'editar/:id', component: Canjeupdatecomponent,
+              canActivate: [roleGuard], data: { roles: ['ADMINISTRADOR'] } },
             { path: '', redirectTo: 'listar', pathMatch: 'full' }
         ]
     },
-    {
-    path: 'reports',
-    component: Reportescomponent,
-    children: [
-      {
-        path: 'reports01',
-        component: Reporte01component
-      },
-      {
-        path: 'reports02',
-        component: Reporte02component
-      },
-      {
-        path: '',
-        redirectTo: 'reports01',
-        pathMatch: 'full'
-      }
-    ]
-  },
 
 
   // ---------- Franco: canjes ----------

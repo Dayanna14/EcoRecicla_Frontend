@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { RecompensaDTOList } from '../models/RecompensaDTOList';
 import { RecompensaDTOInsert } from '../models/RecompensaDTOInsert';
 import { RecompensaBusquedaDTO } from '../models/RecompensaBusquedaDTO';
+import { RecompensaMasCanjeadaDTO } from '../models/RecompensaMasCanjeadaDTO';
 
 
 @Injectable({
@@ -40,4 +41,8 @@ export class RecompensaService {
     const params = new HttpParams().set('estado', estado);
     return this.http.get<RecompensaBusquedaDTO[]>(`${environment.base}/api/tiporecompensas/recompensas/estado`, { params });
   }
+  // recompensaservice.ts  (import { RecompensaMasCanjeadaDTO } from '../models/RecompensaMasCanjeadaDTO';)
+masCanjeadas(): Observable<RecompensaMasCanjeadaDTO[]> {
+  return this.http.get<RecompensaMasCanjeadaDTO[]>(`${this.apiURL}/tipo-recompensa-mas-canjeado`);
+}
 }

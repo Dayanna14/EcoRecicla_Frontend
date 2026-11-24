@@ -10,7 +10,7 @@ import { CanjeDTOInsert } from '../../../models/CanjeDTOInsert';
 import { CanjeDTOList } from '../../../models/CanjeDTOList';
 import { Canjeservice } from '../../../services/canjeservice';
 import { RecompensaService } from '../../../services/recompensaservice';
-import { UsuariosService } from '../../../services/usuarioservice';
+import { UsuariosService } from '../../../services/usuariosservice';
 
 @Component({
   selector: 'app-canjeupdatecomponent',
@@ -79,6 +79,7 @@ export class Canjeupdatecomponent implements OnInit {
           idRecompensa: data.recompensaIdRecompensa,
           Id_usuario: data.usuarioId_usuario,
         });
+        this.cdr.detectChanges();
       },
       error: (error) => {
         console.error('Error al buscar canje', error);
@@ -91,6 +92,7 @@ export class Canjeupdatecomponent implements OnInit {
     this.rS.list().subscribe({
       next: (data) => {
         this.listaRecompensas = data;
+        this.cdr.detectChanges();
       },
     });
   }
@@ -99,6 +101,7 @@ export class Canjeupdatecomponent implements OnInit {
     this.uS.list().subscribe({
       next: (data) => {
         this.listaUsuarios = data;
+        this.cdr.detectChanges();
       },
     });
   }
@@ -109,16 +112,17 @@ export class Canjeupdatecomponent implements OnInit {
       return;
     }
 
-    const dto: CanjeDTOList = {
+    // El backend (PUT /api/canjes) espera idRecompensa e idUsuario
+    const dto = {
       idCanje: this.formCanje.value.idCanje,
       fecha: this.formCanje.value.fecha,
       puntosUsados: this.formCanje.value.puntosUsados,
       estado: this.formCanje.value.estado,
-      recompensaIdRecompensa: this.formCanje.value.idRecompensa,
-      usuarioId_usuario: this.formCanje.value.Id_usuario,
+      idRecompensa: this.formCanje.value.idRecompensa,
+      idUsuario: this.formCanje.value.Id_usuario,
     };
 
-    this.canjeService.update(dto).subscribe({
+    this.canjeService.update(dto as any).subscribe({
       next: () => {
         this.mensaje = 'Canje actualizado correctamente';
         this.cdr.detectChanges();

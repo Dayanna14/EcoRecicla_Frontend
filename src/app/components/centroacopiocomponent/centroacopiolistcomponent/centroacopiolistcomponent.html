@@ -4,7 +4,9 @@
       <h1>Centros de acopio</h1>
       <p class="subtitulo">Gestiona los puntos donde los recicladores entregan sus materiales.</p>
     </div>
-    <a mat-flat-button routerLink="/centrosacopio/insertar">Registrar centro</a>
+    @if (esAdmin) {
+      <a mat-flat-button routerLink="/centrosacopio/insertar">Registrar centro</a>
+    }
   </div>
 
   <div class="tarjeta">

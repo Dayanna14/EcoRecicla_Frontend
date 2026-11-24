@@ -1,0 +1,148 @@
+<header class="banda">
+  <div>
+    <h1>Mi impacto</h1>
+    <p class="actualizado">Hola, {{ nombre }} · así va tu reciclaje</p>
+  </div>
+  <button mat-stroked-button class="btn-actualizar" (click)="obtenerReporte()">
+    <mat-icon>refresh</mat-icon> Actualizar
+  </button>
+</header>
+
+@if (hayError) {
+  <div class="error">
+    <mat-icon>warning</mat-icon>
+    <p class="error-titulo">No se pudo cargar tu información</p>
+    <button mat-button (click)="obtenerReporte()"><mat-icon>refresh</mat-icon> Reintentar</button>
+  </div>
+} @else if (!cargando && misEntregas.length === 0) {
+  <div class="vacio-grande">
+    <mat-icon>recycling</mat-icon>
+    <p><b>Aún no tienes entregas registradas</b></p>
+    <p>Lleva tus residuos a un centro de acopio y empieza a sumar puntos.</p>
+    <p class="nota-codigo">Para tu primera entrega, pide tu <b>código de reciclador</b> al administrador.</p>
+    <a mat-flat-button class="btn-principal" routerLink="/centrosacopio/mapa">Ver centros en el mapa</a>
+  </div>
+} @else {
+  @if (miCodigo !== null) {
+    <section class="codigo-card">
+      <div class="codigo-icono"><mat-icon>badge</mat-icon></div>
+      <div class="codigo-texto">
+        <span>Tu código de reciclador</span>
+        <b class="mono">#{{ miCodigo }}</b>
+        <small>{{ nombre }} · Muéstralo en el centro de acopio para que te registren tus entregas.</small>
+      </div>
+    </section>
+  }
+  <section class="kpis">
+    <div class="kpi"><span>Kg reciclados</span><b class="mono">{{ totalKg }} kg</b><small>En {{ misEntregas.length }} entregas</small></div>
+    <div class="kpi"><span>Puntos ganados</span><b class="mono">{{ totalPuntos }}</b><small>Por tus entregas</small></div>
+    <div class="kpi ambar"><span>Puntos disponibles</span><b class="mono">{{ disponibles }}</b><small>Para canjear</small></div>
+    <div class="kpi"><span>CO₂ evitado</span><b class="mono">{{ co2 }} kg</b><small>Según tus materiales</small></div>
+  </section>
+
+  <section class="mosaico">
+    <div class="tarjeta ancha" (click)="abrirDetalle()">
+      <div class="cabecera"><span class="icono"><mat-icon>show_chart</mat-icon></span><h2>Mis entregas en el tiempo</h2></div>
+      <div class="grafico"><canvas baseChart type="line" [data]="lineaData" [options]="lineaOptions"></canvas></div>
+      <p class="ver-detalle">Ver detalle <mat-icon>arrow_forward</mat-icon></p>
+    </div>
+
+    <div class="tarjeta" (click)="abrirDetalle()">
+      <div class="cabecera"><span class="icono"><mat-icon>recycling</mat-icon></span><h2>Mis materiales</h2></div>
+      <div class="dona-cuerpo">
+        <div class="dona"><canvas baseChart type="doughnut" [data]="donaData" [options]="donaOptions"></canvas></div>
+        <ul class="leyenda">
+          @for (m of materiales.slice(0, 4); track m.nombre; let i = $index) {
+            <li><i [style.background]="['#c9893e', '#2d5d3e', '#709645', '#88a987'][i]"></i>{{ m.nombre }} · {{ m.porcentaje }} %</li>
+          }
+        </ul>
+      </div>
+      <p class="ver-detalle">Ver detalle <mat-icon>arrow_forward</mat-icon></p>
+    </div>
+
+    <div class="tarjeta" (click)="abrirDetalle()">
+      <div class="cabecera"><span class="icono"><mat-icon>emoji_events</mat-icon></span><h2>Mi puesto</h2></div>
+      <div class="puesto">
+        <b>{{ puesto }}º</b>
+        <span>de {{ totalRecicladores }} recicladores</span>
+        @if (puesto === 1) {
+          <small>¡Eres quien más recicla!</small>
+        } @else if (faltaKg > 0) {
+          <small>Te faltan {{ faltaKg }} kg para subir un puesto</small>
+        }
+      </div>
+      <p class="ver-detalle">Ver detalle <mat-icon>arrow_forward</mat-icon></p>
+    </div>
+
+    <div class="tarjeta ancha">
+      <div class="cabecera"><span class="icono"><mat-icon>redeem</mat-icon></span><h2>Recompensas a tu alcance</h2></div>
+      @for (rec of recompensas; track rec.nombre) {
+        <div class="alcance">
+          <span class="alcance-nombre">{{ rec.nombre }}</span>
+          <div class="alcance-barra"><span [style.width.%]="rec.avance" [class.lista]="rec.falta === 0"></span></div>
+          <span class="alcance-falta" [class.lista-texto]="rec.falta === 0">{{ rec.falta === 0 ? '¡Canjeable!' : 'faltan ' + rec.falta }}</span>
+        </div>
+      } @empty {
+        <p class="vacio">No hay recompensas activas por ahora.</p>
+      }
+      <a class="ver-detalle" routerLink="/recompensas/listar">Ver catálogo <mat-icon>arrow_forward</mat-icon></a>
+    </div>
+
+    <div class="tarjeta ancha">
+      <div class="cabecera"><span class="icono"><mat-icon>place</mat-icon></span><h2>¿Dónde reciclar?</h2></div>
+      <ul class="centros">
+        @for (c of centros; track c; let i = $index) {
+          <li><mat-icon>location_on</mat-icon> {{ c }} @if (i === 0) { <span class="chip">el más activo</span> }</li>
+        }
+      </ul>
+      <a class="ver-detalle" routerLink="/centrosacopio/mapa">Ver mapa <mat-icon>arrow_forward</mat-icon></a>
+    </div>
+  </section>
+}
+
+<!-- Detalle: mis entregas -->
+<ng-template #dialogDetalle>
+  <div class="detalle">
+    <div class="detalle-cabecera">
+      <span class="icono"><mat-icon>recycling</mat-icon></span>
+      <div>
+        <h2 mat-dialog-title>Mis entregas</h2>
+        <p class="detalle-sub">Todo lo que has reciclado</p>
+      </div>
+      <button mat-icon-button mat-dialog-close aria-label="Cerrar"><mat-icon>close</mat-icon></button>
+    </div>
+    <mat-dialog-content>
+      <p class="seccion">EN TOTAL</p>
+      <div class="totales">
+        <div><span>Kg</span><b class="mono">{{ totalKg }}</b></div>
+        <div><span>Puntos ganados</span><b class="mono">{{ totalPuntos }}</b></div>
+        <div><span>Puntos canjeados</span><b class="mono">{{ puntosCanjeados }}</b></div>
+      </div>
+      <p class="seccion">POR MATERIAL</p>
+      <table class="tabla">
+        <thead><tr><th>Material</th><th>Kg</th><th>% de lo tuyo</th></tr></thead>
+        <tbody>
+          @for (m of materiales; track m.nombre) {
+            <tr><td>{{ m.nombre }}</td><td class="mono">{{ m.kg }}</td><td><div class="barrita"><span [style.width.%]="m.porcentaje"></span></div><small>{{ m.porcentaje }} %</small></td></tr>
+          }
+        </tbody>
+      </table>
+      <p class="seccion">CADA ENTREGA</p>
+      <table class="tabla">
+        <thead><tr><th>Fecha</th><th>Material</th><th>Kg</th><th>Puntos</th></tr></thead>
+        <tbody>
+          @for (e of misEntregas; track e.idEntrega) {
+            <tr><td>{{ e.fecha | date: 'dd/MM/yyyy' }}</td><td>{{ e.nombreMaterial }}</td><td class="mono">{{ e.cantidadKg }}</td><td class="mono">{{ e.puntosGenerados }}</td></tr>
+          }
+        </tbody>
+      </table>
+      <div class="calculo">
+        <mat-icon>info</mat-icon>
+        <p><b>¿Cómo se calcula?</b> Los puntos son kg × puntos por kg del material. El CO₂ evitado es kg × factor de CO₂ del material.</p>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-flat-button class="btn-cerrar" mat-dialog-close>Cerrar</button>
+    </mat-dialog-actions>
+  </div>
+</ng-template>

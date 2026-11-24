@@ -1,0 +1,73 @@
+<div class="tarjeta" (click)="abrirDetalle()">
+  <div class="cabecera">
+    <span class="icono"><mat-icon>verified_user</mat-icon></span>
+    <h2>Usuarios habilitados</h2>
+  </div>
+  @if (hayError) {
+    <div class="error">
+      <mat-icon>warning</mat-icon>
+      <p class="error-titulo">No se pudo cargar este reporte</p>
+      <p>Los demás reportes siguen disponibles.</p>
+      <button mat-button (click)="obtenerReporte(); $event.stopPropagation()"><mat-icon>refresh</mat-icon> Reintentar</button>
+    </div>
+  } @else if (total === 0) {
+    <p class="vacio">Aún no hay usuarios registrados.</p>
+  } @else {
+    <div class="medidor">
+      <canvas baseChart type="doughnut" [data]="chartData" [options]="chartOptions"></canvas>
+      <span class="medidor-valor mono">{{ porcentaje }} %</span>
+    </div>
+    <p class="lider"><b>{{ habilitados }}</b> habilitados · {{ inhabilitados }} inhabilitados</p>
+    <p class="ver-detalle">Ver detalle <mat-icon>arrow_forward</mat-icon></p>
+  }
+</div>
+
+<!-- Ventana de detalle (se abre con MatDialog) -->
+<ng-template #dialogDetalle>
+  <div class="detalle">
+    <div class="detalle-cabecera">
+      <span class="icono"><mat-icon>verified_user</mat-icon></span>
+      <div>
+        <h2 mat-dialog-title>Usuarios habilitados</h2>
+        <p class="detalle-sub">¿Cuántas cuentas pueden usar la plataforma?</p>
+      </div>
+      <button mat-icon-button mat-dialog-close aria-label="Cerrar"><mat-icon>close</mat-icon></button>
+    </div>
+    <mat-dialog-content>
+      <p class="seccion">EN TOTAL</p>
+      <div class="totales">
+        <div><span>Cuentas</span><b class="mono">{{ total }}</b></div>
+        <div><span>Habilitadas</span><b class="mono">{{ habilitados }}</b></div>
+        <div><span>Inhabilitadas</span><b class="mono">{{ inhabilitados }}</b></div>
+      </div>
+      <p class="seccion">POR ESTADO</p>
+      <table class="tabla">
+        <thead><tr><th>Estado</th><th>Usuarios</th><th>% del total</th></tr></thead>
+        <tbody>
+          @for (item of lista; track item.estado) {
+            <tr>
+              <td>{{ item.estado }}</td>
+              <td class="mono">{{ item.cantidadUsuarios }}</td>
+              <td><div class="barrita"><span [style.width.%]="total > 0 ? (item.cantidadUsuarios / total) * 100 : 0"></span></div></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      <p class="seccion">PARA TENER EN CUENTA</p>
+      @if (avisos.length === 0) {
+        <p class="aviso aviso-ok"><mat-icon>check_circle</mat-icon> Todo en orden.</p>
+      } @else {
+        @for (aviso of avisos; track aviso) {
+          <p class="aviso"><mat-icon>error_outline</mat-icon> {{ aviso }}</p>
+        }
+      }
+      <div class="calculo">
+        <mat-icon>info</mat-icon>
+        <p><b>¿Cómo se calcula?</b> Se cuentan las cuentas según si están habilitadas o no para iniciar sesión.</p>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-flat-button class="btn-cerrar" mat-dialog-close>Cerrar</button>
+    </mat-dialog-actions>
+  </div>
+</ng-template>

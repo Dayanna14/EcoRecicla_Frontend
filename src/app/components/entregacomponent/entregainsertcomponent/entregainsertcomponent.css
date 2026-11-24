@@ -217,3 +217,27 @@
         grid-template-columns: 1fr;
     }
 }
+/* Detectar material con IA */
+.btn-ia { margin: -8px 0 16px; color: var(--eco-verde-bosque); border-color: var(--eco-verde-bosque); }
+.ia-panel { position: relative; margin: -8px 0 16px; }
+.ia-panel video { width: 100%; max-height: 260px; object-fit: cover; border-radius: 12px; background: var(--eco-oliva); display: block; }
+.ia-etiqueta { position: absolute; left: 12px; top: 12px; background: rgba(13, 10, 11, 0.6); color: var(--eco-crema); border-radius: 8px; padding: 4px 10px; }
+.ia-acciones { display: flex; gap: 8px; justify-content: flex-end; margin-top: 8px; }
+.ia-resultado { display: flex; align-items: center; gap: 6px; margin: -8px 0 16px; color: var(--eco-verde-bosque); background: var(--eco-verde-te); border-radius: 8px; padding: 8px 12px; }
+
+/* ---------- Buscador de reciclador ---------- */
+.reciclador-elegido {
+  display: flex; align-items: center; gap: 12px; padding: 12px 14px; margin-bottom: 18px;
+  border: 1px solid var(--eco-verde-bosque, #2d5b3c); border-radius: 12px; background: #eef4ea;
+}
+.reciclador-elegido .avatar {
+  width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; flex-shrink: 0;
+  background: var(--eco-verde-bosque, #2d5b3c); color: #fff; font-weight: 700; font-size: 1.1rem;
+}
+.reciclador-elegido .datos { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.reciclador-elegido .datos span { font-size: .85rem; color: #5f6b5c; }
+.link-manual { margin: -10px 0 14px; color: var(--eco-verde-bosque, #2d5b3c); font-size: .85rem; }
+.nota-reciclador { display: flex; align-items: center; gap: 6px; margin: 4px 0 6px; font-size: .88rem; color: #5f6b5c; }
+.nota-reciclador mat-icon { font-size: 18px; width: 18px; height: 18px; color: var(--eco-verde-bosque, #2d5b3c); }
+.error-reciclador { margin: -8px 0 14px; color: #b3412e; font-size: .8rem; }
+.op-detalle { color: #7a7a7a; font-size: .85rem; }

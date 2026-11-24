@@ -10,7 +10,7 @@ import { Centroacopioservice } from '../../../services/centroacopioservice';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { forkJoin } from 'rxjs';
 import { RouterLink } from '@angular/router';
-type TipoGrafico = 'bar' | 'line' | 'pie' | 'doughnut' | 'radar';
+type TipoGrafico = 'bar' | 'line' | 'pie' | 'doughnut' | 'radar' | 'polarArea';
 
 @Component({
   selector: 'app-reportrolcomponent',
@@ -38,7 +38,7 @@ export class Reportrolcomponent implements OnInit {
   avisos: string[] = [];
   cargandoDetalle: boolean = false;
 
-  public chartType: TipoGrafico = 'doughnut';
+  public chartType: TipoGrafico = 'polarArea';
 
   public chartData: ChartData<TipoGrafico> = {
     labels: [],
@@ -51,6 +51,7 @@ export class Reportrolcomponent implements OnInit {
     plugins: {
       legend: { display: false }, // la tarjeta es resumida; el reparto completo va en el detalle
     },
+    scales: { r: { ticks: { display: false }, grid: { color: '#f0ead2' } } },
   };
 
   constructor(

@@ -5,12 +5,14 @@
 
     <div class="header-section">
         <div>
-            <h1 class="titulo-principal">Lista de entregas</h1>
+            <h1 class="titulo-principal">{{ soloReciclador ? 'Mis entregas' : 'Lista de entregas' }}</h1>
             <p class="subtitulo-principal">Gestiona las entregas de materiales registradas en los centros de acopio.</p>
         </div>
-        <button mat-flat-button class="btn-registrar" routerLink="/entregas/insertar">
-            Registrar entrega
-        </button>
+        @if (puedeRegistrar) {
+            <button mat-flat-button class="btn-registrar" routerLink="/entregas/insertar">
+                Registrar entrega
+            </button>
+        }
     </div>
 
     <div class="card-table">
@@ -26,7 +28,7 @@
             <ng-container matColumnDef="usuario">
                 <th mat-header-cell *matHeaderCellDef> Usuario </th>
                 <td mat-cell *matCellDef="let element">
-                    {{ (listaUsuarios.find(u => u.id_usuario === element.usuarioIdUsuario))?.nombre }}
+                    {{ nombreUsuario(element) }}
                 </td>
             </ng-container>
 

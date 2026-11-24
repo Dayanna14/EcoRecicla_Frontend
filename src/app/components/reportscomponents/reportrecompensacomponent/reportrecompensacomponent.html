@@ -1,0 +1,88 @@
+<div class="tarjeta" (click)="abrirDetalle()">
+  <div class="cabecera">
+    <span class="icono"><mat-icon>redeem</mat-icon></span>
+    <h2>Recompensas más canjeadas</h2>
+  </div>
+  @if (hayError) {
+    <div class="error">
+      <mat-icon>warning</mat-icon>
+      <p class="error-titulo">No se pudo cargar este reporte</p>
+      <p>Los demás reportes siguen disponibles.</p>
+      <button mat-button (click)="obtenerReporte(); $event.stopPropagation()"><mat-icon>refresh</mat-icon> Reintentar</button>
+    </div>
+  } @else if (lista.length === 0) {
+    <p class="vacio">Aún no hay canjes registrados.</p>
+  } @else {
+    <div class="grafico">
+      <canvas baseChart type="bar" [data]="chartData" [options]="chartOptions"></canvas>
+    </div>
+    @if (lider) {
+      <p class="lider">
+        <mat-icon>emoji_events</mat-icon>
+        Favorita: <b>{{ lider.nombreRecompensa }}</b> · <span class="mono">{{ lider.totalCanjes }} canjes</span> · {{ porcentajeLider }} % del total
+      </p>
+    }
+    <p class="ver-detalle">Ver detalle <mat-icon>arrow_forward</mat-icon></p>
+  }
+</div>
+
+<!-- Ventana de detalle (se abre con MatDialog) -->
+<ng-template #dialogDetalle>
+  <div class="detalle">
+    <div class="detalle-cabecera">
+      <span class="icono"><mat-icon>redeem</mat-icon></span>
+      <div>
+        <h2 mat-dialog-title>Recompensas más canjeadas</h2>
+        <p class="detalle-sub">¿Qué recompensas prefieren los usuarios?</p>
+      </div>
+      <button mat-icon-button mat-dialog-close aria-label="Cerrar"><mat-icon>close</mat-icon></button>
+    </div>
+    <mat-dialog-content>
+      @if (cargandoDetalle) {
+        <p class="cargando">Cargando…</p>
+      } @else {
+        <p class="seccion">EN TOTAL</p>
+        <div class="totales">
+          <div><span>Canjes</span><b class="mono">{{ totalCanjes }}</b></div>
+          <div><span>Puntos canjeados</span><b class="mono">{{ totalPuntos }}</b></div>
+          <div><span>Recompensas</span><b class="mono">{{ filas.length }}</b></div>
+        </div>
+        <p class="seccion">CADA RECOMPENSA</p>
+        <table class="tabla">
+          <thead><tr><th>#</th><th>Recompensa</th><th>Canjes</th><th>% del total</th><th>Costo</th><th>Puntos</th><th>Estado</th></tr></thead>
+          <tbody>
+            @for (f of filas; track f.nombre) {
+              <tr>
+                <td>{{ f.posicion }} @if (f.posicion === 1 && f.canjes > 0) { <span class="estrella">★</span> }</td>
+                <td>{{ f.nombre }}</td>
+                <td class="mono">{{ f.canjes }}</td>
+                <td><div class="barrita"><span [style.width.%]="f.porcentaje"></span></div><small>{{ f.porcentaje }} %</small></td>
+                <td class="mono">{{ f.costo ?? '—' }}</td>
+                <td class="mono">{{ f.puntos ?? '—' }}</td>
+                <td>
+                  @if (f.activo === null) { <span class="estado">—</span> }
+                  @else { <span class="estado" [class.inactivo]="!f.activo">{{ f.activo ? 'Activa' : 'Inactiva' }}</span> }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+        <p class="seccion">PARA TENER EN CUENTA</p>
+        @if (avisos.length === 0) {
+          <p class="aviso aviso-ok"><mat-icon>check_circle</mat-icon> Todo en orden.</p>
+        } @else {
+          @for (aviso of avisos; track aviso) {
+            <p class="aviso"><mat-icon>error_outline</mat-icon> {{ aviso }}</p>
+          }
+        }
+      }
+      <div class="calculo">
+        <mat-icon>info</mat-icon>
+        <p><b>¿Cómo se calcula?</b> Se cuentan los canjes de cada recompensa. Los puntos son canjes × costo de la recompensa.</p>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-flat-button class="btn-cerrar" mat-dialog-close>Cerrar</button>
+    </mat-dialog-actions>
+  </div>
+</ng-template>

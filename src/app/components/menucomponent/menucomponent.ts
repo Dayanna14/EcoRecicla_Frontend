@@ -5,8 +5,6 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterLink } from '@angular/router';
 import { Loginservice } from '../../services/loginservice';
-import { UsuariosService } from '../../services/usuariosservice';
-import { UsuariosDTOList } from '../../models/UsuariosDTOList';
 
 @Component({
   selector: 'app-menucomponent',
@@ -23,12 +21,10 @@ export class Menucomponent implements OnInit{
 
 
 
-listaUsuarios: UsuariosDTOList[] = [];
   nombreUsuario: string = '';
 
     constructor(private readonly loginService: Loginservice,
     private readonly router: Router,
-    private usuarioService: UsuariosService,
     
   ) { }
 
@@ -61,36 +57,26 @@ ngOnInit(): void {
     return this.loginService.hasAnyRole(['OPERADOR_CENTRO']);
   }
 
-cargarNombreUsuario(): void {
-    this.usuarioService.list().subscribe({
-      next: (data) => {
-        this.listaUsuarios = data;
-        const usuarioActual = this.listaUsuarios.find(
-          (u: any) => u.correo === this.username || u.username === this.username || u.email === this.username
-        );
-        
-        if (usuarioActual) {
-          this.nombreUsuario = usuarioActual.nombre; // O u.nombreCompleto según tu DTO
-        } else {
-          this.nombreUsuario = this.username;
-        }
-      },
-      error: (err) => {
-        console.error('Error al cargar usuarios para el menú', err);
-        this.nombreUsuario = this.username;
-      }
-    });
+/** El nombre con el que inició sesión: está guardado desde el login, así que sale al instante
+   *  (antes se pedía la lista de usuarios, que solo el admin puede ver y tardaba) */
+  cargarNombreUsuario(): void {
+    this.nombreUsuario = this.loginService.getNombre() || this.username.split('@')[0];
   }
 
-  get avatarRol(): string {
-    if (this.esAdministrador) {
-      return '/img/avatares/avatar-administrador.svg';
-    }
-    if (this.esOperador) {
-      return '/img/avatares/avatar-operador.svg';
-    }
-    
-    return '/img/avatares/avatar-reciclador.svg';
+  get inicial(): string {
+    return (this.nombreUsuario || this.username || '?').trim().charAt(0).toUpperCase();
   }
-  
+
+  get nombreRol(): string {
+    if (this.esAdministrador) return 'Administrador';
+    if (this.esOperador) return 'Operador de centro';
+    return 'Reciclador';
+  }
+
+  /** Color del círculo según el rol */
+  get claseRol(): string {
+    if (this.esAdministrador) return 'rol-admin';
+    if (this.esOperador) return 'rol-operador';
+    return 'rol-reciclador';
+  }
 }
