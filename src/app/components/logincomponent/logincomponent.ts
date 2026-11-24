@@ -106,7 +106,7 @@ export class Logincomponent {
       return '/reportes/dashboard';
     }
     if (this.auth.hasAnyRole(['OPERADOR_CENTRO'])) {
-      return '/entregas/listar';
+      return '/entregas/insertar'; // su trabajo principal: registrar lo que recibe
     }
     if (this.auth.hasAnyRole(['RECICLADOR'])) {
       return '/reportes/dashboard'; // ahí ve "Mi impacto"

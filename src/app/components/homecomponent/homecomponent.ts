@@ -5,6 +5,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { Publicoservice } from '../../services/publicoservice';
 import { ImpactoDTO } from '../../models/ImpactoDTO';
 import { CentroPublicoDTO } from '../../models/CentroPublicoDTO';
+import { estaAbierto } from '../../core/utils/horario';
 
 
 @Component({
@@ -31,5 +32,9 @@ export class Homecomponent implements OnInit {
       next: data => { this.centrosActivos = data; this.cdr.detectChanges(); },
       error: () => {},
     });
+  }
+
+  abierto(c: CentroPublicoDTO): boolean | null {
+    return estaAbierto(c.horario);
   }
 }

@@ -14,6 +14,11 @@ export class Centroacopioservice {
 
   constructor(private http: HttpClient) {}
 
+  // Centros a cargo del operador que inició sesión
+  miCentro(): Observable<CentroAcopioDTOList[]> {
+    return this.http.get<CentroAcopioDTOList[]>(`${this.apiURL}/mi-centro`);
+  }
+
   list(): Observable<CentroAcopioDTOList[]> {
     return this.http.get<CentroAcopioDTOList[]>(this.apiURL);
   }

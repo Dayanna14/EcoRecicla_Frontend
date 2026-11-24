@@ -39,14 +39,11 @@
           }
         </mat-form-field>
 
-        <label class="etiqueta" for="contrasenia">Contraseña</label>
+        <label class="etiqueta" for="contrasenia">Nueva contraseña (opcional)</label>
         <mat-form-field appearance="outline">
           <mat-icon matPrefix>lock</mat-icon>
           <input matInput id="contrasenia" type="password" formControlName="contrasenia" maxlength="70" />
-          <mat-hint>Ingresa la contraseña (nueva o actual)</mat-hint>
-          @if (formUsuario.get('contrasenia')?.hasError('required')) {
-            <mat-error>Campo obligatorio, ingrese la contraseña</mat-error>
-          }
+          <mat-hint>Déjala vacía para conservar la contraseña actual.</mat-hint>
         </mat-form-field>
 
         <label class="etiqueta" for="rol">Rol</label>

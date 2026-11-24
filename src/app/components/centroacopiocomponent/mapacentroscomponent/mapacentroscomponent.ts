@@ -15,6 +15,7 @@ interface ItemCentro {
   distanciaKm: number | null;
 }
 
+import { estaAbierto, textoHorario } from '../../../core/utils/horario';
 @Component({
   selector: 'app-mapacentroscomponent',
   imports: [MatIconModule, MatSnackBarModule, DecimalPipe],
@@ -206,9 +207,13 @@ export class Mapacentroscomponent implements AfterViewInit, OnDestroy {
 
   // Contenido de la ventanita al hacer clic en un marcador
   crearPopup(centro: CentroAcopioDTOInsert, direccion: string): string {
-    const estado = centro.estado
-      ? '<span class="popup-chip popup-activo">● Activo</span>'
-      : '<span class="popup-chip popup-inactivo">● Inactivo</span>';
+    // Activo/inactivo + si está abierto en este momento según su horario
+    const abierto = estaAbierto(centro.horario);
+    const estado = !centro.estado
+      ? '<span class="popup-chip popup-inactivo">● Inactivo</span>'
+      : abierto === false
+        ? '<span class="popup-chip popup-inactivo">● Cerrado ahora</span>'
+        : '<span class="popup-chip popup-activo">● Abierto ahora</span>';
     const ruta = `https://www.openstreetmap.org/directions?route=%3B${centro.latitud}%2C${centro.longitud}`;
 
     return `
@@ -219,6 +224,15 @@ export class Mapacentroscomponent implements AfterViewInit, OnDestroy {
         ${estado}
         <a href="${ruta}" target="_blank" rel="noopener">Cómo llegar →</a>
       </div>`;
+  }
+
+  // Para la lista lateral: "Abierto ahora" / "Cerrado ahora"
+  estadoHorario(centro: CentroAcopioDTOInsert): string {
+    return textoHorario(centro.horario, centro.estado);
+  }
+
+  abiertoAhora(centro: CentroAcopioDTOInsert): boolean {
+    return !!centro.estado && estaAbierto(centro.horario) !== false;
   }
 
   // Evita que un nombre con < > rompa el HTML del popup

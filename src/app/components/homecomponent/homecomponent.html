@@ -202,7 +202,11 @@
                 <li>
                   <mat-icon aria-hidden="true">location_on</mat-icon>
                   <span>{{ c.nombre }}</span>
-                  <small>{{ c.horario }}</small>
+                  <small>{{ c.horario }}
+                    @if (abierto(c) !== null) {
+                      <b class="estado-horario" [class.cerrado]="!abierto(c)">· {{ abierto(c) ? 'Abierto ahora' : 'Cerrado ahora' }}</b>
+                    }
+                  </small>
                   <a [href]="'https://www.openstreetmap.org/?mlat=' + c.latitud + '&mlon=' + c.longitud + '#map=17/' + c.latitud + '/' + c.longitud"
                      target="_blank" rel="noopener" aria-label="Ver en el mapa">Ver</a>
                 </li>

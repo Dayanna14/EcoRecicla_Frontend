@@ -66,6 +66,8 @@ export class Entregainsertcomponent implements OnInit, OnDestroy {
   elegido: { id: number; nombre: string; email?: string; entregas: number } | null = null;
   listaMateriales: MaterialDTOList[] = [];
   listaCentros: CentroAcopioDTOList[] = [];
+  // Operador sin centro asignado: no puede registrar hasta que el admin le asigne uno
+  sinCentro = false;
 
   constructor(
     private entregaService: Entregaservice,
@@ -97,9 +99,15 @@ export class Entregainsertcomponent implements OnInit, OnDestroy {
       this.listaMateriales = data;
       this.cdr.markForCheck();
     });
-    this.centroAcopioService.list().subscribe(data => {
-      this.listaCentros = data;
-      this.cdr.markForCheck();
+    // El operador solo registra en su centro (el backend también lo valida); el admin, en cualquiera
+    const centros$ = this.esAdmin ? this.centroAcopioService.list() : this.centroAcopioService.miCentro();
+    centros$.subscribe(data => {
+      this.listaCentros = data.filter(c => c.estado !== false);
+      if (!this.esAdmin && this.listaCentros.length === 1) {
+        this.formEntrega.get('idCentroAcopio')?.setValue(this.listaCentros[0].idCentro);
+      }
+      this.sinCentro = !this.esAdmin && this.listaCentros.length === 0;
+      this.cdr.detectChanges();
     });
   }
 
@@ -216,7 +224,7 @@ registrarEntrega() {
         console.error('Ocurrió un error al insertar la entrega', err);
         // Si el código escrito no existe, el backend responde con error
         const motivo = err?.error?.message;
-        this.mensaje = this.modoManual
+        this.mensaje = motivo?.includes('centro') ? motivo : this.modoManual
           ? 'No se pudo registrar. Verifica que el código del reciclador sea correcto.'
           : (motivo || 'Ocurrió un error al registrar la entrega.');
         this.snackBar.open(this.mensaje, 'Cerrar', { duration: 4000 });

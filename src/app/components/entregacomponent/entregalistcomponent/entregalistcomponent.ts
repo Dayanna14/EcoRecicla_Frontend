@@ -35,7 +35,7 @@ import { forkJoin } from 'rxjs';
   styleUrl: './entregalistcomponent.css',
 })
 export class Entregalistcomponent implements OnInit {
-  displayedColumns: string[] = ['c1', 'usuario', 'c2', 'c3', 'c_fecha', 'c4', 'c5', 'c6', 'c7'];
+  displayedColumns: string[] = ['c1', 'usuario', 'c2', 'c3', 'c_fecha', 'c4', 'c5', 'receptor', 'c6', 'c7'];
   dataSource = new MatTableDataSource<EntregaDTOList>();
 
   listaUsuarios: UsuariosDTOList[] = [];
@@ -65,6 +65,9 @@ export class Entregalistcomponent implements OnInit {
   get puedeRegistrar(): boolean {
     return this.loginService.hasAnyRole(['ADMINISTRADOR', 'OPERADOR_CENTRO']);
   }
+  get esOperador(): boolean {
+    return !this.esAdmin && this.loginService.hasAnyRole(['OPERADOR_CENTRO']);
+  }
   get soloReciclador(): boolean {
     return !this.puedeRegistrar && this.loginService.hasAnyRole(['RECICLADOR']);
   }
@@ -72,13 +75,20 @@ export class Entregalistcomponent implements OnInit {
   ngOnInit(): void {
     // c6 = eliminar, c7 = editar
     this.displayedColumns = this.displayedColumns.filter(c =>
-      (c !== 'c6' || this.esAdmin) && (c !== 'c7' || this.puedeRegistrar));
+      (c !== 'c6' || this.esAdmin) && (c !== 'c7' || this.puedeRegistrar) && (c !== 'receptor' || this.puedeRegistrar));
     this.listarEntregas();
     if (this.esAdmin) {
       this.listarUsuarios(); // GET /api/usuarios es solo para el administrador
     }
     this.listarMateriales();
     this.listarCentros();
+  }
+
+  // Quién recibió la entrega: "Tú" si fue el operador que mira, o su nombre (el admin ve todos los usuarios)
+  nombreReceptor(entrega: EntregaDTOList): string {
+    if (!entrega.idOperador) return '—';
+    if (entrega.idOperador === this.loginService.getIdUsuario()) return 'Tú';
+    return this.listaUsuarios.find(u => u.id_usuario === entrega.idOperador)?.nombre ?? `Usuario #${entrega.idOperador}`;
   }
 
   // Nombre del usuario de una entrega: de la lista de usuarios (admin) o del reporte detallado
@@ -100,7 +110,10 @@ export class Entregalistcomponent implements OnInit {
   listarEntregas(): void {
     // El reciclador pide solo las suyas: el backend las filtra con su token (no recibe las de otros)
     forkJoin({
-      entregas: this.soloReciclador ? this.entregaService.misEntregas() : this.entregaService.list(),
+      // Reciclador: solo las suyas · Operador: las de su centro · Admin: todas
+      entregas: this.soloReciclador ? this.entregaService.misEntregas()
+        : this.esOperador ? this.entregaService.entregasMiCentro()
+        : this.entregaService.list(),
       detalle: this.entregaService.obtenerReporteDetallado(),
     }).subscribe({
       next: ({ entregas, detalle }) => {

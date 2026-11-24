@@ -19,6 +19,11 @@ export class Entregaservice {
     return this.http.get<EntregaDTOList[]>(this.apiURL);
   }
 
+  // Operador: entregas recibidas en los centros a su cargo
+  entregasMiCentro(): Observable<EntregaDTOList[]> {
+    return this.http.get<EntregaDTOList[]>(`${this.apiURL}/mi-centro`);
+  }
+
   // Solo las entregas del usuario que inició sesión
   misEntregas(): Observable<EntregaDTOList[]> {
     return this.http.get<EntregaDTOList[]>(`${this.apiURL}/mis-entregas`);

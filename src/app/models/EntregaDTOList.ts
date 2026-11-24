@@ -6,4 +6,6 @@ export class EntregaDTOList {
   materialIdMaterial: number = 0;
   centroAcopioIdCentroAcopio: number = 0;
   usuarioIdUsuario: number = 0;
+  // Quién recibió la entrega (operador o admin)
+  idOperador: number | null = null;
 }

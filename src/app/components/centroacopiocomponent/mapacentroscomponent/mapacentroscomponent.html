@@ -31,7 +31,11 @@
               <img [src]="item.centro.estado ? 'img/mapa/pin-activo.svg' : 'img/mapa/pin-inactivo.svg'" alt="" />
               <span class="info">
                 <strong>{{ item.centro.nombre }}</strong>
-                <span>🕒 {{ item.centro.horario }}</span>
+                <span>🕒 {{ item.centro.horario }}
+                  @if (estadoHorario(item.centro)) {
+                    <b class="estado-horario" [class.cerrado]="!abiertoAhora(item.centro)">{{ estadoHorario(item.centro) }}</b>
+                  }
+                </span>
               </span>
               @if (item.distanciaKm !== null) {
                 <span class="distancia mono">{{ item.distanciaKm | number: '1.1-1' }} km</span>

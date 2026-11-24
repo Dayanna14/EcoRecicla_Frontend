@@ -18,7 +18,10 @@
 
       <ng-container matColumnDef="c2">
         <th mat-header-cell *matHeaderCellDef>Nombre</th>
-        <td mat-cell *matCellDef="let element" class="nombre">{{ element.nombre }}</td>
+        <td mat-cell *matCellDef="let element" class="nombre">
+          {{ element.nombre }}
+          @if (misCentros.has(element.idCentro)) { <span class="chip-mio">Tu centro</span> }
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="c3">

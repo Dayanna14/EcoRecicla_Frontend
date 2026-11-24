@@ -1,4 +1,5 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormGroupDirective, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -21,12 +22,13 @@ import { Loginservice } from '../../../services/loginservice';
 @Component({
   selector: 'app-canjeinsertcomponent',
   imports: [CommonModule, RouterModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule,
-    MatSelectModule, MatButtonModule, MatIconModule, MatSnackBarModule],
+    MatSelectModule, MatButtonModule, MatIconModule, MatSnackBarModule, MatDialogModule],
   templateUrl: './canjeinsertcomponent.html',
   styleUrl: './canjeinsertcomponent.css',
 })
 export class Canjeinsertcomponent implements OnInit {
   form!: FormGroup;
+  @ViewChild('dialogConfirmar') dialogConfirmar!: TemplateRef<any>;
   recompensas: RecompensaDTOList[] = [];
   usuarios: UsuariosDTOList[] = [];
   // Reciclador: su id se obtiene con sus entregas (el backend no lo envía en el login)
@@ -53,6 +55,7 @@ export class Canjeinsertcomponent implements OnInit {
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
     private cdr: ChangeDetectorRef,
+    private dialog: MatDialog,
   ) {}
 
   get esAdmin(): boolean {
@@ -176,6 +179,17 @@ export class Canjeinsertcomponent implements OnInit {
       this.snackBar.open('Completa todos los campos obligatorios', 'Cerrar', { duration: 3000 });
       return;
     }
+    // El reciclador confirma antes de gastar sus puntos (el admin registra directo)
+    if (!this.esAdmin && rec) {
+      this.dialog.open(this.dialogConfirmar, { data: { rec, restantes: this.restantes }, width: '420px' })
+        .afterClosed()
+        .subscribe(ok => { if (ok) this.enviar(formDir); });
+      return;
+    }
+    this.enviar(formDir);
+  }
+
+  private enviar(formDir: FormGroupDirective): void {
     const valores = this.form.getRawValue();
     const ahora = new Date().toTimeString().substring(0, 8); // HH:mm:ss
     const dto: CanjeDTOInsert = {

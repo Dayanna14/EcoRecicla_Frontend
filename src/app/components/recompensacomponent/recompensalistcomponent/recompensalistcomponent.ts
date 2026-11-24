@@ -12,6 +12,9 @@ import { RecompensaDTOList } from '../../../models/RecompensaDTOList';
 import { TipoRecompensaDTOList } from '../../../models/TipoRecompensaDTOList';
 import { MatCardModule } from '@angular/material/card';
 import { Loginservice } from '../../../services/loginservice';
+import { Entregaservice } from '../../../services/entregaservice';
+import { Canjeservice } from '../../../services/canjeservice';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-recompensalistcomponent',
@@ -26,6 +29,10 @@ export class Recompensalistcomponent implements OnInit {
   vista: 'tabla' | 'tarjetas' = 'tarjetas'; // solo tarjetas
   imagenDefecto: string = 'img/modulos/moneda-ecopunto.svg';
   pagina: RecompensaDTOList[] = []; // recompensas de la página actual (para las tarjetas)
+  // Filtro por tipo de recompensa (0 = todas)
+  tipoElegido = 0;
+  // Reciclador: sus puntos disponibles, para decirle cuánto le falta en cada tarjeta
+  misPuntos: number | null = null;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild('dialogEliminar') dialogEliminar!: TemplateRef<any>;
@@ -37,6 +44,8 @@ export class Recompensalistcomponent implements OnInit {
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
     private readonly loginService: Loginservice,
+    private eS: Entregaservice,
+    private cS: Canjeservice,
   ) {}
 
   ngOnInit(): void {
@@ -45,7 +54,20 @@ export class Recompensalistcomponent implements OnInit {
       this.pagina = datos;
       this.cdr.detectChanges();
     });
+    // El filtro compara el tipo de cada recompensa con el elegido
+    this.dataSource.filterPredicate = (r, filtro) => filtro === '0' || String(r.idTipoRecompensa) === filtro;
     this.listar();
+    if (this.esReciclador && !this.esAdministrador) {
+      forkJoin({ entregas: this.eS.misEntregas(), canjes: this.cS.misCanjes() }).subscribe({
+        next: ({ entregas, canjes }) => {
+          const ganados = entregas.reduce((t, e) => t + (e.puntosGeneredos ?? 0), 0);
+          const gastados = canjes.filter(c => !(c.estado ?? '').toUpperCase().startsWith('CANCEL'))
+            .reduce((t, c) => t + (c.puntosUsados ?? 0), 0);
+          this.misPuntos = ganados - gastados;
+          this.cdr.detectChanges();
+        },
+      });
+    }
     this.listarTipos();
   }
 
@@ -115,5 +137,15 @@ export class Recompensalistcomponent implements OnInit {
 
   get esReciclador(): boolean {
     return this.loginService.hasAnyRole(['RECICLADOR']);
+  }
+
+  filtrarPorTipo(idTipo: number): void {
+    this.tipoElegido = idTipo;
+    this.dataSource.filter = String(idTipo);
+    this.paginator?.firstPage();
+  }
+
+  faltan(r: RecompensaDTOList): number {
+    return this.misPuntos === null ? 0 : Math.max(0, r.costoPuntos - this.misPuntos);
   }
 }

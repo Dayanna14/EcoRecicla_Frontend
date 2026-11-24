@@ -3,4 +3,5 @@ export class UsuariosDTOList {
     idRol: number=0
     nombre: string=''
     email: string=''
+    enabled: boolean = true
 }

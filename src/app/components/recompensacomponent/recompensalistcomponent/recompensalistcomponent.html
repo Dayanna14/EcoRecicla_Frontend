@@ -14,6 +14,19 @@
   }
   </div>
 
+  <!-- Filtro por tipo -->
+  <div class="filtros-tipo">
+    <button type="button" class="chip-tipo" [class.activo]="tipoElegido === 0" (click)="filtrarPorTipo(0)">Todas</button>
+    @for (t of tipos; track t.idTipoRecompensa) {
+      <button type="button" class="chip-tipo" [class.activo]="tipoElegido === t.idTipoRecompensa" (click)="filtrarPorTipo(t.idTipoRecompensa)">
+        {{ t.nombreTipoRecompensa }}
+      </button>
+    }
+    @if (misPuntos !== null) {
+      <span class="mis-puntos"><mat-icon>stars</mat-icon> Tienes {{ misPuntos }} puntos</span>
+    }
+  </div>
+
   <div class="tarjeta">
 
     <!-- Catálogo en tarjetas (pedido de la profesora: la imagen en tabla no se lee) -->
@@ -42,6 +55,14 @@
               <p class="costo mono">
                 {{ r.costoPuntos }} puntos
               </p>
+              @if (misPuntos !== null && r.estado) {
+                @if (faltan(r) === 0) {
+                  <p class="alcance ok">¡Te alcanza!</p>
+                } @else {
+                  <div class="barra-alcance"><span [style.width.%]="(misPuntos / r.costoPuntos) * 100"></span></div>
+                  <p class="alcance">Te faltan {{ faltan(r) }} pts</p>
+                }
+              }
 
               <span class="estado"
                     [class.inactiva]="!r.estado">

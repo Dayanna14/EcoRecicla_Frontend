@@ -29,12 +29,23 @@
         <td mat-cell *matCellDef="let element">{{ nombreRol(element.idRol) }}</td>
       </ng-container>
 
+      <ng-container matColumnDef="estado">
+        <th mat-header-cell *matHeaderCellDef>Estado</th>
+        <td mat-cell *matCellDef="let element">
+          <span class="chip-estado" [class.inactivo]="element.enabled === false">{{ element.enabled === false ? 'Inhabilitado' : 'Habilitado' }}</span>
+        </td>
+      </ng-container>
+
       <ng-container matColumnDef="c5">
         <th mat-header-cell *matHeaderCellDef>Acciones</th>
         <td mat-cell *matCellDef="let element">
           <a mat-icon-button class="btn-editar" aria-label="Editar usuario" [routerLink]="['/usuarios/editar', element.id_usuario]">
             <mat-icon>edit</mat-icon>
           </a>
+          <button mat-icon-button class="btn-estado" [attr.aria-label]="element.enabled === false ? 'Habilitar cuenta' : 'Inhabilitar cuenta'"
+                  [title]="element.enabled === false ? 'Habilitar cuenta' : 'Inhabilitar cuenta'" (click)="cambiarEstado(element)">
+            <mat-icon>{{ element.enabled === false ? 'toggle_off' : 'toggle_on' }}</mat-icon>
+          </button>
           <button mat-icon-button class="btn-clave" aria-label="Restablecer contraseña" title="Restablecer contraseña" (click)="restablecer(element)">
             <mat-icon>lock_reset</mat-icon>
           </button>

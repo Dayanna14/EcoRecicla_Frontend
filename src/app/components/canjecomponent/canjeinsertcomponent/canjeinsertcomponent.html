@@ -143,3 +143,17 @@
     </aside>
   </div>
 </div>
+
+<!-- Confirmación antes de canjear -->
+<ng-template #dialogConfirmar let-d>
+  <div class="icono-confirmar"><mat-icon aria-hidden="true">redeem</mat-icon></div>
+  <h2 mat-dialog-title>¿Canjear {{ d.rec.nombre }}?</h2>
+  <mat-dialog-content>
+    <p class="texto-dialogo">Usarás <b>{{ d.rec.costoPuntos }} puntos</b> y te quedarán <b>{{ d.restantes }}</b>.</p>
+    <p class="texto-dialogo nota">Tu canje quedará pendiente: recógelo en cualquier centro de acopio mostrando tu código. Mientras no lo recojas, puedes cancelarlo.</p>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-stroked-button [mat-dialog-close]="false" cdkFocusInitial>Volver</button>
+    <button mat-flat-button [mat-dialog-close]="true">Sí, canjear</button>
+  </mat-dialog-actions>
+</ng-template>

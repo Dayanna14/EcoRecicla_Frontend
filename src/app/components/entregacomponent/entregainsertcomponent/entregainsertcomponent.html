@@ -103,7 +103,10 @@
                 }
 
                 <!-- Select de Centro de Acopio -->
-                <label class="input-label">Centro de acopio</label>
+                <label class="input-label">{{ esAdmin ? 'Centro de acopio' : 'Tu centro de acopio' }}</label>
+                @if (sinCentro) {
+                    <p class="nota-reciclador"><mat-icon>warning</mat-icon> No tienes un centro asignado. Pide al administrador que te asigne uno.</p>
+                }
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Seleccione el centro</mat-label>
                     <mat-select formControlName="idCentroAcopio">

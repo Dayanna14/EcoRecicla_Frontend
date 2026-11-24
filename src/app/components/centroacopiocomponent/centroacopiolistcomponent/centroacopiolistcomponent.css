@@ -145,4 +145,4 @@ h2[mat-dialog-title] {
 .btn-confirmar {
   --mat-button-filled-container-color: var(--eco-error);
   --mat-button-filled-label-text-color: #ffffff;
-}
+}.chip-mio { margin-left: 8px; padding: 2px 8px; border-radius: 99px; background: #eef4ea; color: #2d5b3c; font-size: .72rem; font-weight: 600; }

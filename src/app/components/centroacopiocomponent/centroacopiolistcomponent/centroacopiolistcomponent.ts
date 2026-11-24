@@ -49,7 +49,15 @@ export class Centroacopiolistcomponent implements OnInit {
   }
 
 
+  // Centros a cargo del operador que inició sesión (para marcarlos como "Tu centro")
+  misCentros = new Set<number>();
+
   ngOnInit(): void {
+    if (this.loginService.hasAnyRole(['OPERADOR_CENTRO']) && !this.esAdmin) {
+      this.cS.miCentro().subscribe({
+        next: data => { this.misCentros = new Set(data.map(c => c.idCentro)); this.cdr.detectChanges(); },
+      });
+    }
     if (!this.esAdmin) {
       this.displayedColumns = this.displayedColumns.filter(c => c !== 'c6'); // c6 = acciones
     }

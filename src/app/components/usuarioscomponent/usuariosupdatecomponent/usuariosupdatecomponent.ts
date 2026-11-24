@@ -44,7 +44,7 @@ export class Usuariosupdatecomponent implements OnInit {
       codigo: [this.idUsuario],
       nombre: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      contrasenia: ['', Validators.required],
+      contrasenia: [''], // opcional: vacía = se conserva la actual
       rol: ['', Validators.required],
     });
 

@@ -18,7 +18,7 @@ import { RolDTOList } from '../../../models/RolDTOList';
   styleUrl: './usuarioslistcomponent.css',
 })
 export class Usuarioslistcomponent implements OnInit {
-  displayedColumns: string[] = ['c1', 'c2', 'c3', 'c4', 'c5'];
+  displayedColumns: string[] = ['c1', 'c2', 'c3', 'c4', 'estado', 'c5'];
   dataSource = new MatTableDataSource<UsuariosDTOList>();
   roles: RolDTOList[] = [];
 
@@ -105,5 +105,21 @@ export class Usuarioslistcomponent implements OnInit {
           }),
         });
       });
+  }
+
+  // Habilitar / inhabilitar: una cuenta inhabilitada no puede iniciar sesión
+  cambiarEstado(usuario: UsuariosDTOList): void {
+    this.uS.cambiarEstado(usuario.id_usuario).subscribe({
+      next: actualizado => {
+        usuario.enabled = actualizado.enabled;
+        this.snackBar.open(`${usuario.nombre} quedó ${actualizado.enabled ? 'habilitado' : 'inhabilitado'}`, 'Cerrar', {
+          duration: 3500, panelClass: [actualizado.enabled ? 'noti-exito' : 'noti-advertencia'],
+        });
+        this.cdr.detectChanges();
+      },
+      error: err => this.snackBar.open(err.error?.message ?? 'No se pudo cambiar el estado', 'Cerrar', {
+        duration: 4000, panelClass: ['noti-error'],
+      }),
+    });
   }
 }

@@ -168,3 +168,6 @@
   text-align: center;
   color: var(--eco-charcoal);
 }
+/* Abierto / cerrado según el horario */
+.estado-horario { margin-left: 6px; font-size: .75rem; color: #2d5b3c; }
+.estado-horario.cerrado { color: #b3412e; }

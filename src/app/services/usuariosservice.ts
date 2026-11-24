@@ -39,6 +39,11 @@ export class UsuariosService {
     return this.http.get<UsuarioPorEstadoDTO[]>(`${this.apiURL}/usuarios-por-estado`);
   }
 
+  // Habilitar o inhabilitar una cuenta
+  cambiarEstado(id: number): Observable<UsuariosDTOList> {
+    return this.http.put<UsuariosDTOList>(`${this.apiURL}/${id}/estado`, {});
+  }
+
   // Opción B de "olvidé mi contraseña": el admin genera una contraseña temporal
   restablecerContrasenia(id: number): Observable<ContraseniaTemporalDTO> {
     return this.http.put<ContraseniaTemporalDTO>(`${this.apiURL}/${id}/restablecer`, {});
