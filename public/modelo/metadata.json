@@ -1,1 +1,1 @@
-{"tfjsVersion":"1.7.4","tmVersion":"2.4.19","packageVersion":"0.8.4-alpha2","packageName":"@teachablemachine/image","timeStamp":"2026-11-13T05:52:34.999Z","userMetadata":{},"modelName":"tm-my-image-model","labels":["Plástico","Papel","Vidrio","Nada"],"imageSize":224}
+{"tfjsVersion":"1.7.4","tmVersion":"2.4.19","packageVersion":"0.8.4-alpha2","packageName":"@teachablemachine/image","timeStamp":"2026-11-24T19:04:32.110Z","userMetadata":{},"modelName":"ecorecicla-v3","labels":["Plástico","Papel","Vidrio","Metal","Nada"],"imageSize":224}

@@ -23,8 +23,9 @@ export interface Prediccion {
 })
 export class Clasificadorservice {
   // Versión del modelo que se muestra en pantalla (v1 = Teachable Machine original,
-  // v2 = reentrenado el 13/11/2026 con TrashNet + fotos propias + clase "Nada")
-  readonly VERSION_MODELO = 'v2 · MobileNet (Teachable Machine)';
+  // v2 = reentrenado con TrashNet + fotos propias + "Nada";
+  // v3 = 24/11/2026, 5 clases con Metal y videos de webcam propios)
+  readonly VERSION_MODELO = 'v3 · MobileNet (Teachable Machine)';
 
   private readonly RUTA_MODELO = 'modelo/model.json';
   private readonly RUTA_METADATA = 'modelo/metadata.json';

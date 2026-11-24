@@ -28,6 +28,12 @@ const CONSEJOS: { [clase: string]: { icono: string; texto: string }[] } = {
     { icono: 'warning', texto: 'Si está roto, envuélvelo en papel para que nadie se corte.' },
     { icono: 'block', texto: 'No mezcles espejos, focos ni vasos de vidrio templado.' },
   ],
+  // Clase nueva del modelo v3 (latas y envases metálicos)
+  metal: [
+    { icono: 'water_drop', texto: 'Enjuaga las latas para quitar restos de comida o bebida.' },
+    { icono: 'compress', texto: 'Aplástalas para que ocupen menos espacio.' },
+    { icono: 'warning', texto: 'Cuidado con los bordes filosos de las latas abiertas.' },
+  ],
 };
 
 @Component({
