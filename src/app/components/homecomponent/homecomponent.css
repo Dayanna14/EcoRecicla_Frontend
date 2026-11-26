@@ -1386,8 +1386,9 @@
   .barra-interior { gap: 6px; padding: 12px 0; }
   .logo { font-size: 24px; }
   .acciones { gap: 4px; }
-  .canjear-barra { display: none; }
+  .canjear-barra, .login-barra { display: none; }
   .solo-menu { display: inline-flex; margin-top: 16px; }
+  .solo-menu + .solo-menu { margin-top: 8px; }
   .acciones .btn-chico { padding: 9px 14px; font-size: 14px; }
 
   .hero { padding: 32px 0 48px; }

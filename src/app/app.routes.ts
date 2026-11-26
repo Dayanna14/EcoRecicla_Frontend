@@ -91,6 +91,7 @@ export const routes: Routes = [
   // ---------- Dayana: Roles ----------
   {
     path: 'roles',
+    title: 'EcoRecicla | Roles',
     component: Rolcomponent,
     canActivate: [authGuard, roleGuard],
     data: { roles: ['ADMINISTRADOR'] },
@@ -106,6 +107,7 @@ export const routes: Routes = [
   // ---------- Dayana: Centros de acopio ----------
   {
     path: 'centrosacopio',
+    title: 'EcoRecicla | Centros de acopio',
     component: Centroacopiocomponent,
     canActivate: [authGuard, roleGuard],
     data: { roles: ['ADMINISTRADOR', 'OPERADOR_CENTRO', 'RECICLADOR'] },
@@ -124,6 +126,7 @@ export const routes: Routes = [
   // ---------- Nayara: usuarios, recompensas ----------
   {
         path: 'usuarios',
+        title: 'EcoRecicla | Usuarios',
         component: Usuarioscomponent,
         canActivate: [authGuard, roleGuard],
         data: { roles: ['ADMINISTRADOR'] },
@@ -137,6 +140,7 @@ export const routes: Routes = [
     },
     {
         path: 'recompensas',
+        title: 'EcoRecicla | Recompensas',
         component: Recompensacomponent,
         canActivate: [authGuard, roleGuard],
         data: { roles: ['ADMINISTRADOR', 'OPERADOR_CENTRO', 'RECICLADOR'] }, // el operador consulta el catálogo
@@ -158,6 +162,7 @@ export const routes: Routes = [
   // ---------- Axel: tiporecompensas, materiales ----------
   {
     path: 'tiporecompensas',
+    title: 'EcoRecicla | Tipos de recompensa',
     component: Tiporecompensacomponent,
     canActivate: [authGuard, roleGuard],
     data: { roles: ['ADMINISTRADOR'] },
@@ -171,6 +176,7 @@ export const routes: Routes = [
   },
   {
     path: 'materiales',
+    title: 'EcoRecicla | Materiales',
     component: Materialcomponent,
     canActivate: [authGuard, roleGuard],
     // El reciclador consulta los materiales y usa el clasificador IA (no edita)
@@ -190,6 +196,7 @@ export const routes: Routes = [
   // ---------- Jhon: entregas ----------
   {
     path: 'entregas',
+    title: 'EcoRecicla | Entregas',
     component: Entregacomponent,
     canActivate: [authGuard, roleGuard],
     data: { roles: ['ADMINISTRADOR', 'OPERADOR_CENTRO', 'RECICLADOR'] },
@@ -212,6 +219,7 @@ export const routes: Routes = [
     // ---------- Franco: canjes ----------
     {
         path: 'canjes',
+        title: 'EcoRecicla | Canjes',
         component: Canjecomponent,
         canActivate: [authGuard, roleGuard],
         data: { roles: ['ADMINISTRADOR', 'OPERADOR_CENTRO', 'RECICLADOR'] },
@@ -229,6 +237,6 @@ export const routes: Routes = [
   // ---------- Franco: canjes ----------
 
   // ---------- Fallback ----------
-  { path: '**', redirectTo: 'login' },
+  { path: '**', redirectTo: 'home' }, // ruta inexistente: al inicio, no al login
 
 ];

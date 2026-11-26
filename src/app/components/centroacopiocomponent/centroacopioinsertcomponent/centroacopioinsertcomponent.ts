@@ -82,7 +82,7 @@ export class Centroacopioinsertcomponent implements OnInit, AfterViewInit, OnDes
     forkJoin({ usuarios: this.uS.list(), roles: this.rolS.list() }).subscribe({
       next: ({ usuarios, roles }) => {
         const idsOperador = new Set(roles.filter(r => r.nombre.toUpperCase().includes('OPERADOR')).map(r => r.idRol));
-        this.usuarios = usuarios.filter(u => idsOperador.has(u.idRol));
+        this.usuarios = usuarios.filter(u => idsOperador.has(u.idRol) && u.enabled !== false); // sin inhabilitados
         this.cargado = true;
         this.cdr.detectChanges();
       },

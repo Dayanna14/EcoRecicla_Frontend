@@ -18,8 +18,8 @@
 
       <input type="checkbox" id="menu-landing" class="menu-check" #menu />
       <label for="menu-landing" class="hamburguesa" aria-label="Abrir o cerrar el menú">
-        <mat-icon class="icono-abrir">menu</mat-icon>
-        <mat-icon class="icono-cerrar">close</mat-icon>
+        <mat-icon class="icono-abrir" aria-hidden="true">menu</mat-icon>
+        <mat-icon class="icono-cerrar" aria-hidden="true">close</mat-icon>
       </label>
 
       <nav class="enlaces" aria-label="Secciones de la página">
@@ -29,12 +29,13 @@
         <button type="button" (click)="menu.checked = false; impacto.scrollIntoView({ behavior: 'smooth' })">Impacto</button>
         <button type="button" class="btn btn-ambar solo-menu"
           (click)="menu.checked = false; beneficios.scrollIntoView({ behavior: 'smooth' })">Canjear</button>
+        <a class="btn btn-contorno solo-menu" routerLink="/login">Iniciar sesión</a>
       </nav>
 
       <div class="acciones">
         <button type="button" class="btn btn-ambar btn-chico canjear-barra"
           (click)="beneficios.scrollIntoView({ behavior: 'smooth' })">Canjear</button>
-        <a class="btn btn-contorno btn-chico" routerLink="/login">Iniciar sesión</a>
+        <a class="btn btn-contorno btn-chico login-barra" routerLink="/login">Iniciar sesión</a>
         <a class="btn btn-primario btn-chico" routerLink="/registro">Crear cuenta</a>
       </div>
     </div>
@@ -214,8 +215,9 @@
             </ul>
           }
           <a class="btn btn-contorno ver-mapa" routerLink="/centrosacopio/mapa">
-            Ver el mapa completo <mat-icon aria-hidden="true">arrow_forward</mat-icon>
+            Inicia sesión para ver el mapa <mat-icon aria-hidden="true">arrow_forward</mat-icon>
           </a>
+          <p class="nota-ejemplo izq"><mat-icon aria-hidden="true">info</mat-icon>El mapa de al lado es una vista de ejemplo; los centros reales son los de esta lista.</p>
         </div>
 
         <!-- Vista previa del mapa (dibujada, datos de ejemplo). Tocar un pin cambia el popup. -->
@@ -651,6 +653,6 @@
       <circle class="arriba-pista" cx="28" cy="28" r="25" />
       <circle class="arriba-anillo" cx="28" cy="28" r="25" pathLength="1" />
     </svg>
-    <mat-icon>arrow_upward</mat-icon>
+    <mat-icon aria-hidden="true">arrow_upward</mat-icon>
   </button>
 </div>

@@ -37,6 +37,7 @@ import { forkJoin } from 'rxjs';
 export class Entregalistcomponent implements OnInit {
   displayedColumns: string[] = ['c1', 'usuario', 'c2', 'c3', 'c_fecha', 'c4', 'c5', 'receptor', 'c6', 'c7'];
   dataSource = new MatTableDataSource<EntregaDTOList>();
+  cargando: boolean = true; // mientras llega la lista no se dice "no hay entregas"
 
   listaUsuarios: UsuariosDTOList[] = [];
   listaMateriales: MaterialDTOList[] = [];
@@ -120,9 +121,12 @@ export class Entregalistcomponent implements OnInit {
         this.nombrePorEntrega = new Map(detalle.map(d => [d.idEntrega, d.nombreUsuario]));
         this.dataSource.data = entregas;
         this.dataSource.paginator = this.paginator;
+        this.cargando = false;
         this.cdr.detectChanges();
       },
       error: (error) => {
+        this.cargando = false;
+        this.cdr.detectChanges();
         console.error('Error al listar las entregas', error);
         this.notificar('No se pudo cargar la lista de entregas', 'error');
       }

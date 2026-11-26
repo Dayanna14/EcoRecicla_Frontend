@@ -89,7 +89,8 @@
               } @else if (esReciclador && r.estado) {
               <a mat-flat-button
                  [routerLink]="['/canjes/insertar']"
-                 [queryParams]="{ recompensa: r.idRecompensa }">
+                 [queryParams]="{ recompensa: r.idRecompensa }"
+                 [disabled]="faltan(r) > 0">
                 <mat-icon>redeem</mat-icon> Canjear
               </a>
               }

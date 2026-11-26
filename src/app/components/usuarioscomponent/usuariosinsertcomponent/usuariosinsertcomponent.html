@@ -21,6 +21,10 @@
           <input matInput id="nombre" formControlName="nombre" placeholder="Ej. maria_lopez" maxlength="35" />
           @if (form.get('nombre')?.hasError('required')) {
             <mat-error>Campo obligatorio, ingrese el nombre</mat-error>
+          } @else if (form.get('nombre')?.hasError('minlength')) {
+            <mat-error>Debe tener al menos 3 caracteres</mat-error>
+          } @else if (form.get('nombre')?.hasError('pattern')) {
+            <mat-error>Solo letras, números, punto, guion o guion bajo. Sin espacios</mat-error>
           }
         </mat-form-field>
 
@@ -31,7 +35,7 @@
           <input matInput id="email" type="email" formControlName="email" placeholder="correo@ejemplo.com" maxlength="70" />
           @if (form.get('email')?.hasError('required')) {
             <mat-error>Campo obligatorio, ingrese el email</mat-error>
-          } @else if (form.get('email')?.hasError('email')) {
+          } @else if (form.get('email')?.hasError('email') || form.get('email')?.hasError('pattern')) {
             <mat-error>Ingrese un email válido</mat-error>
           }
         </mat-form-field>
@@ -43,6 +47,8 @@
           <input matInput id="contrasenia" type="password" formControlName="contrasenia" placeholder="Contraseña" maxlength="70" />
           @if (form.get('contrasenia')?.hasError('required')) {
             <mat-error>Campo obligatorio, ingrese la contraseña</mat-error>
+          } @else if (form.get('contrasenia')?.hasError('minlength')) {
+            <mat-error>Debe tener al menos 8 caracteres</mat-error>
           }
         </mat-form-field>
 
@@ -62,7 +68,7 @@
 
         <div class="acciones">
           <a mat-stroked-button routerLink="/usuarios/listar">Cancelar</a>
-          <button mat-flat-button type="submit">Registrar usuario</button>
+          <button mat-flat-button type="submit" [disabled]="form.invalid">Registrar usuario</button>
         </div>
       </form>
     </div>

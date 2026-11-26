@@ -96,7 +96,7 @@ export class Entregainsertcomponent implements OnInit, OnDestroy {
   cargarCombos(): void {
     this.cargarRecicladores();
     this.materialService.list().subscribe(data => {
-      this.listaMateriales = data;
+      this.listaMateriales = data.filter(m => m.estado !== false); // solo materiales activos
       this.cdr.markForCheck();
     });
     // El operador solo registra en su centro (el backend también lo valida); el admin, en cualquiera

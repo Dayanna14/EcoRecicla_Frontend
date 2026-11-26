@@ -102,7 +102,7 @@
             <!-- Mensaje cuando la tabla está vacía -->
             <tr class="mat-row" *matNoDataRow>
                 <td class="no-data" [attr.colspan]="displayedColumns.length">
-                    No hay entregas registradas para mostrar.
+                    {{ cargando ? 'Cargando entregas…' : 'No hay entregas registradas para mostrar.' }}
                 </td>
             </tr>
         </table>

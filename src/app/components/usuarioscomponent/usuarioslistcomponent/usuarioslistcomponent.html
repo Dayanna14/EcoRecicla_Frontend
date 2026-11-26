@@ -43,13 +43,13 @@
             <mat-icon>edit</mat-icon>
           </a>
           <button mat-icon-button class="btn-estado" [attr.aria-label]="element.enabled === false ? 'Habilitar cuenta' : 'Inhabilitar cuenta'"
-                  [title]="element.enabled === false ? 'Habilitar cuenta' : 'Inhabilitar cuenta'" (click)="cambiarEstado(element)">
+                  [title]="element.enabled === false ? 'Habilitar cuenta' : 'Inhabilitar cuenta'" [disabled]="esMiCuenta(element)" (click)="cambiarEstado(element)">
             <mat-icon>{{ element.enabled === false ? 'toggle_off' : 'toggle_on' }}</mat-icon>
           </button>
           <button mat-icon-button class="btn-clave" aria-label="Restablecer contraseña" title="Restablecer contraseña" (click)="restablecer(element)">
             <mat-icon>lock_reset</mat-icon>
           </button>
-          <button mat-icon-button class="btn-eliminar" aria-label="Eliminar usuario" (click)="eliminar(element)">
+          <button mat-icon-button class="btn-eliminar" aria-label="Eliminar usuario" [disabled]="esMiCuenta(element)" (click)="eliminar(element)">
             <mat-icon>delete</mat-icon>
           </button>
         </td>

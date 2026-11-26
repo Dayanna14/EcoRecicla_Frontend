@@ -23,7 +23,7 @@
     @if (lider) {
       <p class="lider">
         <mat-icon>emoji_events</mat-icon>
-        Líder: <b>{{ lider.nombreMaterial }}</b> · <span class="mono">{{ lider.totalKgReciclados }} kg</span> · {{ porcentajeLider }} % del total
+        Líder: <b>{{ lider.nombreMaterial }}</b> · <span class="mono">{{ lider.totalKgReciclados | number: '1.0-1' }} kg</span> · {{ porcentajeLider }} % del total
       </p>
     }
 
@@ -49,7 +49,7 @@
       } @else {
         <p class="seccion">EN TOTAL</p>
         <div class="totales">
-          <div><span>Kg reciclados</span><b class="mono">{{ totalKg }} kg</b></div>
+          <div><span>Kg reciclados</span><b class="mono">{{ totalKg | number: '1.0-1' }} kg</b></div>
           <div><span>Entregas</span><b class="mono">{{ totalEntregas }}</b></div>
           <div><span>Materiales con entregas</span><b class="mono">{{ lista.length }}</b></div>
         </div>
@@ -67,13 +67,13 @@
               <tr>
                 <td>{{ f.posicion }} @if (f.posicion === 1) { <span class="estrella">★</span> }</td>
                 <td>{{ f.nombre }}</td>
-                <td class="mono">{{ f.kg }}</td>
+                <td class="mono">{{ f.kg | number: '1.0-1' }}</td>
                 <td>
                   <div class="barrita"><span [style.width.%]="f.porcentaje" [class.barrita-lider]="f.posicion === 1"></span></div>
                   <small>{{ f.porcentaje }} %</small>
                 </td>
                 <td class="mono">{{ f.entregas }}</td>
-                <td class="mono">{{ f.promedio }}</td>
+                <td class="mono">{{ f.promedio | number: '1.0-1' }}</td>
                 <td class="mono">{{ f.puntosPorKg ?? '—' }}</td>
                 <td>
                   @if (f.activo === null) {

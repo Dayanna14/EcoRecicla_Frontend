@@ -32,9 +32,10 @@ export class Usuariosinsertcomponent implements OnInit {
     private snackBar: MatSnackBar,
   ) {
     this.form = this.fb.group({
-      nombre: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      contrasenia: ['', Validators.required],
+      // Mismas reglas que el registro público
+      nombre: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(35), Validators.pattern(/^[A-Za-z0-9._-]+$/)]],
+      email: ['', [Validators.required, Validators.email, Validators.pattern(/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/)]],
+      contrasenia: ['', [Validators.required, Validators.minLength(8)]],
       rol: ['', Validators.required],
     });
   }
@@ -66,8 +67,8 @@ export class Usuariosinsertcomponent implements OnInit {
     }
     // Sin id_usuario: con IDENTITY, enviar 0 hace fallar a Hibernate
     const usuario = {
-      nombre: this.form.value.nombre,
-      email: this.form.value.email,
+      nombre: this.form.value.nombre.trim(),
+      email: this.form.value.email.trim(),
       contrasenia: this.form.value.contrasenia,
       idRol: this.form.value.rol,
     } as UsuariosDTOInsert;

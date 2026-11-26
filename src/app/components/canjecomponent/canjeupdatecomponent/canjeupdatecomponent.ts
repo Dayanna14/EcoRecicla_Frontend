@@ -21,11 +21,12 @@ import { UsuariosService } from '../../../services/usuariosservice';
     ReactiveFormsModule],
   templateUrl: './canjeupdatecomponent.html',
   styleUrl: './canjeupdatecomponent.css',
+  providers: [provideNativeDateAdapter()],
 })
 export class Canjeupdatecomponent implements OnInit {
   estados: any[] = [
     { value: 'PENDIENTE', viewValue: 'Pendiente' },
-    { value: 'ENTREGADO', viewValue: 'Entregado' },
+    { value: 'COMPLETADO', viewValue: 'Completado' },
     { value: 'CANCELADO', viewValue: 'Cancelado' },
   ];
 

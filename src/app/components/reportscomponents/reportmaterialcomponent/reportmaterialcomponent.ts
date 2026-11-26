@@ -1,3 +1,4 @@
+import { DecimalPipe } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,7 +11,7 @@ import { MaterialRankingDTO } from '../../../models/MaterialRankingDTO';
 
 @Component({
   selector: 'app-reportmaterialcomponent',
-  imports: [BaseChartDirective, MatIconModule, MatButtonModule, MatDialogModule, RouterLink],
+  imports: [DecimalPipe, BaseChartDirective, MatIconModule, MatButtonModule, MatDialogModule, RouterLink],
   templateUrl: './reportmaterialcomponent.html',
   styleUrl: './reportmaterialcomponent.css',
 })

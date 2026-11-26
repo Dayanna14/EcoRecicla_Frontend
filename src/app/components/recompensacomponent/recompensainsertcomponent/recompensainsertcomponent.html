@@ -72,7 +72,7 @@
 
         <div class="acciones">
           <a mat-stroked-button routerLink="/recompensas/listar">Cancelar</a>
-          <button mat-flat-button type="submit">Registrar recompensa</button>
+          <button mat-flat-button type="submit" [disabled]="form.invalid">Registrar recompensa</button>
         </div>
       </form>
     </div>

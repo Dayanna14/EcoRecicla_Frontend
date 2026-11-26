@@ -1,3 +1,4 @@
+import { Loginservice } from '../../../services/loginservice';
 import { ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -32,7 +33,13 @@ export class Usuarioslistcomponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
+    private loginService: Loginservice,
   ) {}
+
+  // El admin no puede inhabilitar ni eliminar su propia cuenta
+  esMiCuenta(u: any): boolean {
+    return u.id_usuario === this.loginService.getIdUsuario();
+  }
 
   ngOnInit(): void {
     this.listar();

@@ -34,7 +34,7 @@ export class Registrocomponent {
 
   readonly form = this.fb.nonNullable.group({
     nombre: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(35), Validators.pattern(/^[A-Za-z0-9._-]+$/)]],
-    email: ['', [Validators.required, Validators.email, Validators.maxLength(70)]],
+    email: ['', [Validators.required, Validators.email, Validators.pattern(/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/), Validators.maxLength(70)]],
     contrasenia: ['', [Validators.required, Validators.minLength(8)]],
     confirmar: ['', Validators.required],
     acepto: [false, Validators.requiredTrue],
