@@ -59,7 +59,7 @@ export class Centroacopiolistcomponent implements OnInit {
       });
     }
     if (!this.esAdmin) {
-      this.displayedColumns = this.displayedColumns.filter(c => c !== 'c6'); // c6 = acciones
+      this.displayedColumns = this.displayedColumns.filter(c => c !== 'c5' && c !== 'c6'); // c5 = acciones, c6 = operador
     }
     this.listar();
     if (this.esAdmin) {

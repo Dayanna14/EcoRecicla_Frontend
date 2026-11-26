@@ -1,7 +1,7 @@
 <header class="banda">
   <div>
     <h1>Mi impacto</h1>
-    <p class="actualizado">Hola, {{ nombre }} · así va tu reciclaje</p>
+    <p class="actualizado">Hola, {{ nombre }}. Así va tu reciclaje</p>
   </div>
   <button mat-stroked-button class="btn-actualizar" (click)="obtenerReporte()">
     <mat-icon>refresh</mat-icon> Actualizar
@@ -43,7 +43,7 @@
       </a>
     </div>
   </section>
-} @else {
+} @else if (!cargando) {
   @if (nuevasEntregas > 0) {
     <div class="nueva">
       <mat-icon>celebration</mat-icon>

@@ -25,7 +25,7 @@
           @if (camaraActiva) { <span class="en-vivo">● EN VIVO</span> }
         </h2>
 
-        <input #inputFoto type="file" accept="image/*" hidden (change)="seleccionarFoto($event)" />
+        <input #inputFoto type="file" accept="image/png,image/jpeg,image/webp" hidden (change)="seleccionarFoto($event)" />
 
         @if (camaraActiva) {
           <div class="vista-previa camara">

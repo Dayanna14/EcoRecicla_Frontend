@@ -98,7 +98,14 @@ export class Materialclasificarcomponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // 1. Cargar el modelo una sola vez (puede tardar la primera vez)
     this.cS.cargarModelo()
-      .then(() => (this.modeloDisponible = true))
+      .then(() => {
+        this.modeloDisponible = true;
+        // Si subió la foto mientras el modelo cargaba, clasificarla ahora
+        if (this.urlFoto && this.predicciones.length === 0) {
+          this.cdr.detectChanges();
+          this.clasificar();
+        }
+      })
       .catch(err => {
         console.error('Error al cargar el modelo de IA', err);
         this.notificar('No se pudo cargar el modelo de IA', 'error');
@@ -338,8 +345,9 @@ export class Materialclasificarcomponent implements OnInit, OnDestroy {
     const archivo = (event.target as HTMLInputElement).files?.[0];
     if (!archivo) return;
 
-    if (!archivo.type.startsWith('image/')) {
-      this.notificar('El archivo debe ser una imagen (JPG o PNG)', 'advertencia');
+    const esHeic = /\.hei[cf]$/i.test(archivo.name) || archivo.type.includes('heic') || archivo.type.includes('heif');
+    if (!archivo.type.startsWith('image/') || esHeic) {
+      this.notificar('Formato no soportado. Usa una foto JPG o PNG (las fotos HEIC del iPhone no se pueden leer)', 'advertencia');
       return;
     }
 
