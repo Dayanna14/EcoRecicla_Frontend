@@ -1,41 +1,42 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { provideNativeDateAdapter } from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { ActivatedRoute } from '@angular/router';
-import { CanjeDTOInsert } from '../../../models/CanjeDTOInsert';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CanjeDTOList } from '../../../models/CanjeDTOList';
+import { RecompensaDTOList } from '../../../models/RecompensaDTOList';
+import { UsuariosDTOList } from '../../../models/UsuariosDTOList';
 import { Canjeservice } from '../../../services/canjeservice';
 import { RecompensaService } from '../../../services/recompensaservice';
 import { UsuariosService } from '../../../services/usuariosservice';
 
 @Component({
   selector: 'app-canjeupdatecomponent',
-  imports: [MatInputModule,
-    MatSelectModule,
-    MatDatepickerModule,
-    MatButtonModule,
-    ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink, MatFormFieldModule, MatInputModule, MatSelectModule,
+    MatButtonModule, MatIconModule, MatSnackBarModule],
   templateUrl: './canjeupdatecomponent.html',
-  styleUrl: './canjeupdatecomponent.css',
-  providers: [provideNativeDateAdapter()],
+  // Mismo diseño que "Registrar canje"
+  styleUrls: ['../canjeinsertcomponent/canjeinsertcomponent.css', './canjeupdatecomponent.css'],
 })
 export class Canjeupdatecomponent implements OnInit {
-  estados: any[] = [
+  estados = [
     { value: 'PENDIENTE', viewValue: 'Pendiente' },
     { value: 'COMPLETADO', viewValue: 'Completado' },
     { value: 'CANCELADO', viewValue: 'Cancelado' },
   ];
 
-  listaRecompensas: any[] = [];
-  listaUsuarios: any[] = [];
+  listaRecompensas: RecompensaDTOList[] = [];
+  listaUsuarios: UsuariosDTOList[] = [];
 
-  idCanje: any = null;
-  formCanje!: FormGroup;
-  mensaje: string = '';
+  idCanje: number = 0;
+  formCanje: FormGroup;
+  noEncontrado: boolean = false;
+  guardando: boolean = false;
+  private horaOriginal: string = '00:00:00'; // se conserva la hora del canje al guardar
 
   constructor(
     private canjeService: Canjeservice,
@@ -43,25 +44,25 @@ export class Canjeupdatecomponent implements OnInit {
     private rS: RecompensaService,
     private uS: UsuariosService,
     private route: ActivatedRoute,
-    private cdr: ChangeDetectorRef
-  ) {}
+    private router: Router,
+    private snackBar: MatSnackBar,
+    private cdr: ChangeDetectorRef,
+  ) {
+    this.formCanje = this.fb.group({
+      fecha: ['', Validators.required],
+      puntosUsados: ['', [Validators.required, Validators.min(1)]],
+      estado: ['', Validators.required],
+      idRecompensa: ['', Validators.required],
+      idUsuario: ['', Validators.required],
+    });
+  }
 
   ngOnInit(): void {
     this.idCanje = Number(this.route.snapshot.paramMap.get('id'));
-    if (!this.idCanje || isNaN(this.idCanje)) {
-      this.mensaje = 'ID de canje inválido';
+    if (!this.idCanje) {
+      this.noEncontrado = true;
       return;
     }
-
-    this.formCanje = this.fb.group({
-      idCanje: [],
-      fecha: [new Date(), Validators.required],
-      puntosUsados: ['', Validators.required],
-      estado: ['', Validators.required],
-      idRecompensa: ['', Validators.required],
-      Id_usuario: ['', Validators.required],
-    });
-
     this.buscarPorId();
     this.listarRecompensas();
     this.listarUsuarios();
@@ -70,74 +71,63 @@ export class Canjeupdatecomponent implements OnInit {
   buscarPorId(): void {
     this.canjeService.listId(this.idCanje).subscribe({
       next: (data: CanjeDTOList) => {
-        console.log('Canje encontrado:', data);
-
+        const fecha = String(data.fecha ?? '');
+        this.horaOriginal = fecha.length > 11 ? fecha.slice(11, 19) : '00:00:00';
         this.formCanje.patchValue({
-          idCanje: data.idCanje,
-          fecha: data.fecha,
+          fecha: fecha.slice(0, 10), // el input date usa AAAA-MM-DD
           puntosUsados: data.puntosUsados,
           estado: data.estado,
           idRecompensa: data.recompensaIdRecompensa,
-          Id_usuario: data.usuarioId_usuario,
+          idUsuario: data.usuarioId_usuario,
         });
         this.cdr.detectChanges();
       },
-      error: (error) => {
-        console.error('Error al buscar canje', error);
-        this.mensaje = 'No se encontró el canje';
+      error: () => {
+        this.noEncontrado = true;
+        this.cdr.detectChanges();
       },
     });
   }
 
   listarRecompensas(): void {
     this.rS.list().subscribe({
-      next: (data) => {
-        this.listaRecompensas = data;
-        this.cdr.detectChanges();
-      },
+      next: data => { this.listaRecompensas = data; this.cdr.detectChanges(); },
     });
   }
 
   listarUsuarios(): void {
     this.uS.list().subscribe({
-      next: (data) => {
-        this.listaUsuarios = data;
-        this.cdr.detectChanges();
-      },
+      next: data => { this.listaUsuarios = data; this.cdr.detectChanges(); },
     });
   }
 
   actualizar(): void {
-    if (this.formCanje.invalid) {
-      this.mensaje = 'Todos los campos son obligatorios';
+    if (this.formCanje.invalid || this.guardando) {
+      this.formCanje.markAllAsTouched();
       return;
     }
-
-    // El backend (PUT /api/canjes) espera idRecompensa e idUsuario
+    const v = this.formCanje.value;
+    // El backend (PUT /api/canjes) espera idRecompensa e idUsuario, y fecha con hora
     const dto = {
-      idCanje: this.formCanje.value.idCanje,
-      fecha: this.formCanje.value.fecha,
-      puntosUsados: this.formCanje.value.puntosUsados,
-      estado: this.formCanje.value.estado,
-      idRecompensa: this.formCanje.value.idRecompensa,
-      idUsuario: this.formCanje.value.Id_usuario,
+      idCanje: this.idCanje,
+      fecha: `${v.fecha}T${this.horaOriginal}`,
+      puntosUsados: v.puntosUsados,
+      estado: v.estado,
+      idRecompensa: v.idRecompensa,
+      idUsuario: v.idUsuario,
     };
 
+    this.guardando = true;
     this.canjeService.update(dto as any).subscribe({
       next: () => {
-        this.mensaje = 'Canje actualizado correctamente';
-        this.cdr.detectChanges();
-        this.formCanje.reset({
-          fecha: new Date(),
-          puntosUsados: '',
-          estado: '',
-          idRecompensa: '',
-          Id_usuario: '',
-        });
+        this.guardando = false;
+        this.snackBar.open('Canje actualizado correctamente', 'Cerrar', { duration: 3000, panelClass: ['noti-exito'] });
+        this.router.navigate(['/canjes/listar']);
       },
-      error: (error) => {
-        console.error(error);
-        this.mensaje = 'Error al actualizar el canje';
+      error: (err) => {
+        this.guardando = false;
+        this.cdr.detectChanges();
+        this.snackBar.open(err?.error?.message || 'No se pudo actualizar el canje', 'Cerrar', { duration: 5000, panelClass: ['noti-error'] });
       },
     });
   }

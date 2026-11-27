@@ -1,74 +1,92 @@
-<div class="container">
-  <div>
-    <h2>Actualización de Canje</h2>
-  </div>
-  <div>
-    <form [formGroup]="formCanje" (ngSubmit)="actualizar()">
-      
-      <!-- ID Canje (Solo lectura) -->
-      <mat-form-field class="example-full-width">
-        <mat-label>Código de Canje</mat-label>
-        <input matInput formControlName="idCanje" readonly />
-      </mat-form-field>
-      <br />
+<div class="contenedor">
+  <nav class="migas">
+    <a routerLink="/canjes/listar">Canjes</a>
+    <span>/</span>
+    <span>Editar</span>
+  </nav>
 
-      <!-- Fecha -->
-      <mat-form-field>
-        <mat-label>Fecha</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="fecha" />
-        <mat-hint>MM/DD/YYYY</mat-hint>
-        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-      </mat-form-field>
-      <br />
+  <h1>Editar canje</h1>
+  <p class="subtitulo">Corrige los datos del canje registrado.</p>
 
-      <!-- Puntos Usados -->
-      <mat-form-field class="example-full-width">
-        <mat-label>Puntos Usados</mat-label>
-        <input matInput type="number" placeholder="Ej. 500" formControlName="puntosUsados" />
-      </mat-form-field>
-      <br />
+  <div class="grid grid-simple">
+    @if (noEncontrado) {
+      <div class="tarjeta vacio">
+        <mat-icon>error_outline</mat-icon>
+        <p>No se encontró el canje.</p>
+        <a mat-stroked-button routerLink="/canjes/listar">Volver a la lista</a>
+      </div>
+    } @else {
+      <form class="tarjeta formulario" [formGroup]="formCanje" (ngSubmit)="actualizar()">
+        <h2>Datos del canje #{{ idCanje }}</h2>
 
-      <!-- Estado -->
-      <mat-form-field>
-        <mat-label>Estado</mat-label>
-        <mat-select formControlName="estado">
-          @for (item of estados; track item) {
-            <mat-option [value]="item.value">{{ item.viewValue }}</mat-option>
+        <label class="etiqueta">Recompensa</label>
+        <mat-form-field appearance="outline">
+          <mat-icon matPrefix>card_giftcard</mat-icon>
+          <mat-select formControlName="idRecompensa" placeholder="Seleccione una recompensa">
+            @for (r of listaRecompensas; track r.idRecompensa) {
+              <mat-option [value]="r.idRecompensa">{{ r.nombre }} · {{ r.costoPuntos }} pts</mat-option>
+            }
+          </mat-select>
+          @if (formCanje.get('idRecompensa')?.hasError('required')) {
+            <mat-error>Campo obligatorio, seleccione la recompensa</mat-error>
           }
-        </mat-select>
-      </mat-form-field>
-      <br />
+        </mat-form-field>
 
-      <!-- Recompensa (Combo desplegable) -->
-      <mat-form-field>
-        <mat-label>Recompensa</mat-label>
-        <mat-select formControlName="idRecompensa">
-          @for (rec of listaRecompensas; track rec) {
-            <!-- Ajusta rec.idRecompensa y rec.nombre según los atributos de tu DTO de Recompensa -->
-            <mat-option [value]="rec.idRecompensa">{{ rec.nombre }}</mat-option>
+        <div class="fila">
+          <div>
+            <label class="etiqueta" for="puntosUsados">Puntos usados</label>
+            <mat-form-field appearance="outline">
+              <mat-icon matPrefix>stars</mat-icon>
+              <input matInput id="puntosUsados" type="number" formControlName="puntosUsados" />
+              @if (formCanje.get('puntosUsados')?.hasError('required')) {
+                <mat-error>Campo obligatorio</mat-error>
+              } @else if (formCanje.get('puntosUsados')?.hasError('min')) {
+                <mat-error>Debe ser mayor a 0</mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div>
+            <label class="etiqueta" for="fecha">Fecha</label>
+            <mat-form-field appearance="outline">
+              <mat-icon matPrefix>calendar_today</mat-icon>
+              <input matInput id="fecha" type="date" formControlName="fecha" />
+              @if (formCanje.get('fecha')?.hasError('required')) {
+                <mat-error>Campo obligatorio, seleccione la fecha</mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+
+        <label class="etiqueta">Usuario</label>
+        <mat-form-field appearance="outline">
+          <mat-icon matPrefix>person</mat-icon>
+          <mat-select formControlName="idUsuario" placeholder="Seleccione un usuario">
+            @for (u of listaUsuarios; track u.id_usuario) {
+              <mat-option [value]="u.id_usuario">{{ u.nombre }} · {{ u.email }}</mat-option>
+            }
+          </mat-select>
+          @if (formCanje.get('idUsuario')?.hasError('required')) {
+            <mat-error>Campo obligatorio, seleccione el usuario</mat-error>
           }
-        </mat-select>
-      </mat-form-field>
-      <br />
+        </mat-form-field>
 
-      <!-- Usuario (Combo desplegable) -->
-      <mat-form-field>
-        <mat-label>Usuario</mat-label>
-        <mat-select formControlName="Id_usuario">
-          @for (usr of listaUsuarios; track usr) {
-            <!-- Ajusta usr.idUsuario y usr.nombre según los atributos de tu DTO de Usuario -->
-            <mat-option [value]="usr.idUsuario">{{ usr.nombre }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-      <br />
+        <label class="etiqueta">Estado</label>
+        <mat-form-field appearance="outline">
+          <mat-icon matPrefix>toggle_on</mat-icon>
+          <mat-select formControlName="estado">
+            @for (e of estados; track e.value) {
+              <mat-option [value]="e.value">{{ e.viewValue }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
 
-      <button mat-flat-button color="primary" type="submit">Guardar</button>
-    </form>
-
-    @if (mensaje) {
-      <p>{{ mensaje }}</p>
+        <div class="acciones">
+          <a mat-stroked-button routerLink="/canjes/listar">Cancelar</a>
+          <button mat-flat-button type="submit" [disabled]="formCanje.invalid || guardando">
+            {{ guardando ? 'Guardando…' : 'Guardar cambios' }}
+          </button>
+        </div>
+      </form>
     }
   </div>
 </div>
