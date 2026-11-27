@@ -1,1 +1,243 @@
+/* Cambiar contraseña: estilos propios (antes reutilizaba los CSS del login y del registro) */
+:host {
+  display: block;
+  font-family: 'Lato', sans-serif;
+}
+
+/* ---------- Escritorio: 50/50 ---------- */
+.pantalla {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+}
+
+.lado-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 32px;
+  background-color: var(--eco-crema);
+}
+
+.logo {
+  width: min(100%, 420px);
+  height: auto;
+}
+
+.frase {
+  max-width: 360px;
+  margin: 0;
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--eco-verde-bosque);
+}
+
+.lado-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 32px;
+  background-color: var(--eco-verde-bosque);
+}
+
+/* ---------- Tarjeta ---------- */
+.tarjeta {
+  width: 100%;
+  max-width: 420px;
+  padding: 32px 28px;
+  background-color: var(--eco-linen);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--eco-onyx) 30%, transparent);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+h1 {
+  margin: 0;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.75rem;
+  color: var(--eco-verde-bosque);
+}
+
+.intro {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--eco-charcoal);
+}
+
+/* ---------- Campos (Angular Material, solo con tokens) ---------- */
+mat-form-field {
+  width: 100%;
+  border-radius: 8px;
+  --mat-form-field-container-text-font: 'Lato', sans-serif;
+  --mat-form-field-outlined-label-text-color: var(--eco-charcoal);
+  --mat-form-field-outlined-focus-label-text-color: var(--eco-verde-bosque);
+  --mat-form-field-outlined-input-text-color: var(--eco-onyx);
+  --mat-form-field-outlined-caret-color: var(--eco-verde-bosque);
+  --mat-form-field-outlined-outline-color: var(--eco-salvia);
+  --mat-form-field-outlined-hover-outline-color: var(--eco-verde-hoja);
+  --mat-form-field-outlined-focus-outline-color: var(--eco-verde-bosque);
+  --mat-form-field-outlined-error-outline-color: var(--eco-error);
+  --mat-form-field-outlined-error-hover-outline-color: var(--eco-error);
+  --mat-form-field-outlined-error-focus-outline-color: var(--eco-error);
+  --mat-form-field-outlined-error-label-text-color: var(--eco-error);
+  --mat-form-field-error-text-color: var(--eco-error);
+}
+
+mat-form-field:focus-within {
+  outline: 2px solid var(--eco-ambar);
+  outline-offset: 2px;
+}
+
+mat-form-field mat-icon {
+  color: var(--eco-charcoal);
+}
+
+mat-form-field mat-icon[matPrefix] {
+  margin-left: 12px;
+  margin-right: 8px;
+}
+
+/* ---------- Ojo ---------- */
+.ojo {
+  color: var(--eco-charcoal);
+}
+
+.ojo:focus-visible {
+  outline: 2px solid var(--eco-ambar);
+  outline-offset: 2px;
+}
+
+/* ---------- Error del servidor ---------- */
+.error {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--eco-error);
+}
+
+/* ---------- Botón Ingresar ---------- */
+.ingresar {
+  width: 100%;
+  height: 48px;
+  font-family: 'Lato', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  --mat-button-filled-container-color: var(--eco-verde-bosque);
+  --mat-button-filled-label-text-color: var(--eco-crema);
+  --mat-button-filled-disabled-container-color: var(--eco-oliva);
+  --mat-button-filled-disabled-label-text-color: var(--eco-crema);
+}
+
+.ingresar:hover:not(:disabled) {
+  --mat-button-filled-container-color: var(--eco-verde-hoja);
+}
+
+.ingresar:focus-visible {
+  outline: 2px solid var(--eco-ambar);
+  outline-offset: 2px;
+}
+
+/* ---------- Nota y link ---------- */
+.nota {
+  margin: 8px 0 0;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: var(--eco-charcoal);
+}
+
+.volver {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: var(--eco-verde-hoja);
+  text-decoration: none;
+}
+
+.volver mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}
+
+.volver:hover {
+  text-decoration: underline;
+}
+
+.volver:focus-visible {
+  outline: 2px solid var(--eco-ambar);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* ---------- Tablet: 768 – 1023px ---------- */
+@media (max-width: 1023px) {
+  .pantalla {
+    grid-template-columns: 2fr 3fr; /* izquierda ~40% */
+  }
+
+  .frase {
+    font-size: 1.2rem;
+  }
+}
+
+/* ---------- Celular: < 768px ---------- */
+@media (max-width: 767px) {
+  .pantalla {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+
+  .lado-logo {
+    padding: 16px;
+  }
+
+  .logo {
+    width: 140px;
+  }
+
+  .frase {
+    display: none;
+  }
+
+  .lado-form {
+    justify-content: flex-start;
+    padding: 16px;
+  }
+
+  .tarjeta {
+    max-width: none;
+    padding: 24px 20px;
+  }
+}
+/* ---------- Agregados: crear cuenta, olvidé mi contraseña y avisos ---------- */
+.enlace {
+  background: none; border: none; padding: 0; cursor: pointer; font: inherit;
+  color: var(--eco-verde-bosque, #2d5b3c); text-decoration: underline; font-size: .85rem;
+}
+.olvide { align-self: flex-end; margin-top: -4px; }
+.ayuda {
+  display: flex; gap: 8px; align-items: flex-start; margin: 0; padding: 10px 12px;
+  border-radius: 10px; background: #eef4ea; color: #2d5b3c; font-size: .85rem; line-height: 1.4;
+}
+.ayuda mat-icon { flex-shrink: 0; font-size: 20px; width: 20px; height: 20px; }
+.nota a { color: var(--eco-verde-bosque, #2d5b3c); font-weight: 700; }
+
+/* --- Del registro --- */
+.error-campo { margin: -6px 0 0 12px; color: #b3412e; font-size: .78rem; }
+.acepto { font-size: .85rem; }
+.nota a { color: var(--eco-verde-bosque, #2d5b3c); font-weight: 700; }
+
+/* --- Propios de cambiar contraseña --- */
 .enlace-salir { background: none; border: none; cursor: pointer; font: inherit; }

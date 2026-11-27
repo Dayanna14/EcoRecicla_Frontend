@@ -23,7 +23,7 @@ function coinciden(grupo: AbstractControl): ValidationErrors | null {
     MatInputModule, MatCheckboxModule, MatSnackBarModule],
   templateUrl: './registrocomponent.html',
   // Mismo diseño que el login
-  styleUrls: ['../logincomponent/logincomponent.css', './registrocomponent.css'],
+  styleUrl: './registrocomponent.css',
 })
 export class Registrocomponent {
   private readonly fb = inject(FormBuilder);

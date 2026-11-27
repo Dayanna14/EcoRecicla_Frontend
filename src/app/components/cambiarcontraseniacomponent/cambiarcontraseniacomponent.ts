@@ -21,7 +21,7 @@ function coinciden(grupo: AbstractControl): ValidationErrors | null {
   selector: 'app-cambiarcontraseniacomponent',
   imports: [ReactiveFormsModule, RouterLink, MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSnackBarModule],
   templateUrl: './cambiarcontraseniacomponent.html',
-  styleUrls: ['../logincomponent/logincomponent.css', '../registrocomponent/registrocomponent.css', './cambiarcontraseniacomponent.css'],
+  styleUrl: './cambiarcontraseniacomponent.css',
 })
 export class Cambiarcontraseniacomponent {
   private readonly fb = inject(FormBuilder);
