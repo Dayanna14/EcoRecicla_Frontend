@@ -47,6 +47,14 @@ export class Registrocomponent {
   }
   errorMessage = '';
   submitting = false;
+  // Render duerme el backend gratis: si tarda, avisamos que está despertando (igual que en el login)
+  despertando = false;
+  private aviso: ReturnType<typeof setTimeout> | null = null;
+
+  private quitarAviso(): void {
+    this.despertando = false;
+    if (this.aviso) clearTimeout(this.aviso);
+  }
 
   registrar(): void {
     if (this.form.invalid || this.submitting) {
@@ -55,16 +63,19 @@ export class Registrocomponent {
     }
     this.errorMessage = '';
     this.submitting = true;
+    this.aviso = setTimeout(() => { this.despertando = true; this.cdr.detectChanges(); }, 5000);
     const v = this.form.getRawValue();
 
     this.auth.registrar({ nombre: v.nombre.trim(), email: v.email.trim(), contrasenia: v.contrasenia }).subscribe({
       next: () => {
         this.submitting = false;
+        this.quitarAviso();
         this.snackBar.open(`¡Bienvenido a EcoRecicla, ${v.nombre.trim()}! 🌱`, 'Cerrar', { duration: 4000, panelClass: ['noti-exito'] });
         void this.router.navigateByUrl('/reportes/dashboard');
       },
       error: (err: HttpErrorResponse) => {
         this.submitting = false;
+        this.quitarAviso();
         const msg: string = err.error?.message ?? '';
         // El backend avisa si el usuario o el email ya existen: se muestra en su campo
         if (msg.toLowerCase().includes('usuario')) {

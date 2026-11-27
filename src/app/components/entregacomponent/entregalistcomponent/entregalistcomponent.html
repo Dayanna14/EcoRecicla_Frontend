@@ -6,7 +6,7 @@
     <div class="header-section">
         <div>
             <h1 class="titulo-principal">{{ soloReciclador ? 'Mis entregas' : esOperador ? 'Entregas de mi centro' : 'Lista de entregas' }}</h1>
-            <p class="subtitulo-principal">Gestiona las entregas de materiales registradas en los centros de acopio.</p>
+            <p class="subtitulo-principal">{{ soloReciclador ? 'Los materiales que entregaste y los puntos que ganaste.' : 'Gestiona las entregas de materiales registradas en los centros de acopio.' }}</p>
         </div>
         @if (puedeRegistrar) {
             <button mat-flat-button class="btn-registrar" routerLink="/entregas/insertar">

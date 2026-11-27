@@ -83,6 +83,12 @@
         <button type="submit" matButton="filled" class="ingresar" [disabled]="submitting">
           {{ submitting ? 'Creando tu cuenta…' : 'Crear mi cuenta' }}
         </button>
+        @if (despertando) {
+          <p class="ayuda" role="status">
+            <mat-icon aria-hidden="true">hourglass_top</mat-icon>
+            Despertando el servidor, la primera vez del día puede tardar hasta un minuto…
+          </p>
+        }
 
         <p class="nota">¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión</a></p>
       </form>

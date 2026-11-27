@@ -2,7 +2,7 @@
   <div class="encabezado">
     <div>
       <h1>Centros de acopio</h1>
-      <p class="subtitulo">Gestiona los puntos donde los recicladores entregan sus materiales.</p>
+      <p class="subtitulo">{{ esAdmin ? 'Gestiona los puntos donde los recicladores entregan sus materiales.' : 'Los puntos donde puedes entregar tus materiales reciclables.' }}</p>
     </div>
     @if (esAdmin) {
       <a mat-flat-button routerLink="/centrosacopio/insertar">Registrar centro</a>

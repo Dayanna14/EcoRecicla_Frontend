@@ -152,6 +152,11 @@ export class Mapacentroscomponent implements AfterViewInit, OnDestroy {
           fillOpacity: 0.1,
         }).addTo(this.mapa)
           .bindPopup('<div class="popup-centro"><strong>Tú estás aquí</strong></div>');
+        // Punto visible con la etiqueta siempre a la vista (sin pasar el mouse)
+        L.circleMarker(this.miUbicacion, {
+          radius: 8, color: '#ffffff', weight: 3, fillColor: '#c9893e', fillOpacity: 1,
+        }).addTo(this.mapa)
+          .bindTooltip('Tú estás aquí', { permanent: true, direction: 'top', offset: [0, -10] });
 
         this.mapa.setView(this.miUbicacion, 14);
         this.calcularDistancias();

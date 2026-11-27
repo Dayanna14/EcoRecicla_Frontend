@@ -2,7 +2,7 @@
   <div class="encabezado">
     <div>
       <h1>Materiales</h1>
-      <p class="subtitulo">Gestiona los materiales reciclables y los puntos que otorgan.</p>
+      <p class="subtitulo">{{ esAdmin ? 'Gestiona los materiales reciclables y los puntos que otorgan.' : 'Los materiales que puedes reciclar y los puntos que te da cada kilo.' }}</p>
     </div>
     <div class="botones-encabezado">
       <a mat-stroked-button routerLink="/materiales/buscar">

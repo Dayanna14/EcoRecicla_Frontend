@@ -16,10 +16,6 @@
         </mat-select>
       </mat-form-field>
 
-      <button mat-flat-button class="btn-buscar" (click)="buscarPorEstado()">
-        <mat-icon>search</mat-icon>
-        Buscar
-      </button>
     </div>
 
     @if (dataSource.length > 0) {
@@ -55,7 +51,7 @@
     } @else {
       <div class="vacio">
         <img src="img/estados/buscar.svg" alt="" />
-        <p>Selecciona un estado y pulsa <strong>Buscar</strong>.</p>
+        <p>Selecciona un estado para ver los centros.</p>
       </div>
     }
   </div>
