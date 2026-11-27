@@ -6,9 +6,9 @@
   </nav>
 
   <h1>Editar canje</h1>
-  <p class="subtitulo">Corrige los datos del canje registrado.</p>
+  <p class="subtitulo">Canje N.° {{ idCanje }} · Corrige los datos y guarda los cambios.</p>
 
-  <div class="grid grid-simple">
+  <div class="grid">
     @if (noEncontrado) {
       <div class="tarjeta vacio">
         <mat-icon>error_outline</mat-icon>
@@ -17,7 +17,7 @@
       </div>
     } @else {
       <form class="tarjeta formulario" [formGroup]="formCanje" (ngSubmit)="actualizar()">
-        <h2>Datos del canje #{{ idCanje }}</h2>
+        <h2>Datos del canje</h2>
 
         <label class="etiqueta">Recompensa</label>
         <mat-form-field appearance="outline">
@@ -87,6 +87,35 @@
           </button>
         </div>
       </form>
+
+      <!-- Resumen a la derecha (como en Registrar canje) -->
+      <aside class="tarjeta panel">
+        <h2>Resumen del canje</h2>
+        @if (recompensaElegida; as r) {
+          <div class="preview">
+            <div class="preview-img">
+              @if (r.imagenUrl) {
+                <img [src]="r.imagenUrl" [alt]="r.nombre" (error)="sinImagen($event)" />
+              }
+              <mat-icon class="preview-icono">redeem</mat-icon>
+            </div>
+            <div>
+              <h3>{{ r.nombre }}</h3>
+              <p class="costo">{{ r.costoPuntos }} puntos</p>
+            </div>
+          </div>
+        } @else {
+          <p class="nota"><mat-icon>card_giftcard</mat-icon> Elige una recompensa.</p>
+        }
+
+        <div class="balance">
+          <div class="linea"><span>Usuario</span><strong>{{ usuarioElegido?.nombre ?? '—' }}</strong></div>
+          <div class="linea"><span>Puntos usados</span><strong>{{ formCanje.get('puntosUsados')?.value || 0 }}</strong></div>
+          <div class="linea total"><span>Estado</span><strong>{{ nombreEstado }}</strong></div>
+        </div>
+
+        <p class="nota"><mat-icon>info</mat-icon> Si cambias el estado a Cancelado, los puntos vuelven al reciclador.</p>
+      </aside>
     }
   </div>
 </div>

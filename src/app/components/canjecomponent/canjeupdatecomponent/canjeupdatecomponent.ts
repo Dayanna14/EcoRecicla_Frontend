@@ -19,8 +19,7 @@ import { UsuariosService } from '../../../services/usuariosservice';
   imports: [ReactiveFormsModule, RouterLink, MatFormFieldModule, MatInputModule, MatSelectModule,
     MatButtonModule, MatIconModule, MatSnackBarModule],
   templateUrl: './canjeupdatecomponent.html',
-  // Mismo diseño que "Registrar canje"
-  styleUrls: ['../canjeinsertcomponent/canjeinsertcomponent.css', './canjeupdatecomponent.css'],
+  styleUrl: './canjeupdatecomponent.css',
 })
 export class Canjeupdatecomponent implements OnInit {
   estados = [
@@ -87,6 +86,24 @@ export class Canjeupdatecomponent implements OnInit {
         this.cdr.detectChanges();
       },
     });
+  }
+
+  // Para el resumen de la derecha
+  get recompensaElegida(): RecompensaDTOList | undefined {
+    const id = this.formCanje.get('idRecompensa')?.value;
+    return this.listaRecompensas.find(r => r.idRecompensa === id);
+  }
+  get usuarioElegido(): UsuariosDTOList | undefined {
+    const id = this.formCanje.get('idUsuario')?.value;
+    return this.listaUsuarios.find(u => u.id_usuario === id);
+  }
+  get nombreEstado(): string {
+    const v = this.formCanje.get('estado')?.value;
+    return this.estados.find(e => e.value === v)?.viewValue ?? '—';
+  }
+
+  sinImagen(ev: Event): void {
+    (ev.target as HTMLImageElement).style.visibility = 'hidden';
   }
 
   listarRecompensas(): void {
