@@ -13,6 +13,10 @@ import * as L from 'leaflet';
 import { Nominatimservice } from '../../../services/nominatimservice';
 import { MatTimepickerModule } from '@angular/material/timepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { forkJoin } from 'rxjs';
+import { UsuariosService } from '../../../services/usuariosservice';
+import { Rolservice } from '../../../services/rolservice';
+import { UsuariosDTOList } from '../../../models/UsuariosDTOList';
 
 @Component({
   selector: 'app-centroacopioupdatecomponent',
@@ -33,7 +37,8 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 })
 export class Centroacopioupdatecomponent {
    idCentro: number = 0;
-  idUsuario: number = 0; // se conserva el usuario que ya tiene el centro
+  idUsuario: number = 0; // operador que ya tiene el centro
+  operadores: UsuariosDTOList[] = []; // para cambiar el operador responsable
   formCentro!: FormGroup;
   direccion: string = '';
 
@@ -59,6 +64,8 @@ export class Centroacopioupdatecomponent {
     private router: Router,
     private cdr: ChangeDetectorRef,
     private snackBar: MatSnackBar,
+    private uS: UsuariosService,
+    private rolS: Rolservice,
   ) {}
 
   ngOnInit(): void {
@@ -74,6 +81,7 @@ export class Centroacopioupdatecomponent {
       latitud: [null, [Validators.required, Validators.min(-90), Validators.max(90)]],
       longitud: [null, [Validators.required, Validators.min(-180), Validators.max(180)]],
       estado: [true, Validators.required],
+      idUsuario: [null, Validators.required],
     });
 
     if (!this.idCentro || isNaN(this.idCentro)) {
@@ -127,11 +135,25 @@ export class Centroacopioupdatecomponent {
     return String(fecha.getHours()).padStart(2, '0') + ':' + String(fecha.getMinutes()).padStart(2, '0');
   }
 
+  // Operadores habilitados (mismo filtro que Registrar centro); se incluye el actual aunque esté inhabilitado
+  listarOperadores(): void {
+    forkJoin({ usuarios: this.uS.list(), roles: this.rolS.list() }).subscribe({
+      next: ({ usuarios, roles }) => {
+        const idsOperador = new Set(roles.filter(r => r.nombre.toUpperCase().includes('OPERADOR')).map(r => r.idRol));
+        this.operadores = usuarios.filter(u => idsOperador.has(u.idRol) && (u.enabled !== false || u.id_usuario === this.idUsuario));
+        this.cdr.detectChanges();
+      },
+      error: () => this.notificar('No se pudieron cargar los operadores', 'error'),
+    });
+  }
+
   buscarPorId(): void {
     this.cS.listId(this.idCentro).subscribe({
       next: (data: CentroAcopioDTOInsert) => {
         this.idUsuario = data.idUsuario;
+        this.listarOperadores();
         this.formCentro.patchValue({
+          idUsuario: data.idUsuario,
           codigo: data.idCentro,
           nombre: data.nombre,
           apertura: this.aFecha((data.horario ?? '').split('-')[0]),
@@ -207,7 +229,7 @@ export class Centroacopioupdatecomponent {
 
     const dto: CentroAcopioDTOInsert = {
       idCentro: this.formCentro.value.codigo,
-      idUsuario: this.idUsuario,
+      idUsuario: this.formCentro.value.idUsuario,
       nombre: this.formCentro.value.nombre,
       horario: this.aTexto(this.formCentro.value.apertura) + '-' + this.aTexto(this.formCentro.value.cierre),
       latitud: this.formCentro.value.latitud,

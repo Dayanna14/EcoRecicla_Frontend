@@ -54,6 +54,20 @@
         </div>
       </div>
 
+      <label class="etiqueta">Operador responsable</label>
+      <mat-form-field appearance="outline">
+        <mat-icon matPrefix>person</mat-icon>
+        <mat-select formControlName="idUsuario" placeholder="Seleccione el operador">
+          @for (u of operadores; track u.id_usuario) {
+            <mat-option [value]="u.id_usuario">{{ u.nombre }} · {{ u.email }}</mat-option>
+          }
+        </mat-select>
+        <mat-hint>Persona que recibe y valida las entregas en este centro.</mat-hint>
+        @if (formCentro.get('idUsuario')?.hasError('required')) {
+          <mat-error>Campo obligatorio, seleccione el operador</mat-error>
+        }
+      </mat-form-field>
+
       <label class="etiqueta">Estado</label>
       <mat-form-field appearance="outline">
         <mat-icon matPrefix>toggle_on</mat-icon>
